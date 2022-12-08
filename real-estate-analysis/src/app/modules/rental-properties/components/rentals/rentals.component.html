@@ -1,0 +1,141 @@
+<div class="container">
+
+  <div class="right-container">
+    <a mat-raised-button [routerLink]="['/add-edit-property', 0]" color="primary">+ Add new property</a>
+  </div>
+
+  <div class="right-container">
+    <form [formGroup]="searchForm">
+      <mat-form-field appearance="fill">
+        <mat-label>Search <mat-icon>search</mat-icon>
+        </mat-label>
+        <input matInput formControlName="searchValue" (keyup)="search(searchValue.value)">
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div *ngIf="propertiesLoading">
+    <mat-spinner [diameter]="170"></mat-spinner>
+  </div>
+
+  <div *ngIf="filteredProperties.length > 0" class="search-list-container">
+    <section class="rental-item" *ngFor="let property of filteredProperties">
+      <mat-card class="mat-elevation-z8">
+        <div *ngIf="property.thumbnailImageBase64">
+          <img mat-card-image [src]="'data:' + property.thumbnailImageContentType + ';base64,' + property.thumbnailImageBase64" alt="property">
+        </div>
+        <div *ngIf="!property.thumbnailImageBase64">
+          <img mat-card-image [src]="noImage" alt="property">
+        </div>
+
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>
+              <strong>
+                {{property.address.address}}<br>
+                {{property.address.city}}, {{property.address.state.name}} {{property.address.zipCode}}
+              </strong>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong> Cap Rate:{{property.financialSummary.annualCapRate}}%</strong>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong>Cash-on-Cash Rate: {{property.financialSummary.annualCashOnCashRate}}%</strong>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong>Cash Flow: {{property.financialSummary.annualCashFlow | currency}}</strong>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-fab (click)="onDetails(property)">
+            <mat-icon matTooltip="Details">info</mat-icon>
+          </button>
+          <button mat-fab (click)="onDelete(property)">
+            <mat-icon matTooltip="Delete">delete</mat-icon>
+          </button>
+          <button mat-fab (click)="onEditClick(property)">
+            <mat-icon matTooltip="Edit">edit</mat-icon>
+          </button>
+          <button mat-fab (click)="onAnnualIncomeStatement(property)">
+            <mat-icon matTooltip="Income Statement">description</mat-icon>
+          </button>
+          <button mat-fab (click)="onAttachmentsClick(property)">
+            <mat-icon matTooltip="Attachments">attachment</mat-icon>
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </section>
+
+
+
+  </div>
+
+
+  <div *ngIf="filteredProperties.length < 1" class="rentals-list-container">
+    <section class="rental-item" *ngFor="let property of properties">
+      <mat-card class="mat-elevation-z8">
+        <div *ngIf="property.thumbnailImageBase64">
+          <img mat-card-image [src]="'data:' + property.thumbnailImageContentType + ';base64,' + property.thumbnailImageBase64" alt="property">
+        </div>
+        <div *ngIf="!property.thumbnailImageBase64">
+          <img mat-card-image [src]="noImage" alt="property">
+        </div>
+
+        <mat-card-content>
+          <mat-list>
+            <mat-list-item>
+              <strong>
+                {{property.address.address}}<br>
+                {{property.address.city}}, {{property.address.state.name}} {{property.address.zipCode}}
+              </strong>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong> Cap Rate:{{property.financialSummary.annualCapRate}}%</strong>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong>Cash-on-Cash Rate: {{property.financialSummary.annualCashOnCashRate}}%</strong>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+            <mat-list-item>
+              <strong>Cash Flow: {{property.financialSummary.annualCashFlow | currency}}</strong>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <a mat-button (click)="onDetails(property)">
+            <mat-icon matTooltip="Details">info</mat-icon>
+          </a>
+          <a mat-button (click)="onDelete(property)">
+            <mat-icon matTooltip="Delete">delete</mat-icon>
+          </a>
+          <a mat-button (click)="onEditClick(property)">
+            <mat-icon matTooltip="Edit">edit</mat-icon>
+          </a>
+          <a mat-button (click)="onAnnualIncomeStatement(property)">
+            <mat-icon matTooltip="Income Statement">description</mat-icon>
+          </a>
+          <a mat-button (click)="onAttachmentsClick(property)">
+            <mat-icon matTooltip="Attachments">attachment</mat-icon>
+          </a>
+        </mat-card-actions>
+
+      </mat-card>
+    </section>
+
+
+
+  </div>
+
+
+</div>

@@ -1,0 +1,53 @@
+table{
+  width: 100%;
+  margin-top: 4%;
+  margin-bottom: 2%;
+  border-spacing: 0;
+}
+
+  th{
+    /* padding-left: 16px; */
+    font-size: 16px;
+    font-weight:bold;
+    border-bottom: solid black 1.5px;
+    background-color: #ced4da;
+  }
+
+  #summary>td{
+    font-size: 16px;
+    text-align: center;
+    background-color: #d1e7dd;
+    border:none;
+  }
+
+  .mat-column-total-cash-needed{
+    font-weight:600;
+
+  }
+
+table.custom td{
+  font-size: 16px;
+  text-align: center;
+  border:none;
+}
+
+  table.custom {
+    line-height: 55px;
+    background-color: #f1f1f1;
+    box-shadow: -9px 2px 25px 0px rgba(141, 136, 136, 0.84);
+    -webkit-box-shadow: -9px 2px 25px 0px rgba(141, 136, 136, 0.84);
+   -moz-box-shadow: -9px 2px 25px 0px rgba(141, 136, 136, 0.84);
+    border-radius: 11px
+  }
+
+  tr:hover{
+  background-color: #ced4da;
+  }
+
+  .emphasize-blue{
+background-color: #cff4fc;;
+  }
+
+  .double-border{
+    border-bottom: double black 3px;
+  }

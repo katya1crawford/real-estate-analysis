@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{description}}</h2>
+
+<mat-dialog-content>
+
+
+  <form [formGroup]="attachmentsFormGroup">
+    <div>
+      <div>
+        <input type="file" [ngClass]="{'is-invalid': attachmentsFormGroup.invalid && attachmentsFormGroup.dirty}" class="form-control"
+          (change)="onFilesChange($event)" id="validatedCustomFile" multiple>
+        <label class="form-label" for="validatedCustomFile">{{selectedFiles}}</label>
+        <div *ngIf="filesCtrl.errors?.fileSize" class="invalid-feedback">File size must be equal or less than 15 MB.</div>
+        <div *ngIf="filesCtrl.errors?.fileType" class="invalid-feedback">Only &quot;.txt&quot;, &quot;.pdf&quot;, &quot;.jpg&quot;,
+          &quot;.jpeg&quot;, &quot;.gif&quot;, &quot;.png&quot;, &quot;.docx&quot;, &quot;.doc&quot;, &quot;.xlsx&quot;, &quot;.xls&quot;
+          files are acceptable.</div>
+      </div>
+
+      <div>
+        <button class="btn btn-outline-secondary" type="submit" [disabled]="attachmentsFormGroup.pristine || attachmentsFormGroup.invalid">
+          Add
+        </button>
+      </div>
+    </div>
+    <div *ngIf="property.files.length < 1">No Files Found </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close mat-dialog-close="false" (click)="close()">Close</button>
+  <button mat-raised-button color="primary" mat-button mat-dialog-close="true" (click)="save()">Save</button>
+</mat-dialog-actions>

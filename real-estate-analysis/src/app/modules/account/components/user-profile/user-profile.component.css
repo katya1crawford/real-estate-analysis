@@ -1,0 +1,35 @@
+.mat-card {
+  margin-top: 5%;
+  margin-bottom: 15%;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  max-width: max-content;
+}
+
+.mat-form-field {
+  width: 100% !important;
+}
+
+.mat-card-header,
+.mat-card-subtitle {
+  background-color: #00bcd4;
+  color: #fff;
+  background-size: cover;
+  padding-top: 5px;
+}
+
+.mat-card-content {
+  padding: 10px 10px;
+  align-content: center;
+}
+
+.container {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-card-actions {
+  padding-right: 20px;
+}

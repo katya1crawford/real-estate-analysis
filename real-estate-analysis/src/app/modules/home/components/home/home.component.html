@@ -1,0 +1,55 @@
+<div>
+  <div class="container">
+    <h3>
+      What does it calculate?
+    </h3>
+  </div>
+</div>
+
+<div class="center-container">
+  <div class="flex-item">
+    <img src="/assets/cash-flow.png">
+    <h3 class="center">Cash Flow</h3>
+    <p>
+      This is probably the most important value investors inquire about because cash flow is an investor’s monthly profit. Think about it as an
+      investor’s salary.
+      Cash flow is equal to the monthly expenses deducted from monthly income.
+    </p>
+  </div>
+  <div class="flex-item">
+    <img src="/assets/cash-on-cash-return.png">
+    <h3 class="center">Cash-on-Cash Return</h3>
+    <p>
+      This number gives the investor the returns on a property based on the amount of cash put in the investment. It is calculated by dividing cash
+      flow by investment costs.
+    </p>
+  </div>
+  <div class="flex-item">
+    <img src="/assets/cap-rate.png">
+    <h3 class="center">Cap Rate</h3>
+    <p>
+      This calculation is also very important to investors because it is the purest form of understanding a property’s returns. Cap rate tells the
+      returns
+      of a property independent of its financing or the way it was paid for. Therefore, this number indicates the returns as if the property was
+      already paid for.
+    </p>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+
+<div class="button-container">
+  <h3>Simply input the numbers and app will do the rest.</h3>
+
+  <div *ngIf="!isAuthorized"><a mat-raised-button color="accent" [routerLink]="['/account/registration']" class=" btn btn-success btn-lg">LET'S
+      START HERE</a></div>
+</div>
+
+
+<div class="footer-container">
+  <img src="/assets/1_small.png" alt="">
+  <img src="/assets/2_small.png" alt="">
+  <img src="/assets/3_small.png" alt="">
+  <img src="/assets/4_small.png" alt="">
+</div>

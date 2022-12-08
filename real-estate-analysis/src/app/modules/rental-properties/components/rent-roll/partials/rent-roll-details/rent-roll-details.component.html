@@ -1,0 +1,137 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <mat-spinner *ngIf="pageLoading"></mat-spinner>
+
+    <div class="table-container" *ngIf="!pageLoading && rentRollSummary">
+
+      <button mat-raised-button (click)="export(this.rentRollSummary.rentRollItems)">
+        <mat-icon matTooltip="Export Excel sheet">document_scanner</mat-icon>
+      </button>
+
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort class="mat-elevation-z8">
+
+        <ng-container matColumnDef="units">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Units</th>
+          <td mat-cell *matCellDef="let item">{{item.unit}} </td>
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="2">Total</td>
+
+        </ng-container>
+
+        <ng-container matColumnDef="fp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Floor Plan</th>
+          <td mat-cell *matCellDef="let item"> {{item.floorPlan}} </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="sqft">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Sqft</th>
+          <td mat-cell *matCellDef="let item">{{item.squareFootage}}</td>
+          <td mat-footer-cell *matFooterCellDef> {{rentRollSummary.totalSquareFootage | number}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="brs">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Bedrooms </th>
+          <td mat-cell *matCellDef="let item">{{item.bedrooms}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="baths">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Baths </th>
+          <td mat-cell *matCellDef="let item">{{item.bathrooms}} </td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vacant">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Vacant </th>
+          <td mat-cell *matCellDef="let item" [ngClass]="{'highlighted': item.isVacant}">{{item.isVacant ? 'Yes' : ''}}</td>
+          <td mat-footer-cell *matFooterCellDef>{{rentRollSummary.numberOfVacantUnits}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="renovated">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Renovated </th>
+          <td mat-cell *matCellDef="let item" [ngClass]="{'highlighted': item.isRenovated }">{{item.isRenovated ? 'Yes' : ''}} </td>
+          <td mat-footer-cell *matFooterCellDef>{{rentRollSummary.numberOfRenovatedUnits}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contract-rent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Contract Rent</th>
+          <td mat-cell *matCellDef="let item">{{item.contractRent}}</td>
+          <td mat-footer-cell *matFooterCellDef>{{rentRollSummary.totalContractRent | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="other-income">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Other Income</th>
+          <td mat-cell *matCellDef="let item">{{item.otherIncome}} </td>
+          <td mat-footer-cell *matFooterCellDef> {{rentRollSummary.totalOtherIncome | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mkt-rent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Market Rent </th>
+          <td mat-cell *matCellDef="let item">{{item.marketRent}}</td>
+          <td mat-footer-cell *matFooterCellDef> {{rentRollSummary.totalMarketRent | currency}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="%-mkt-rent">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>% of Market Rent </th>
+          <td mat-cell *matCellDef="let item">{{item.percentOfMarketRent}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="mtm">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MTM </th>
+          <td mat-cell *matCellDef="let item">{{item.isMonthToMonth ? 'Yes' : ''}}</td>
+          <td mat-footer-cell *matFooterCellDef> {{rentRollSummary.numberOfMonthToMonthUnits}} </td>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="lease-start">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Lease Start</th>
+          <td mat-cell *matCellDef="let item">{{item.leaseStartDate|date:'M/d/yy'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="lease-end">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Lease End </th>
+          <td mat-cell *matCellDef="let item">{{item.leaseEndDate|date:'M/d/yy'}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+
+        </ng-container>
+
+
+        <ng-container matColumnDef="lease-term">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Lease Term </th>
+          <td mat-cell *matCellDef="let item">{{item.leaseTermInMonths}}</td>
+          <td mat-footer-cell *matFooterCellDef> </td>
+
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+        <tr mat-footer-row *matFooterRowDef="totalRowFooter; sticky: true"></tr>
+        <!-- <tr mat-footer-row *matFooterRowDef="averageRowFooter; sticky: true"></tr> -->
+
+
+      </table>
+
+      <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5,10,20]" [length]="rentRollSummary.rentRollItems.length" [showFirstLastButtons]="true">
+      </mat-paginator>
+
+    </div>
+
+
+  </mat-card-content>
+
+</mat-card>

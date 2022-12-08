@@ -1,0 +1,31 @@
+.details-container, .income-rent-container,.poverty-ethnic-container,.unemployment-rate-container{
+display: flex;
+flex-direction: row;
+align-items: center;
+flex-wrap: wrap;
+gap: 10px;
+justify-content:space-around;
+}
+
+.mat-card{
+width: auto;
+margin-right: 2%;
+}
+
+.mat-form-field {
+  width: 80%;
+}
+
+.details-item{
+align-self: center;
+}
+
+section{
+  margin-top: 2%;
+}
+
+.form-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

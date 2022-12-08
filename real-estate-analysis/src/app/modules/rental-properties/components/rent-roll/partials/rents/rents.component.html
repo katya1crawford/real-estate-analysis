@@ -1,0 +1,118 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Rents
+    </mat-card-title>
+    <mat-card-subtitle>What are the average rents for different types of floor plans?</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div id="container">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5">All Occupied Units</th>
+          </tr>
+          <tr>
+            <th>Floor Plan</th>
+            <th>Units</th>
+            <th>Avg Contract Rent</th>
+            <th>Avg Market Rent</th>
+            <th>% of Market Rent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let floorPlan of rentRollSummary.rentsAllOccupiedUnits.rentsFloorPlans">
+            <td>{{floorPlan.floorPlan}}</td>
+            <td>{{floorPlan.units}}</td>
+            <td>{{floorPlan.averageContractRent | currency}}</td>
+            <td>{{floorPlan.averageMarketRent | currency}}</td>
+            <td>{{floorPlan.percentOfMarketRent}}%</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total Average:</td>
+            <td>{{rentRollSummary.rentsAllOccupiedUnits.units}}</td>
+            <td>{{rentRollSummary.rentsAllOccupiedUnits.averageContractRent | currency}}</td>
+            <td>{{rentRollSummary.rentsAllOccupiedUnits.averageMarketRent | currency}}</td>
+            <td>{{rentRollSummary.rentsAllOccupiedUnits.percentOfMarketRent}}%</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="5">Occupied Non-Renovated Units</th>
+              </tr>
+              <tr>
+                <th>Floor Plan</th>
+                <th>Units</th>
+                <th>Avg Contract Rent</th>
+                <th>Avg Market Rent</th>
+                <th>% of Market Rent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let floorPlan of rentRollSummary.rentsNonRenovatedOccupiedUnits.rentsFloorPlans">
+                <td>{{floorPlan.floorPlan}}</td>
+                <td>{{floorPlan.units}}</td>
+                <td>{{floorPlan.averageContractRent | currency}}</td>
+                <td>{{floorPlan.averageMarketRent | currency}}</td>
+                <td>{{floorPlan.percentOfMarketRent}}%</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total Average:</td>
+                <td>{{rentRollSummary.rentsNonRenovatedOccupiedUnits.units}}</td>
+                <td>{{rentRollSummary.rentsNonRenovatedOccupiedUnits.averageContractRent | currency}}</td>
+                <td>{{rentRollSummary.rentsNonRenovatedOccupiedUnits.averageMarketRent | currency}}</td>
+                <td>{{rentRollSummary.rentsNonRenovatedOccupiedUnits.percentOfMarketRent}}%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="5">Occupied Renovated Units</th>
+              </tr>
+              <tr>
+                <th>Floor Plan</th>
+                <th>Units</th>
+                <th>Avg Contract Rent</th>
+                <th>Avg Market Rent</th>
+                <th>% of Market Rent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let floorPlan of rentRollSummary.rentsRenovatedOccupiedUnits.rentsFloorPlans">
+                <td>{{floorPlan.floorPlan}}</td>
+                <td>{{floorPlan.units}}</td>
+                <td>{{floorPlan.averageContractRent | currency}}</td>
+                <td>{{floorPlan.averageMarketRent | currency}}</td>
+                <td>{{floorPlan.percentOfMarketRent}}%</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total Average:</td>
+                <td>{{rentRollSummary.rentsRenovatedOccupiedUnits.units}}</td>
+                <td>{{rentRollSummary.rentsRenovatedOccupiedUnits.averageContractRent | currency}}</td>
+                <td>{{rentRollSummary.rentsRenovatedOccupiedUnits.averageMarketRent | currency}}</td>
+                <td>{{rentRollSummary.rentsRenovatedOccupiedUnits.percentOfMarketRent}}%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,165 @@
+@media (max-width:800px) {
+ .main-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column !important;
+    flex-wrap: wrap;
+    align-items: center;
+
+    }
+
+    .mat-form-field, .mat-form-field-two{
+       width:88% !important;
+    }
+
+    .form-container, .financial-summary-container{
+    width: 80% !important;
+    background-color:#fff ;
+    align-items: center;
+    }
+}
+
+
+.main-container{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4%;
+
+}
+
+.form-container{
+  margin: 0 auto;
+  padding-top: 2%;
+  display: flex;
+  width: 62%;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.147);
+  border-radius: 15px;
+
+}
+
+/* .mat-form-field-two{
+width: 100% !important;
+} */
+
+.unit-groups-container{
+display: flex;
+flex-direction: column;
+}
+
+.financial-summary-container{
+  width: 31%;
+  padding-top: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-items: right;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.147);
+  border-radius: 15px;
+}
+
+.column-container{
+display: flex;
+flex-direction: column;
+justify-content: center;
+column-gap: 5%;
+margin-left: 5%;
+
+}
+
+.section-container{
+  display: flex;
+  align-items:stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap:2%;
+  margin-left:5%;
+}
+
+.location-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap:2%;
+  margin-left: 5%;
+}
+
+.full-width {
+  width: 80% !important;
+}
+
+div.location-container{
+width: 100%;
+}
+
+.expenses-container{
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+gap: 1%;
+margin-left:6%;
+margin-top: 1%;
+padding-top:2.5% ;
+width: 100% !important;
+}
+
+.two-fields-container{
+width: 100%;
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+gap: 2%;
+margin-left:3%;
+}
+
+section{
+  /* width: 100%; */
+  /* margin: auto; */
+  flex-basis: auto;
+}
+.mat-card-header{
+  background-color:#00BCD4;
+  margin-bottom: 1%;
+}
+
+.mat-card{
+  margin-left: 4%;
+  padding: 0;
+  margin-bottom: 1%;
+  width: 500px;
+}
+
+.mat-dialog-title{
+  padding: 0;
+  text-align: center;
+}
+
+
+.mat-card{
+  margin-left: 4%;
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+
+.inner-card{
+  width: 77%;
+  height: auto;
+  padding-right: 0;
+}
+.mat-card-title{
+  color:aliceblue;
+  font-weight: 400;
+  margin-top: 10%;
+}
+textarea{
+  width: 500px !important;
+}
+
+/*
+.array-btn-add{
+  margin-left:30%;
+} */

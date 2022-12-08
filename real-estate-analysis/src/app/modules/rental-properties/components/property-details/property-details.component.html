@@ -1,0 +1,55 @@
+<div class="details-container">
+
+
+  <div class="link">
+    <span><a [routerLink]="['/rentals/listings']">Listings</a> / Property Details</span>
+  </div>
+
+  <div class="buttons">
+    <button mat-raised-button><a [routerLink]="'rent-roll'"> RENT ROLL</a></button>
+  </div>
+
+
+
+  <div class="partials-container">
+
+    <div class="summary-map-container">
+
+      <div class="summary">
+        <app-property-summary [property]="property" [pageLoading]="pageLoading"></app-property-summary>
+      </div>
+
+      <div class="map">
+        <app-summary-map [property]="property" [pageLoading]="pageLoading"></app-summary-map>
+      </div>
+
+    </div>
+
+    <div>
+      <app-kpis [property]="property" [pageLoading]="pageLoading"></app-kpis>
+    </div>
+
+    <div>
+      <app-estimated-resale-value [property]="property" [pageLoading]="pageLoading"></app-estimated-resale-value>
+    </div>
+
+    <div class="income-statement">
+      <app-income-statement [property]="property" [pageLoading]="pageLoading"></app-income-statement>
+    </div>
+
+    <div>
+      <app-financial-forecast [property]="property" [financialForecasts]="financialForecasts" [pageLoading]="pageLoading"></app-financial-forecast>
+    </div>
+
+
+    <div>
+      <app-gallery [property]="property" [galleryImages]="galleryImages" [pageLoading]="pageLoading"></app-gallery>
+    </div>
+
+
+    <div *ngIf="!pageLoading && property.notes">
+      <app-notes [property]="property" [pageLoading]="pageLoading"></app-notes>
+    </div>
+  </div>
+
+</div>

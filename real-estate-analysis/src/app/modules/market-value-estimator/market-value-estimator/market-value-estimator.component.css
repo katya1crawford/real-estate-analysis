@@ -1,0 +1,111 @@
+.mat-card-header {
+  background-color: #00bcd4;
+}
+
+.mat-card {
+  /* margin-left: 4%; */
+  max-width: 500px;
+  padding: 0;
+}
+.mat-card-title {
+  color: aliceblue;
+  font-weight: 400;
+  margin-top: 10%;
+}
+
+.mat-form-field {
+  width: 90% !important;
+}
+
+.form {
+  padding: 3% 5% 0 5%;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-container {
+  display: flex;
+  justify-content: end;
+  margin: 1%;
+}
+
+#form-btn {
+  width: 411px !important;
+  margin-bottom: 5%;
+  margin-left: 7%;
+}
+
+table {
+  width: 80%;
+  margin-top: 4%;
+  margin-bottom: 2%;
+  border: 0.05px solid #b3b2b2;
+  line-height: 25px;
+  background-color: #f1f1f1;
+  box-shadow: -2px 2px 15px 0px rgba(141, 136, 136, 0.84);
+  -webkit-box-shadow: -2px 2px 15px 0px rgba(141, 136, 136, 0.84);
+  -moz-box-shadow: -2px 2px 15px 0px rgba(141, 136, 136, 0.84);
+  border-radius: 11px;
+}
+
+th {
+  /* padding-left: 16px; */
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: solid black 1.5px;
+  padding: 10px;
+  background-color: #b3d0ec;
+  border-bottom: 4px solid black;
+}
+
+#summary > td {
+  font-size: 16px;
+  text-align: center;
+  background-color: #d1e7dd;
+  border: none;
+}
+
+.mat-column-total-cash-needed {
+  font-weight: 600;
+}
+
+td {
+  font-size: 16px;
+  padding: 5px;
+  text-align: center;
+  border: none;
+}
+
+.subjectProperty {
+  background-color: rgb(225, 255, 225);
+  border-top: 4px black solid;
+}
+
+.comparableProperty {
+  background-color: rgb(255, 225, 225);
+  border-bottom: 4px solid black;
+}
+
+tr:hover {
+  background-color: #ced4da;
+}
+
+.emphasize-blue {
+  background-color: #cff4fc;
+}
+
+#description {
+  margin: 5% 1%;
+}
+
+.buttons {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  column-gap: 10px;
+  justify-content: space-between;
+}
+.mat-icon {
+  font-size: 20px;
+}

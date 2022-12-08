@@ -1,0 +1,132 @@
+@media (max-width: 750px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  th {
+    font-size: 0.45rem;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: end;
+  gap: 1%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+  margin-right: 2%;
+}
+
+.buttons-container div {
+  margin: 1%;
+}
+
+.mat-icon {
+  font-size: 20px;
+}
+.mat-icon:hover {
+  cursor: pointer;
+}
+
+.mat-form-field {
+  width: 90% !important;
+}
+
+.filters-container {
+  padding: 5% 3%;
+}
+
+table > mat-icon {
+  font-size: 20px;
+}
+
+.text-container {
+  margin-left: 3%;
+  width: 90%;
+  display: flex;
+  justify-content: start;
+  line-height: 1.9;
+}
+
+h2,
+h4 {
+  margin-left: 4%;
+}
+
+.mat-card-header {
+  background-color: #00bcd4;
+}
+
+.mat-card {
+  margin-left: 4%;
+  max-width: 500px;
+  padding: 0;
+}
+.mat-card-title {
+  color: aliceblue;
+  font-weight: 400;
+  margin-top: 10%;
+}
+
+.table-container {
+  margin-top: 3%;
+  margin-bottom: 3%;
+  width: 90%;
+  margin-left: 3%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+  margin: 2% auto;
+  padding: 16px;
+}
+
+th {
+  font-weight: bold;
+  font-size: 1rem;
+  color: black;
+  text-align: center;
+}
+
+.mat-column-city {
+  width: 32px;
+  padding-right: 24px;
+  text-align: left;
+}
+
+.delete-edit-favorite td {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+}
+
+.delete-edit-favorite button {
+  background-color: none;
+  border: none;
+  padding: 0;
+}
+
+.is-good {
+  background-color: #4dd0e1;
+  color: white;
+}
+
+.mat-column-delete-edit-favorite {
+  width: 32px;
+  padding-left: 20px;
+  text-align: right;
+  border-left: 1px solid currentColor;
+}
+
+.mat-column-city {
+  width: 32px;
+  padding-right: 20px;
+  text-align: left;
+}

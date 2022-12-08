@@ -1,0 +1,83 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div *ngIf="isAuthorized">
+      <button mat-icon-button>
+        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+      </button>
+      <span style="margin: 5px;" id="portalLabel">Properties Portal</span>
+    </div>
+    <span class="spacer"></span>
+    <button mat-raised-button [routerLink]="'account/registration'" *ngIf="!isAuthorized" class="loginBtn">
+      Sign Up </button>
+    <button mat-raised-button (click)="onLogin()" class="loginBtn" *ngIf="!isAuthorized">
+      Log In </button>
+    <button mat-raised-button (click)="onLogOut()" class="loginBtn" *ngIf="isAuthorized">
+      Log Out </button>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <a mat-list-item> Sign Up </a>
+      <a mat-list-item [routerLink]="'/home'"> Home </a>
+      <a mat-list-item [routerLink]="'account/user-profile'"> Account Information </a>
+      <a mat-list-item [matMenuTriggerFor]="rentalsMenu"> Rentals </a>
+      <mat-menu #rentalsMenu="matMenu" yPosition="below" xPosition="before">
+        <a mat-menu-item [routerLink]="'rentals/listings'">Listings</a>
+        <a mat-menu-item [routerLink]="'rentals/in-review'">In-Review</a>
+        <a mat-menu-item [routerLink]="'rentals/purchased'">Purchased</a>
+      </mat-menu>
+      <a mat-list-item [matMenuTriggerFor]="locationAnalysisMenu"> Location Analysis </a>
+      <mat-menu #locationAnalysisMenu="matMenu" yPosition="below" xPosition="before">
+        <a mat-menu-item [routerLink]="'location-analysis/cities'">Cities</a>
+        <a mat-menu-item [routerLink]="'location-analysis/neighborhoods'">Neighborhoods</a>
+      </mat-menu>
+
+      <a mat-list-item [routerLink]="'market-value-estimator'"> Market Value Estimator </a>
+      <a mat-list-item [matMenuTriggerFor]="dueDiligenceMenu"> Due Diligence </a>
+      <mat-menu #dueDiligenceMenu="matMenu" yPosition="below" xPosition="before">
+        <a mat-menu-item [routerLink]="'due-diligence/pre-offer'">Pre-Offer</a>
+        <a mat-menu-item [routerLink]="'due-diligence/purchase-and-sale-agreement'">Purchase and Sale Agreement</a>
+        <a mat-menu-item [routerLink]="'due-diligence/post-acceptance'">Post-Acceptance</a>
+      </mat-menu>
+      <a mat-list-item [matMenuTriggerFor]="entityMenu"> Entity Structure </a>
+      <mat-menu #entityMenu="matMenu" yPosition="below" xPosition="before">
+        <a mat-menu-item [routerLink]="'entity-structure/limited-partnership'">Limited Partnership</a>
+        <a mat-menu-item [routerLink]="'entity-structure/llc'">LLC</a>
+        <a mat-menu-item [routerLink]="'entity-structure/series-llc'">Series LLC</a>
+        <a mat-menu-item [routerLink]="'entity-structure/taxation'">Taxation</a>
+        <a mat-menu-item [routerLink]="'entity-structure/wyoming-entity'">Wyoming Entity</a>
+        <a mat-menu-item [routerLink]="'entity-structure/estate-planning'">Estate Planning</a>
+      </mat-menu>
+      <a mat-list-item [matMenuTriggerFor]="miscellaneousMenu"> Miscellaneous </a>
+      <mat-menu #miscellaneousMenu="matMenu" yPosition="below" xPosition="before">
+        <a mat-menu-item [routerLink]="'cost-segregation'">Cost Segregation</a>
+        <a mat-menu-item [routerLink]="'classifications'">Classifications</a>
+        <a mat-menu-item [routerLink]="'finding-a-good-deal'">Finding a Good Deal</a>
+        <a mat-menu-item [routerLink]="'best-rentals'">Best Rentals</a>
+        <a mat-menu-item [routerLink]="'submitting-your-offer'">Submitting Your Offer</a>
+      </mat-menu>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+
+
+    <header>
+      <h1>Real estate can be easy.</h1>
+      <h2>Real Estate Analysis Group app will save you time from using spreadsheets to calculate costs and return.</h2>
+    </header>
+
+    <div class="router">
+      <router-outlet></router-outlet>
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <div class="footer-container">
+      <p> Copyright &copy; 2022 | <a [routerLink]="['/terms']" class="link">Terms and Conditions</a>
+        | <a [routerLink]="['/privacy']" class="link">Privacy</a> | <a href="javascript:void(0);" class="link">Contact Us</a>
+      </p>
+    </div>

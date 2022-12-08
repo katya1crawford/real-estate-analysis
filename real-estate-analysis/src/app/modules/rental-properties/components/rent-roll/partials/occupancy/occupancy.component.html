@@ -1,0 +1,116 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Occupancy
+    </mat-card-title>
+    <mat-card-subtitle>What is the occupancy status of each floor plan?</mat-card-subtitle>
+  </mat-card-header>
+  <div id="container">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="5">All Units</th>
+        </tr>
+        <tr>
+          <th>Floor Plan</th>
+          <th>Units</th>
+          <th>Occupied Units</th>
+          <th>Vacant Units</th>
+          <th>% of Vacant Units</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let floorPlan of rentRollSummary.occupancyAllUnits.occupancyFloorPlans">
+          <td>{{floorPlan.floorPlan}}</td>
+          <td>{{floorPlan.units}}</td>
+          <td>{{floorPlan.occupiedUnits}}</td>
+          <td>{{floorPlan.vacantUnits}}</td>
+          <td>{{floorPlan.percentOfVacantUnits}}%</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Totals:</td>
+          <td>{{rentRollSummary.occupancyAllUnits.totalUnits}}</td>
+          <td>{{rentRollSummary.occupancyAllUnits.totalOccupiedUnits}}</td>
+          <td>{{rentRollSummary.occupancyAllUnits.totalVacantUnits}}</td>
+          <td>{{rentRollSummary.occupancyAllUnits.totalPercentOfVacantUnits}}%</td>
+        </tr>
+      </tfoot>
+    </table>
+
+
+    <div>
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5">Non-Renovated Units</th>
+          </tr>
+          <tr>
+            <th>Floor Plan</th>
+            <th>Units</th>
+            <th>Occupied Units</th>
+            <th>Vacant Units</th>
+            <th>% of Vacant Units</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let floorPlan of rentRollSummary.occupancyNonRenovatedUnits.occupancyFloorPlans">
+            <td>{{floorPlan.floorPlan}}</td>
+            <td>{{floorPlan.units}}</td>
+            <td>{{floorPlan.occupiedUnits}}</td>
+            <td>{{floorPlan.vacantUnits}}</td>
+            <td>{{floorPlan.percentOfVacantUnits}}%</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Totals:</td>
+            <td>{{rentRollSummary.occupancyNonRenovatedUnits.totalUnits}}</td>
+            <td>{{rentRollSummary.occupancyNonRenovatedUnits.totalOccupiedUnits}}</td>
+            <td>{{rentRollSummary.occupancyNonRenovatedUnits.totalVacantUnits}}</td>
+            <td>{{rentRollSummary.occupancyNonRenovatedUnits.totalPercentOfVacantUnits}}%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+
+    <div>
+
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5">Renovated Units</th>
+          </tr>
+          <tr>
+            <th>Floor Plan</th>
+            <th>Units</th>
+            <th>Occupied Units</th>
+            <th>Vacant Units</th>
+            <th>% of Vacant Units</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let floorPlan of rentRollSummary.occupancyRenovatedUnits.occupancyFloorPlans">
+            <td>{{floorPlan.floorPlan}}</td>
+            <td>{{floorPlan.units}}</td>
+            <td>{{floorPlan.occupiedUnits}}</td>
+            <td>{{floorPlan.vacantUnits}}</td>
+            <td>{{floorPlan.percentOfVacantUnits}}%</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Totals:</td>
+            <td>{{rentRollSummary.occupancyRenovatedUnits.totalUnits}}</td>
+            <td>{{rentRollSummary.occupancyRenovatedUnits.totalOccupiedUnits}}</td>
+            <td>{{rentRollSummary.occupancyRenovatedUnits.totalVacantUnits}}</td>
+            <td>{{rentRollSummary.occupancyRenovatedUnits.totalPercentOfVacantUnits}}%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</mat-card>

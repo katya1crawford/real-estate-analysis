@@ -1,0 +1,892 @@
+<div class="container" *ngIf="!pageLoading">
+  <form [formGroup]="addEditPropertyForm" (ngSubmit)="onAddEditPropertyFormSubmit()">
+    <div class="image-container">
+      <mat-form-field appearance="fill">
+        <button mat-icon-button matPrefix (click)="f_input.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+        <mat-label>Choose image</mat-label>
+        <input type="text" readonly matInput [value]="thumbnailImage.value ? thumbnailImage.value.name  : ''" formControlName="thumbnailImage" />
+        <input type="file" hidden #f_input (change)="onThumbnailImageChange($event)" />
+      </mat-form-field>
+
+      <button mat-mini-fab matTooltip="Delete Image" (click)="onDeleteThumbnailImage($event)">
+        <mat-icon>delete_forever</mat-icon>
+      </button>
+
+    </div>
+
+    <div class="main-container">
+
+      <div class="form-container">
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Property Details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+
+            <div class="status">
+              <section *ngIf="(propertyStatuses$|async) else loading">
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>Property Status</mat-label>
+                  <mat-select formControlName="propertyStatusId">
+                    <mat-option value="">Any Or None</mat-option>
+                    <mat-option *ngFor="let status of propertyStatuses$|async" [value]="status.id">{{status.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+
+              <section>
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>Address</mat-label>
+                  <input matInput formControlName="address" type="text">
+                </mat-form-field>
+              </section>
+
+              <ng-template #loading>
+                <mat-spinner></mat-spinner>
+              </ng-template>
+
+            </div>
+
+
+            <div class="location-container">
+              <section>
+                <mat-form-field appearance="fill">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" type="text">
+                </mat-form-field>
+              </section>
+
+              <section *ngIf="(states$|async) as states; else loading">
+                <mat-form-field appearance="fill">
+                  <mat-label>State</mat-label>
+                  <mat-select matInput formControlName="stateId">
+                    <mat-option value="">Select one</mat-option>
+                    <mat-option *ngFor="let state of states" [value]="state.id">{{state.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+              <section>
+                <mat-form-field appearance="fill">
+                  <mat-label>Zip Code</mat-label>
+                  <input matInput formControlName="zipCode" type="number">
+                </mat-form-field>
+              </section>
+            </div>
+
+            <div class="section-container">
+              <section *ngIf="(propertyTypes$|async) as propertyTypes; else loading">
+                <mat-form-field appearance="fill">
+                  <mat-label>Property Type</mat-label>
+                  <mat-select formControlName="propertyTypeId">
+                    <mat-option value="">Any Or None</mat-option>
+                    <mat-option *ngFor="let propertyType of propertyTypes" [value]="propertyType.id">{{propertyType.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </section>
+
+              <section>
+                <mat-form-field appearance="fill">
+                  <mat-label>Year Build in</mat-label>
+                  <input matInput formControlName="yearBuiltIn" type="number">
+                </mat-form-field>
+              </section>
+            </div>
+
+            <div class="section-container">
+              <section>
+                <mat-form-field appearance="fill">
+                  <mat-label>Lot SF</mat-label>
+                  <input matInput formControlName="lotSquareFootage" type="number">
+                </mat-form-field>
+              </section>
+              <section>
+                <mat-form-field appearance="fill">
+                  <mat-label>Building SF</mat-label>
+                  <input matInput formControlName="buildingSquareFootage" type="number">
+                </mat-form-field>
+              </section>
+            </div>
+          </mat-card-content>
+          <mat-progress-bar *ngIf="pageLoading" mode="indeterminate"></mat-progress-bar>
+        </mat-card>
+
+
+
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Unit Groups</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div formArrayName="unitGroups">
+              <div *ngFor="let unitGroup of unitGroups.controls; index as i; last as isLast; first as isFirst" [formGroupName]="i">
+
+                <section class="section-container">
+                  <mat-form-field appearance="fill">
+                    <mat-label># of Units</mat-label>
+                    <input matInput formControlName="numberOfUnits" type="number">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>SF</mat-label>
+                    <input matInput formControlName="squareFootage" type="number">
+                  </mat-form-field>
+                </section>
+
+                <section section class="section-container">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Bedrooms</mat-label>
+                    <input matInput formControlName="bedrooms" type="number">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Bathrooms </mat-label>
+                    <input matInput formControlName="bathrooms" type="number">
+                  </mat-form-field>
+                  <section>
+                    <button mat-mini-fab *ngIf="(i !== closingCosts.controls.length - 1) || (closingCosts.controls.length > 1 && isLast)"
+                      (click)="onRemoveFieldClick(unitGroups,i,$event)" class="array-btn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-mini-fab (click)="onAddArrayGroup(unitGroups,$event)" *ngIf="isFirst" class="array-btn">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </section>
+                </section>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <div formGroupName="financialSummaryGroup" class="financialSummary">
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Loan Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <section>
+
+                <div class="section-container">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Purchase Price</mat-label>
+                    <input matInput formControlName="purchasePrice" type="number">
+                    <button mat-icon-button matPrefix matTooltipPosition="above" matTooltip="This is the cost that you plan to buy the property for. If you are unsure of what to put here, just
+                    take a guess at what you think you can get the property for and then run the calculator. You can always come back later and adjust this number
+                    until you find the perfect purchase price.">
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Down Payment Percent</mat-label>
+                    <input matInput formControlName="downPaymentPercent" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label> Down Payment Amount</mat-label>
+                    <input matInput formControlName="downPayment" type="number">
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="section-container">
+
+                  <mat-form-field appearance="fill" style="width:40% !important;">
+                    <mat-label>Loan APR</mat-label>
+                    <input matInput type="number" formControlName="loanApr">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width:40% !important;">
+                    <mat-label>Loan Years</mat-label>
+                    <input matInput type="number" formControlName="loanYears">
+                  </mat-form-field>
+
+                </div>
+              </section>
+
+              <div *ngIf="(closingCostTypes$|async) as closingCostsTypes; else loading" formArrayName="closingCosts">
+                <mat-card class="mat-elevation-z8" style="width:90%">
+                  <mat-card-header>
+                    <mat-card-title>Closing Cost Expenses</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <section>
+                      <div class="expenses-container" *ngFor="let closingCost of closingCosts.controls; index as i; last as isLast; first as isFirst"
+                        [formGroupName]="i">
+                        <section>
+                          <mat-form-field appearance="fill">
+                            <mat-label>Closing Cost Type </mat-label>
+                            <mat-select formControlName="closingCostTypeId">
+                              <mat-option *ngFor="let closingCostType of closingCostsTypes" [value]="closingCostType.id">
+                                {{closingCostType.name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </section>
+                        <section>
+                          <mat-form-field appearance="fill">
+                            <mat-label>Amount </mat-label>
+                            <input matInput type="number" formControlName="amount" class="mat-form-field-two">
+                            <button mat-icon-button matPrefix>
+                              <mat-icon>attach_money</mat-icon>
+                            </button>
+                          </mat-form-field>
+                        </section>
+                        <section>
+                          <button mat-mini-fab *ngIf="(i !== closingCosts.controls.length - 1) || (closingCosts.controls.length > 1 && isLast)"
+                            (click)="onRemoveFieldClick(closingCosts,i,$event)" class=" array-btn">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                          <button mat-mini-fab (click)="onAddArrayGroup(closingCosts,$event)" *ngIf="isFirst" class="array-btn">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </section>
+                      </div>
+                    </section>
+                  </mat-card-content>
+                </mat-card>
+
+              </div>
+
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Repair Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <section formArrayName="interiorRepairExpenses">
+                <div class="inner-card" *ngFor="let interiorRepairExpense of interiorRepairExpenses.controls; index as i;last as isLast;first as isFirst"
+                  [formGroupName]="i">
+                  <mat-card *ngIf="interiorRepairExpenseTypes$|async as interiorRepairExpenseTypes;else loading">
+                    <mat-card-content>
+                      <p>Interior Expenses</p>
+                      <div class="expenses-container">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Interior Repair Exp.Type</mat-label>
+                          <mat-select formControlName="interiorRepairExpenseTypeId">
+                            <mat-option *ngFor="let interiorRepairExpenseType of interiorRepairExpenseTypes" [value]="interiorRepairExpenseType.id">
+                              {{interiorRepairExpenseType.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                          <mat-label>Amount </mat-label>
+                          <input matInput formControlName="amount" type="number" class="mat-form-field-two">
+                          <button mat-icon-button matPrefix>
+                            <mat-icon>attach_money</mat-icon>
+                          </button>
+                        </mat-form-field>
+                        <button mat-mini-fab *ngIf="(i !== interiorRepairExpenses.controls.length - 1) || (interiorRepairExpenses.controls.length > 1 && isLast)"
+                          (click)="onRemoveFieldClick(interiorRepairExpenses,i,$event)" class=" array-btn">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="onAddArrayGroup(interiorRepairExpenses,$event)" *ngIf="isFirst" class="array-btn-add">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </section>
+
+              <section formArrayName="exteriorRepairExpenses">
+                <div class="inner-card" *ngFor="let exteriorRepairExpense of exteriorRepairExpenses.controls; index as i;last as isLast;first as isFirst"
+                  [formGroupName]="i">
+                  <mat-card *ngIf="(exteriorRepairExpenseTypes$|async) as exteriorRepairExpenseTypes; else loading">
+                    <mat-card-content>
+                      <p>Exterior Expenses</p>
+
+                      <div class="expenses-container">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Exterior Repair Exp.Type</mat-label>
+                          <mat-select formControlName="exteriorRepairExpenseTypeId">
+                            <mat-option *ngFor="let exteriorRepairExpenseType of exteriorRepairExpenseTypes" [value]="exteriorRepairExpenseType.id">
+                              {{exteriorRepairExpenseType.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                          <mat-label>Amount </mat-label>
+                          <input matInput type="number" formControlName="amount" class="mat-form-field-two">
+                          <button mat-icon-button matPrefix>
+                            <mat-icon>attach_money</mat-icon>
+                          </button>
+                        </mat-form-field>
+                        <button mat-mini-fab *ngIf="(i !== exteriorRepairExpenses.controls.length - 1) || (exteriorRepairExpenses.controls.length > 1 && isLast)"
+                          (click)="onRemoveFieldClick(exteriorRepairExpenses,i,$event)" class=" array-btn">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="onAddArrayGroup(exteriorRepairExpenses,$event)" *ngIf="isFirst" class="array-btn">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </section>
+
+              <section formArrayName="generalRepairExpenses">
+                <div class="inner-card" *ngFor="let generalRepairExpense of generalRepairExpenses.controls; index as i; last as isLast; first as isFirst"
+                  [formGroupName]="i">
+                  <mat-card *ngIf="generalRepairExpenseTypes$|async as generalRepairExpenseTypes; else loading">
+                    <mat-card-content>
+                      <p>General Expenses</p>
+
+                      <div class="expenses-container">
+                        <mat-form-field appearance="fill">
+                          <mat-label>General Repair Exp.Type </mat-label>
+                          <mat-select formControlName="generalRepairExpenseTypeId">
+                            <mat-option *ngFor="let generalRepairExpenseType of generalRepairExpenseTypes" [value]="generalRepairExpenseType.id">
+                              {{generalRepairExpenseType.name}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                          <mat-label>Amount </mat-label>
+                          <input matInput type="number" formControlName="amount" class="mat-form-field-two">
+                          <button mat-icon-button matPrefix>
+                            <mat-icon>attach_money</mat-icon>
+                          </button>
+                        </mat-form-field>
+                        <button mat-mini-fab *ngIf="(i !== generalRepairExpenses.controls.length - 1) || (generalRepairExpenses.controls.length > 1 && isLast)"
+                          (click)="onRemoveFieldClick(generalRepairExpenses,i,$event)" class=" array-btn">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="onAddArrayGroup(generalRepairExpenses,$event)" *ngIf="isFirst" class="array-btn">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </section>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8" formArrayName="annualOperatingExpenses">
+            <mat-card-header>
+              <mat-card-title>Annual Operating Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <section>
+                <div class="inner-card" *ngFor="let operatingExpense of annualOperatingExpenses.controls; index as i;last as isLast;first as isFirst"
+                  [formGroupName]="i">
+
+                  <div class="section-container" *ngIf="operatingExpenseTypes$|async as operatingExpenseTypes;  else loading">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Operating Exp.Type </mat-label>
+                      <mat-select formControlName="operatingExpenseTypeId">
+                        <mat-option *ngFor="let operatingExpenseType of operatingExpenseTypes" [value]="operatingExpenseType.id">
+                          {{operatingExpenseType.name}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Amount </mat-label>
+                      <input matInput type="number" formControlName="amount" class="mat-form-field-two">
+                      <button mat-icon-button matPrefix>
+                        <mat-icon>attach_money</mat-icon>
+                      </button>
+                    </mat-form-field>
+                    <button mat-mini-fab *ngIf="(i !== annualOperatingExpenses.controls.length - 1) || (annualOperatingExpenses.controls.length > 1 && isLast)"
+                      (click)="onRemoveFieldClick(annualOperatingExpenses,i,$event)" class="array-btn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-mini-fab (click)="onAddArrayGroup(annualOperatingExpenses,$event )" *ngIf="isFirst" class="array-btn">
+                      <mat-icon>add</mat-icon>
+                    </button>
+
+                  </div>
+                </div>
+              </section>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Annual Income</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Gross Scheduled Rental Income</mat-label>
+                    <input matInput type="number" formControlName="annualGrossScheduledRentalIncome" placeholder="$0.00" class="mat-form-field-two">
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Other Income </mat-label>
+                    <input matInput type="number" formControlName="otherAnnualIncome" class="mat-form-field-two">
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Annual Variable Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Vacancy</mat-label>
+                    <input matInput formControlName="annualVacancyRate" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Property Management Fee </mat-label>
+                    <input matInput formControlName="annualPropertyManagementFeeRate" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Future Annual Assumptions</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill" placeholder="%0.0">
+                    <mat-label>Rental Income Growth Rate</mat-label>
+                    <input matInput formControlName="annualGrossScheduledRentalIncomeGrowthRate" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill" placeholder="%0.0">
+                    <mat-label>Expenses Growth Rate </mat-label>
+                    <input matInput formControlName="annualOperatingExpensesGrowthRate" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Market Rates</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Market Capitalization Rate</mat-label>
+                    <input matInput formControlName="marketCapitalizationRate" type="number">
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+          <div class="expenses-container">
+            <section>
+              <mat-form-field appearance="fill">
+                <mat-label>Notes</mat-label>
+                <textarea cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" matInput></textarea>
+              </mat-form-field>
+            </section>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="financial-summary-container">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Financing Overview</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">Total Purchase Price:
+                <a mat-button href="javascript:void(0)" [appPopover]="totalPurchasePriceTemplate" title="Total Purchase Price">
+                  <strong>{{financialSummary? (financialSummary.totalPurchasePrice |currency) : '$0.00'}}</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Loan Amount:
+                <a mat-button href="javascript:void(0)" [appPopover]="loanAmountTemplate" title="Loan Amount">
+                  <strong>{{financialSummary ? (financialSummary.loanAmount | currency) : '$0.00'}}</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Total Cash Needed:
+                <a mat-button href="javascript:void(0)" [appPopover]="totalCashNeededTemplate" title="Total Cash Needed">
+                  <strong>{{financialSummary ? (financialSummary.totalCashNeeded | currency): '$0.00'}}</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Debt Service Coverage Ratio:
+                <a mat-button href="javascript:void(0)" [appPopover]="dscrTemplate" title="Debt Service Coverage Ratio">
+                  <strong>{{financialSummary ? (financialSummary.debtCoverageRatio | currency) : '$0.00'}}</strong>
+                </a>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Annual Rates</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">Capitalization Rate:
+                <a mat-button href="javascript:void(0)" [appPopover]="capitalizationRateTemplate" title="Capitalization Rate:">
+                  <strong>{{financialSummary ? (financialSummary.annualCapRate) : '0.00' }} %</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Cash-on-Cash Rate:
+                <a mat-button href="javascript:void(0)" [appPopover]="cashOnCashTemplate" title="Cash-on-Cash Rate">
+                  <strong>{{financialSummary ? (financialSummary.annualCashOnCashRate | currency) : '0.00' }} %</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Total ROI:
+                <a mat-button href="javascript:void(0)" [appPopover]="totalRoiTemplate" title="Total ROI">
+                  <strong>{{financialSummary ? financialSummary.debtCoverageRatio : '0'}} %</strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">EGI:
+                <a mat-button href="javascript:void(0)" [appPopover]="egiTemplate" title="EGI">
+                  <strong>{{financialSummary ? (financialSummary.annualEffectiveGrossIncome | currency) : '$0.00' }}</strong>
+
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Operating Expenses:
+                <strong>{{financialSummary ? (financialSummary.totalAnnualOperatingExpenses | currency) : '$0.00' }}</strong>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">NOI:
+
+                <strong>{{financialSummary ? (financialSummary.annualNoi| currency) : '$0.00' }}</strong>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Debt Service:
+
+                <strong>{{financialSummary ? (financialSummary.annualMortgageExpenses | currency): '$0.00' }}</strong>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Net Cash Flow:
+
+                <strong>{{financialSummary ? (financialSummary.annualCashFlow | currency) : '$0.00' }}</strong>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Gain on Sale</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">Exit Price:
+                <a mat-button href="javascript:void(0)" [appPopover]="exitPriceTemplate" title="Exit Price">
+                  <strong> {{financialSummary ? (financialSummary.exitPrice | currency) : "$0.00" }} </strong>
+                </a>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Gain on Sale:
+                <a mat-button href="javascript:void(0)" [appPopover]="gainOnSaleTemplate" title="Gain on Sale">
+                  <strong>{{financialSummary ? (financialSummary.gainOnSale | currency) :'$0.00' }}</strong> </a>
+              </mat-list-item>
+
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Gain on Value:
+                <a mat-button href="javascript:void(0)" [appPopover]="gainOnValueTemplate">
+                  <strong>{{financialSummary ? financialSummary.gainOnValuePercent : 0 }} %</strong>
+                </a>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="column-container">
+
+          <div>
+            <button mat-raised-button color="primary" (click)="onRefreshRatesClick($event)">REFRESH RATES</button>
+          </div>
+
+
+
+          <div class="buttons">
+            <button mat-raised-button>BACK</button>
+            <button mat-raised-button (click)="onResetForm()" color="warn">RESET</button>
+            <button mat-raised-button type="submit" color="accent">SAVE</button>
+          </div>
+
+          <div>
+            <span>Note: To see much more analysis data save this property by clicking SAVE button in this form then go to the property details page.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+    </div>
+  </form>
+
+
+
+
+
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+
+  <ng-template #totalPurchasePriceTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Total Purchase Price
+      </mat-card-header>
+      <mat-card-content>
+        <span>Purchase price:
+          <strong>{{(purchasePrice.value | currency) || '$0.00' }}</strong><br /></span>
+        <span>Closing Costs:
+          <strong>{{financialSummary ?(financialSummary.totalClosingCosts | currency) : '$0.00' }}</strong><br /></span>
+        <span>
+          Interior Repair Exp.:
+          <strong>{{financialSummary ? (financialSummary.totalInteriorRepairExpenses | currency) : '$0.00' }}</strong><br /></span>
+        <span>
+          Exterior Repair Exp.:
+          <strong>{{financialSummary ? (financialSummary.totalExteriorRepairExpenses | currency) : '$0.00' }}</strong><br /></span>
+        <span>
+          General Repair Exp.: <strong>{{financialSummary ? financialSummary.totalGeneralRepairExpenses : '$0.00' | currency}}</strong><br /></span>
+        <span>
+          <mat-divider></mat-divider>
+          Total Purchase Price:
+          <strong>{{financialSummary ? (financialSummary.totalPurchasePrice | currency) : '$0.00' }}</strong>
+        </span>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+
+  <ng-template #loanAmountTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Total Purchase Price
+      </mat-card-header>
+      <mat-card-content>
+        <p>Loan Amount = Purchase Price - Down Payment</p>
+        <p>
+          <i>
+            {{ financialSummary ? (financialSummary.loanAmount | currency) : 0 }} = {{(purchasePrice.value | currency) || 0 }} - {{(downPayment.value | currency) ||
+            0 }}</i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #totalCashNeededTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Total Cash Needed
+      </mat-card-header>
+      <mat-card-content>
+        <span>Down Payment:
+          <strong>{{(downPayment.value| currency) || 0 }}</strong><br /></span>
+        <span>Closing Costs:
+          <strong>{{financialSummary ? (financialSummary.totalClosingCosts | currency) : 0 }}</strong><br /></span>
+        <span>Interior Repair Exp.:
+          <strong>{{financialSummary ? (financialSummary.totalInteriorRepairExpenses | currency) : 0 }}</strong><br /></span>
+        <span>Exterior Repair Exp.:
+          <strong>{{financialSummary ? (financialSummary.totalExteriorRepairExpenses | currency) : 0 }}</strong><br /></span>
+        <span>General Repair Exp.:
+          <strong>{{financialSummary ? (financialSummary.totalGeneralRepairExpenses | currency) : 0 }}</strong><br /></span>
+        <div class="rowSubTotal">Total Cash Needed:
+          <strong>{{financialSummary ? (financialSummary.totalCashNeeded | currency) : 0 }}</strong>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #dscrTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Total Cash Needed
+      </mat-card-header>
+      <mat-card-content>
+        <p>DSCR = Net Operating Income / Principal and Interest Payments</p>
+        <p>
+          <i>{{financialSummary ? financialSummary.debtCoverageRatio : 0}} = {{financialSummary ? (financialSummary.annualNoi | currency) : 0 }} /
+            {{financialSummary ? (financialSummary.annualMortgageExpenses | currency) : 0 }} </i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #capitalizationRateTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Capitalization Rate
+      </mat-card-header>
+      <mat-card-content>
+        <p>Capitalization Rate = Net Operating Income / Total Purchase Price</p>
+        <p>
+          <i>{{financialSummary ? financialSummary.annualCapRate : 0 }} % = {{financialSummary ? (financialSummary.annualNoi | currency) : 0 }} /
+            {{financialSummary ? (financialSummary.totalPurchasePrice | currency) : 0 }}</i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #cashOnCashTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Cash-on-Cash
+      </mat-card-header>
+      <mat-card-content>
+        <p>Cash-on-Cash = (NOI - Debt Service) / Total Cash Needed</p>
+        <p>
+          <i>{{financialSummary ? financialSummary.annualCashOnCashRate : 0 }}% = ({{financialSummary ? (financialSummary.annualNoi | currency) : 0 }} -
+            {{financialSummary ? (financialSummary.annualMortgageExpenses | currency) : 0 }} ) / {{financialSummary ? financialSummary.totalCashNeeded : 0 |
+            currency}}</i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #totalRoiTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Total ROI
+      </mat-card-header>
+      <mat-card-content>
+        <p>Total ROI = (Net Cash Flow + Loan Principal Reduction) / Total Cash Needed</p>
+        <p>
+          <i>{{ financialSummary ? financialSummary.annualTotalRoi : 0 }}% = ({{financialSummary ? (financialSummary.annualCashFlow | currency) : 0 }} +
+            {{financialSummary ? (financialSummary.annualTotalPrincipalPayment | currency) : 0 }}) / {{financialSummary ? (financialSummary.totalCashNeeded |
+            currency)
+            : 0 }}</i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #egiTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        EGI
+      </mat-card-header>
+      <mat-card-content>
+        <span>Rental Income:
+          <strong>{{(annualGrossScheduledRentalIncome.value| currency) || 0 }}</strong><br /></span>
+        <span>Less Vacancy Loss:
+          <strong>{{financialSummary ? (financialSummary.annualVacancyLoss | currency) : 0 }}</strong><br /></span>
+        <span>Other Income:
+          <strong>{{(otherAnnualIncome.value| currency) || 0 }}</strong><br /></span>
+        <div class="rowSubTotal">EGI:
+          <strong>{{financialSummary ? (financialSummary.annualEffectiveGrossIncome | currency) : 0 }}</strong>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #exitPriceTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Exit Price
+      </mat-card-header>
+      <mat-card-content>
+        <p>Exit Price = NOI / Market Capitalization Rate</p>
+        <p>
+          <i>
+            {{financialSummary ? (financialSummary.exitPrice | currency ) : 0 }} = {{financialSummary ? (financialSummary.annualNoi | currency) : 0 }} /
+            {{financialSummary.annualCapRate || 0}}%
+          </i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #gainOnSaleTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Gain on Sale
+      </mat-card-header>
+      <mat-card-content>
+        <p>Gain on Sale = Exit Price - Total Purchase Price</p>
+        <p>
+          <i>
+            {{financialSummary ? (financialSummary.gainOnSale | currency) : 0 }} = {{financialSummary ? (financialSummary.exitPrice| currency) : 0 }} -
+            {{financialSummary ? (financialSummary.totalPurchasePrice | currency) : 0 }}
+          </i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #gainOnValueTemplate>
+    <mat-card class="popover">
+      <mat-card-header class="popover-title">
+        Gain on Value
+      </mat-card-header>
+      <mat-card-content>
+        <p>Gain on Value = Gain on Sale / Exit Price</p>
+        <p>
+          <i>
+            {{financialSummary ? financialSummary.gainOnValuePercent : 0}} % = {{financialSummary ? (financialSummary.gainOnSale | currency) : 0}} /
+            {{financialSummary ? (financialSummary.exitPrice | currency) : 0}}
+          </i>
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>

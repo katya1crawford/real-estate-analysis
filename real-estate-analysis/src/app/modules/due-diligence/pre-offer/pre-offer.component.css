@@ -1,0 +1,21 @@
+.mat-expansion-panel, li{
+  width: 80%;
+  margin-top:1%
+}
+
+.list-container{
+margin: 2% 4%;
+display: flex;
+flex-direction: column;
+gap:12%;
+}
+
+.none{
+  list-style: none;
+
+}
+
+.mat-icon{
+  margin-bottom: 0;
+  font-size: 15px;
+}

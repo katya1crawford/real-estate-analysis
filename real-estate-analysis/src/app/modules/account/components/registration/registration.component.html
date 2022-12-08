@@ -1,0 +1,56 @@
+<mat-card class="registration-card">
+  <mat-card-header>
+    <span class="logo-image">
+      <img src="/assets/logo.png" alt="">
+    </span>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-stepper [orientation]="isSmall ? 'vertical':'horizontal'" #stepper>
+      <mat-step [stepControl]="name" [editable]="isEditable">
+        <form [formGroup]="name">
+          <ng-template matStepLabel>Fill out your name</ng-template>
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="First name" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Last name" required>
+          </mat-form-field>
+          <div>
+            <button mat-raised-button color="accent" matStepperNext>NEXT</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="credentials" [editable]="isEditable">
+        <form [formGroup]="credentials">
+          <ng-template matStepLabel>Fill out your email & password</ng-template>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="123@example.com" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="confirmPassword" required>
+          </mat-form-field>
+          <div class="spacer">
+            <button mat-raised-button matStepperPrevious>BACK</button>
+            <button mat-raised-button color="accent" matStepperNext>NEXT</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <div class="spacer">
+          <button mat-raised-button matStepperPrevious>BACK</button>
+          <button mat-raised-button color="accent" (click)="onRegistrationFormSubmit()">SUBMIT</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card-content>
+</mat-card>

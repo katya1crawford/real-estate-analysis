@@ -1,0 +1,38 @@
+@media (max-width: 800px) {
+  .mat-card {
+    width: 100% !important;
+  }
+}
+
+* {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.summary {
+  width: 60%;
+  height: 100%;
+}
+
+.mat-card-header {
+  background-color: #00bcd4;
+}
+
+.mat-card-title {
+  color: aliceblue;
+  font-weight: 400;
+  margin-top: 10%;
+}
+
+.mat-card {
+  margin-left: 4%;
+  width: 100% !important;
+  padding: 0;
+}
+
+.mat-card-image {
+  padding: 5%;
+  margin: 0 auto;
+  background-size: cover;
+  max-height: 70%;
+  max-width: 80%;
+}

@@ -1,0 +1,12 @@
+a {
+  text-decoration: none;
+}
+
+.container {
+  padding-top: 10%;
+  padding-bottom: 7%;
+  display: flex;
+  gap: 3%;
+  align-items: center;
+  flex-direction: column;
+}

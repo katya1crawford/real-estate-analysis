@@ -1,0 +1,8 @@
+<h3 mat-dialog-title color="warn">DELETE ACCOUNT</h3>
+<mat-dialog-content>
+  All data related to your account will be lost. Are you sure that you want to delete your account?
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close="false" [disabled]="isLoading">CLOSE</button>
+  <button mat-raised-button color="warn" [disabled]="isLoading" (click)="onDeleteAccount()">DELETE</button>
+</mat-dialog-actions>

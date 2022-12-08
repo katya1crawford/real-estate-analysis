@@ -1,0 +1,52 @@
+import { ReadAddress } from './readAddress';
+import { ReadAnnualOperatingExpense } from './readAnnualOperatingExpense';
+import { ReadClosingCost } from './readClosingCost';
+import { ReadExteriorRepairExpense } from './readExteriorRepairExpense';
+import { ReadFile } from './readFile';
+import { ReadFinancialSummary } from './readFinancialSummary';
+import { ReadGeneralRepairExpense } from './readGeneralRepairExpense';
+import { ReadInteriorRepairExpense } from './readInteriorRepairExpense';
+import { ReadLookup } from './readLookUp';
+import { ReadNearbyPlace } from './readNearbyPlace';
+import { ReadUnitGroup } from './readUnitGroups';
+
+
+export class ReadProperty {
+  public readonly address: ReadAddress;
+  public annualOperatingExpenses: ReadAnnualOperatingExpense[];
+  public readonly annualOperatingExpensesGrowthRate: number;
+  public readonly annualGrossScheduledRentalIncomeGrowthRate: number;
+  public readonly marketCapitalizationRate: number;
+  public readonly annualPropertyManagementFeeRate: number;
+  public readonly annualGrossScheduledRentalIncome: number;
+  public readonly annualVacancyRate: number;
+  public readonly unitGroups: ReadUnitGroup[];
+  public readonly closingCosts: ReadClosingCost[];
+  public readonly createdDate: Date;
+  public readonly downPayment: number;
+  public readonly exteriorRepairExpenses: ReadExteriorRepairExpense[];
+  public files: ReadFile[];
+  public readonly financialSummary: ReadFinancialSummary;
+  public readonly generalRepairExpenses: ReadGeneralRepairExpense[];
+  public readonly id: number;
+  public readonly interiorRepairExpenses: ReadInteriorRepairExpense[];
+  public readonly loanApr: number;
+  public readonly loanYears: number;
+  public readonly notes: string;
+  public readonly otherAnnualIncome: number;
+  public readonly propertyType: ReadLookup;
+  public readonly propertyStatus: ReadLookup;
+  public readonly purchasePrice: number;
+  public readonly buildingSquareFootage: number;
+  public thumbnailImageBase64: string;
+  public readonly thumbnailImageContentType: string;
+  public readonly lotSquareFootage: number;
+  public readonly totalUnits: number;
+  public readonly totalUnitsSquareFootage: number;
+  public readonly yearBuiltIn: number;
+  public readonly groupName: string;
+  public readonly nearbyCheckCashingPlaces: ReadNearbyPlace[];
+  public readonly nearbyGroceryOrSupermarkets: ReadNearbyPlace[];
+  public readonly nearbyPawnShops: ReadNearbyPlace[];
+  public readonly nearbyStarbuckses: ReadNearbyPlace[];
+}

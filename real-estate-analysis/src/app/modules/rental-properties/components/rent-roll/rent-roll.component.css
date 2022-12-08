@@ -1,0 +1,22 @@
+.error {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  padding: 2.3%;
+  background-color: rgba(231, 223, 223, 0.42);
+}
+
+.import-container {
+  display: flex;
+  justify-content: end;
+  margin: 1%;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(0, 151, 167);
+  opacity: 0.88;
+}
+
+.link {
+  margin-top: 3%;
+}

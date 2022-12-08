@@ -1,0 +1,24 @@
+@media (max-width:850px) {
+  .mat-stepper {
+    orientation:"vertical" !important;
+  }
+.logo-image img{
+  width: 70%;
+}
+}
+
+
+.spacer {
+display: flex;
+justify-content: space-between;
+}
+
+.registration-card{
+max-width: 70%;
+margin: 5% auto;
+}
+
+.logo-image{
+  max-width: 80%;
+    margin: 1% auto;
+}

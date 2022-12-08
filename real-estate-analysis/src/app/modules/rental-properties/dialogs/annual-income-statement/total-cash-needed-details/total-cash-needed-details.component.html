@@ -1,0 +1,12 @@
+<span>Down Payment: <strong>{{this.property.downPayment | currency}}</strong><br /></span>
+<span>Closing Costs:
+  <strong>{{this.property.financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+<span>Interior Repair Exp.:
+  <strong>{{this.property.financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+<span>Exterior Repair Exp.:
+  <strong>{{this.property.financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+<span>General Repair Exp.:
+  <strong>{{this.property.financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+<mat-divider></mat-divider>
+<span>Total Cash Needed: <strong>{{property.financialSummary.totalCashNeeded |
+    currency}}</strong></span>

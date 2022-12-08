@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Long Term Financial Forecast
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div id="chart" *ngIf="!pageLoading">
+      <app-charts [options]="chartOptions" [width]="'400px'" (load)="saveChartInstance($event)"></app-charts>
+    </div>
+
+
+
+    <div *ngIf="!pageLoading">
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th *ngFor="let value of financialForecasts[0].values | keyvalue; let i=index">
+              {{i + 1}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let financialForecast of financialForecasts">
+            <td class="forecast-name">
+              {{financialForecast.name}}
+            </td>
+            <td *ngFor="let value of financialForecast.values">
+              {{financialForecast.id === 10 ? value + '%' : value | currency}}
+            </td>
+            <td class="highlight">
+              <div></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,9 @@
+<mat-dialog-content>
+  <div *ngFor="let activeImage of activeImages">
+    <img [src]="'data:' + activeImage.mimeType + ';base64,' + activeImage.contentBase64" alt="townhome">
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" mat-dialog-close mat-dialog-close="false">Close</button>
+</mat-dialog-actions>

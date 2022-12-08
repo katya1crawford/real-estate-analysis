@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-content>
+    <div id="charts-container">
+      <div>
+        <app-charts [options]="configAllRent" [width]="'700px'" [height]="'500px'">
+        </app-charts>
+      </div>
+
+      <div>
+        <app-charts [options]="configRentByFloor" [id]="idRentByFloor" [width]="'700px'" [height]="'500px'">
+        </app-charts>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

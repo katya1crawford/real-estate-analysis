@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Email Confirmation
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="emailConfirmError; else emailConfirmSuccess">
+      <mat-icon>priority_high</mat-icon>
+      Unable to confirm email
+    </div>
+    <ng-template #emailConfirmSuccess>
+      <div>
+        Your email has been successfully confirmed. Please go to <a [routerLink]="['/home']">Home page</a> to log in.
+      </div>
+    </ng-template>
+  </mat-card-content>
+
+</mat-card>

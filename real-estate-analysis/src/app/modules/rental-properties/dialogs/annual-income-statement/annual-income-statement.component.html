@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>{{description}}</h2>
+
+<mat-dialog-content>
+
+  <table #summary mat-table [dataSource]="mainDataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="cap-rate">
+      <th mat-header-cell *matHeaderCellDef> Cap Rate </th>
+      <td mat-cell *matCellDef="let property"> {{property.financialSummary.annualCapRate}}% </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="cash-on-cash rate">
+      <th mat-header-cell *matHeaderCellDef> Cash-on-cash Rate </th>
+      <td mat-cell *matCellDef="let property"> {{property.financialSummary.annualCashOnCashRate}}% </td>
+    </ng-container>
+
+    <ng-container matColumnDef="purchase price">
+      <th mat-header-cell *matHeaderCellDef> Purchase Price </th>
+      <td mat-cell *matCellDef="let property"> {{property.purchasePrice | currency}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="total cash needed">
+      <th mat-header-cell *matHeaderCellDef> Total Cash Needed </th>
+      <td mat-cell *matCellDef="let property" (click)="openTotalCashDetails()" class="link">{{property.financialSummary.totalCashNeeded | currency}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsOne"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsOne;"></tr>
+  </table>
+
+  <table class="custom" *ngIf="this.property">
+    <thead>
+      <tr>
+        <th colspan="2">Income</th>
+        <th>% of EGI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> Gross Scheduled Rental Income </td>
+        <td>{{this.property.annualGrossScheduledRentalIncome | currency}}</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>Less {{this.property.annualVacancyRate}}% Vacancy Loss</td>
+        <td> {{(0 - property.financialSummary.annualVacancyLoss) | currency}}</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>Net Rental Income</td>
+        <td> {{this.property.annualGrossScheduledRentalIncome | currency}}</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>Other Income </td>
+        <td>{{this.property.otherAnnualIncome | currency}}</td>
+        <td></td>
+      </tr>
+
+      <tr>
+        <td>Effective Gross Income (EGI)</td>
+        <td class="double-border"> {{this.property.financialSummary.annualEffectiveGrossIncome | currency}}</td>
+        <td class="double-border"><strong>100%</strong></td>
+      </tr>
+
+      <tr>
+      </tr>
+      <tr>
+        <td style="background-color: #ced4da; font-weight: 600; border-bottom: solid 1.5px black;" colspan="4">Operating Expenses</td>
+      </tr>
+      <tr *ngFor="let expense of operatingExpenses">
+        <td>{{expense.name}} </td>
+        <td>{{expense.amount}} </td>
+        <td>{{this.getPercentOfGoi(expense.amount)}}%</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr class="emphasize-blue">
+        <td>Total Operating Expenses</td>
+        <td>{{this.property.financialSummary.totalAnnualOperatingExpenses | currency}}</td>
+        <td>{{this.getPercentOfGoi(this.property.financialSummary.totalAnnualOperatingExpenses)}}%</td>
+      </tr>
+
+      <tr class="emphasize-blue">
+        <td>Net Operating Income (NOI) </td>
+        <td class="double-border"><strong>{{this.property.financialSummary.annualNoi | currency}}</strong></td>
+        <td class="double-border">{{this.getPercentOfGoi(this.property.financialSummary.annualNoi)}}%</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <table class="custom">
+    <thead>
+      <tr>
+        <th colspan="3">Other Expenses </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> Debt Service (principal & interest)</td>
+        <td>{{this.property.financialSummary.annualMortgageExpenses | currency}}</td>
+        <td>{{this.getPercentOfGoi(this.property.financialSummary.annualMortgageExpenses)}}%</td>
+      </tr>
+      <tr class="emphasize-blue">
+        <td> Net Cash Flow </td>
+        <td class="double-border">{{this.property.financialSummary.annualCashFlow | currency}}</td>
+        <td class="double-border">{{this.getPercentOfGoi(this.property.financialSummary.annualCashFlow)}}%</td>
+      </tr>
+    </tbody>
+  </table>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close mat-dialog-close="false" (click)="close()">Close</button>
+</mat-dialog-actions>

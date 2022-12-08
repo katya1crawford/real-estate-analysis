@@ -1,0 +1,64 @@
+.details-container,
+.crimeIndex-container,
+.value-container,
+.jobsGrowth-container,
+.population-container,
+.income-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: 6%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-right: 15px;
+  padding-left: 10px;
+}
+
+section {
+  margin-top: 2%;
+}
+
+.mat-card {
+  width: 100%;
+  margin: 0.5%;
+  padding: 0;
+}
+
+.mat-card-header {
+  background-color: #00bcd4;
+  font-size: 0.5em;
+  color: aliceblue;
+}
+.mat-card-title {
+  margin: 1% auto;
+}
+
+input {
+  width: 100%;
+}
+
+/* .mat-dialog-content{
+  padding: 0;
+  margin: 2%;
+} */
+
+.mat-card-content {
+  margin-top: 2%;
+}
+
+.mat-card-content {
+  height: fit-content;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.two-column {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}

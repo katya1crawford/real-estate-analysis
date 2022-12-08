@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-content>
+
+    <div id="charts-container">
+
+      <div>
+        <app-charts [options]="configLeaseByMonth" [width]="'600px'" [height]="'500px'" (load)="saveLeaseCountByMonthInstance($event)"></app-charts>
+      </div>
+
+      <div>
+        <app-charts [options]="configLeaseExpSchedule" [width]="'600px'" [height]="'500px'" (load)="saveLeaseExpInstance($event)"></app-charts>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

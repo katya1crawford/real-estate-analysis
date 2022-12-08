@@ -1,0 +1,46 @@
+<div id="container" *ngIf="!pageLoading">
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.totalNumberOfUnits}}</h1>
+      <h4>Units</h4>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.vacancyRate}}%</h1>
+      <h4>Vacancy Rate</h4>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.averagePercentOfMarketRent}}%</h1>
+      <h4>Avg. % of Market Rent</h4>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.averageContractRent | currency}}</h1>
+      <h4>Avg. Contract Rent</h4>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.averageMarketRent | currency}}</h1>
+      <h4>Avg. Market Rent</h4>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <h1>{{rentRollSummary.totalActualMonthlyIncome | currency}}</h1>
+      <h4>Total Income</h4>
+    </mat-card-content>
+  </mat-card>
+
+
+</div>

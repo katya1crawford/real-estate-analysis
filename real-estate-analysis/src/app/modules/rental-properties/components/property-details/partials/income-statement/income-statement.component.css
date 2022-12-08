@@ -1,0 +1,104 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    gap: 15%;
+    margin-top: 5%;
+    justify-content: center;
+    align-items: center;
+}
+
+.mat-card-header {
+    background-color: #00bcd4;
+}
+
+.mat-card {
+    /* margin-left: 4%; */
+    max-width: 1300px;
+    padding: 0;
+}
+.mat-card-title {
+    color: aliceblue;
+    font-weight: 400;
+    margin-top: 10%;
+}
+
+table {
+    font-size: 16px;
+    table-layout: auto;
+    border-radius: 4px;
+    border-color: rgba(0, 0, 0, 0.175);
+    border-width: 1px;
+    width: 100%;
+    display: inline-block;
+    background-color: white;
+    border-collapse: collapse;
+}
+
+tr {
+    text-align: left;
+    border: 1px solid transparent;
+    z-index: 7;
+    border-color: rgba(0, 0, 0, 0.175);
+    border-width: 1px;
+}
+
+tr:first-child {
+    text-align: left;
+}
+
+td:first-child {
+    text-align: left;
+}
+
+td {
+    /* text-align: right; */
+    padding: 30px;
+    transition: all 0.2s ease-in-out;
+}
+
+td.highlight {
+    padding: 0;
+    width: 4px;
+}
+
+th {
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: solid black 0.5px;
+    padding: 10px;
+    background-color: #b3d0ec;
+    border-bottom: 1.5px solid black;
+}
+
+.forecast-name {
+    font-weight: bold;
+    padding: 10px;
+}
+
+td.highlight div {
+    width: 4px;
+    height: 60px;
+    border-radius: 4px;
+    background-color: white;
+    transition: all 0.2s ease-in-out;
+}
+
+tr:hover {
+    box-shadow: 0px 9px 4px -6px grey;
+}
+
+tr:hover td {
+    cursor: pointer;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    background-color: #b3d0ec;
+}
+
+tr:hover td.highlight div {
+    transform: scaleX(3);
+}
+
+.header {
+    background-color: #b3d0ec;
+}

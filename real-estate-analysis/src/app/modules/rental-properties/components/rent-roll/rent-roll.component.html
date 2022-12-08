@@ -1,0 +1,23 @@
+<div class="link">
+  <span><a [routerLink]="['/rentals/property-details', id]">Property Details</a> / Rent roll </span>
+</div>
+
+<div class="import-container" *ngIf="!pageLoading">
+  <mat-icon matTooltip="Import Rent Roll CSV" (click)="onImportRentRollCsvClick()">document_scanner</mat-icon>
+</div>
+
+<mat-spinner [diameter]="'200'" *ngIf="pageLoading"></mat-spinner>
+
+
+<div class='error' *ngIf="!rentRollSummary || rentRollSummary.rentRollItems.length == 0">
+  <mat-error>*No rent roll found</mat-error>
+</div>
+
+
+<app-summary [rentRollSummary]="rentRollSummary" [pageLoading]="pageLoading" *ngIf="rentRollSummary"></app-summary>
+<app-contract-rent-by-month [rentRollSummary]="rentRollSummary" *ngIf="rentRollSummary"></app-contract-rent-by-month>
+<app-lease-count-by-month [rentRollSummary]="rentRollSummary" *ngIf="rentRollSummary"></app-lease-count-by-month>
+<app-floor-plans [rentRollSummary]="rentRollSummary" [pageLoading]="pageLoading" *ngIf="rentRollSummary"></app-floor-plans>
+<app-occupancy [rentRollSummary]="rentRollSummary" [pageLoading]="pageLoading" *ngIf="rentRollSummary"></app-occupancy>
+<app-rents [rentRollSummary]="rentRollSummary" [pageLoading]="pageLoading" *ngIf="rentRollSummary"></app-rents>
+<app-rent-roll-details [rentRollSummary]="rentRollSummary" [pageLoading]="pageLoading" *ngIf="rentRollSummary"></app-rent-roll-details>

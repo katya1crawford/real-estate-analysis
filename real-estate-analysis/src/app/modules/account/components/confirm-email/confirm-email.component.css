@@ -1,0 +1,26 @@
+@media (max-width:650px) {
+  .mat-card {
+   width: 70% !important;
+  }
+  }
+
+.mat-card{
+  width:50%;
+  margin: 3% auto;
+  padding:0;
+}
+
+.mat-card-header{
+  background-color:#00BCD4;
+  color: #fff;
+}
+
+.mat-card-title{
+  font-weight: 400;
+  margin-top: 10%;
+}
+
+
+.mat-card-content{
+  padding: 3%;
+}

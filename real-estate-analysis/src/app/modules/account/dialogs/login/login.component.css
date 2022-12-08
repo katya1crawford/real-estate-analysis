@@ -1,0 +1,20 @@
+.login-card {
+  max-width: 400px;
+}
+
+.form-input{
+  width: 300px;
+}
+
+.custom-small{
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0ch;
+  text-transform: none;
+  color: rgb(118, 118, 118);
+  margin: 0px;
+  padding: 0px;
+  display: block;
+}

@@ -1,0 +1,19 @@
+.mat-card {
+  overflow: auto;
+  width: 100%;
+  margin: 20px 0;
+}
+
+#charts-container {
+  margin-left: 3%;
+  display: flex;
+  flex-direction: row;
+  gap: 1%;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 30px;
+}
+.mat-card {
+  padding: 0;
+}

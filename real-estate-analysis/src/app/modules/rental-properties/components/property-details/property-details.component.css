@@ -1,0 +1,88 @@
+@media (max-width: 900px) {
+    .partials-container {
+        display: flex;
+        flex-direction: column;
+        margin-right: 1%;
+    }
+
+    .summary-map-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5%;
+        width: 100%;
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .summary > .mat-card {
+        padding: 0;
+        flex-grow: 3;
+        width: 100%;
+    }
+    .map {
+        flex-shrink: 2;
+    }
+}
+
+.map {
+    width: 70%;
+}
+.summary {
+    width: 100%;
+}
+.summary-map-container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    gap: 2%;
+    margin-bottom: 20px;
+}
+
+.summary-map-container > div.map {
+    width: 40%;
+}
+
+.summary-map-container > div.summary {
+    width: 30%;
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+}
+
+.partials-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.partials-container {
+    margin-left: 4%;
+    margin-bottom: 5%;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1300px;
+}
+
+.partials-container > div,
+.link {
+    margin-top: 3%;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(0, 151, 167);
+    opacity: 0.88;
+}
+
+.income-statement {
+    max-height: 1200px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}

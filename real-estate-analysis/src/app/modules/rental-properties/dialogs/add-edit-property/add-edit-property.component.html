@@ -1,0 +1,686 @@
+<h3 mat-dialog-title>Add Or Edit Property</h3>
+<mat-dialog-content>
+  <div class="container">
+    <form [formGroup]="addEditPropertyForm">
+      <div class="image-container">
+
+      </div>
+
+      <div class="main-container">
+
+        <div class="form-container">
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Property Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <div class="column-container">
+                <section>
+                  <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Property Status</mat-label>
+                    <mat-select formControlName="propertyStatusId">
+                      <mat-option value="">Any Or None</mat-option>
+                      <mat-option *ngFor="let status of propertyStatuses$|async" [value]="status.id">{{status.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </section>
+
+                <section>
+                  <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="address" type="text">
+                  </mat-form-field>
+                </section>
+
+                <ng-template #loading>
+                  <mat-spinner></mat-spinner>
+                </ng-template>
+
+              </div>
+
+
+              <div class="location-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="city" type="text" required>
+                  </mat-form-field>
+                </section>
+
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>State</mat-label>
+                    <mat-select matInput formControlName="stateId" required>
+                      <mat-option value="">Select one</mat-option>
+                      <mat-option *ngFor="let state of states$|async" [value]="state.id">{{state.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Zip Code</mat-label>
+                    <input matInput formControlName="zipCode" type="number" required>
+                  </mat-form-field>
+                </section>
+              </div>
+
+              <div class="section-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Property Type</mat-label>
+                    <mat-select formControlName="propertyTypeId">
+                      <mat-option value="">Any Or None</mat-option>
+                      <mat-option *ngFor="let propertyType of propertyTypes$|async" [value]="propertyType.id">{{propertyType.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </section>
+
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Year Build in</mat-label>
+                    <input matInput formControlName="yearBuiltIn" type="number" required>
+                  </mat-form-field>
+                </section>
+              </div>
+
+              <div class="section-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Lot SF</mat-label>
+                    <input matInput formControlName="lotSquareFootage" type="number" required>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Building SF</mat-label>
+                    <input matInput formControlName="buildingSquareFootage" type="number" required>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+            <mat-progress-bar *ngIf="pageLoading" mode="indeterminate"></mat-progress-bar>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Unit Groups</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="section-container" formArrayName="unitGroups" *ngFor="let unitGroup of unitGroups.controls;index as i" [formGroupName]="i">
+                <div class="two-fields-container">
+
+                  <mat-form-field appearance="fill">
+                    <mat-label># of Units</mat-label>
+                    <input matInput formControlName="numberOfUnits" type="number" required>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>SF</mat-label>
+                    <input matInput formControlName="squareFootage" type="number" required>
+                  </mat-form-field>
+
+                </div>
+                <div class="two-fields-container">
+                  <section>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Bedrooms</mat-label>
+                      <input matInput formControlName="bedrooms" type="number" required>
+                    </mat-form-field>
+                  </section>
+                  <section>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Bathrooms </mat-label>
+                      <input matInput formControlName="bathrooms" type="number" required>
+                    </mat-form-field>
+                    <!-- <button mat-icon-button class=" array-btn">
+                      <mat-icon>delete</mat-icon>
+                    </button> -->
+                    <button mat-icon-button (click)="onAddUnitGroupClick()" class="array-btn">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </section>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+          <mat-card class="mat-elevation-z8" formGroupName="financialSummaryGroup">
+            <mat-card-header>
+              <mat-card-title>Loan Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <section>
+                <div class="two-fields-container">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Purchase Price</mat-label>
+                    <input matInput formControlName="purchasePrice" type="number" required>
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Down Payment Percent</mat-label>
+                    <input matInput formControlName="downPaymentPercent" type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label> Down Payment Amount</mat-label>
+                    <input matInput formControlName="downPayment" type="number" required>
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="two-fields-container">
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Loan APR</mat-label>
+                    <input matInput type="number" formControlName="loanApr" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill">
+                    <mat-label>Loan Years</mat-label>
+                    <input matInput type="number" formControlName="loanYears" required>
+
+                  </mat-form-field>
+
+                </div>
+                <div>
+                  <mat-card class="mat-elevation-z8">
+                    <mat-card-header>
+                      <mat-card-title>Closing Cost Expenses</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="inner-card" formArrayName="closingCosts"
+                        *ngFor="let closingCost of closingCosts.controls; index as i;last as isLast;first as isFirst" [formGroupName]="i">
+                        <mat-card>
+
+                          <mat-card-content>
+                            <div class="expenses-container">
+                              <mat-form-field appearance="fill">
+                                <mat-label>Closing Cost Type </mat-label>
+                                <mat-select formControlName="closingCostTypeId">
+                                  <mat-option *ngFor="let closingCostType of closingCostTypes$|async" [value]="closingCostType.id">
+                                    {{closingCostType.name}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-form-field appearance="fill">
+                                <mat-label>Amount </mat-label>
+                                <input matInput type="number" formControlName="amount" required class="mat-form-field-two">
+                                <button mat-icon-button matPrefix>
+                                  <mat-icon>attach_money</mat-icon>
+                                </button>
+                              </mat-form-field>
+                              <button mat-icon-button *ngIf="(i !== closingCosts.controls.length - 1) || (closingCosts.controls.length > 1 && isLast)"
+                                (click)="onRemoveFieldClick(closingCosts,i)" class=" array-btn">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                              <button mat-icon-button (click)="onAddClosingCostClick()" *ngIf="isFirst" class="array-btn">
+                                <mat-icon>add</mat-icon>
+                              </button>
+
+                            </div>
+                          </mat-card-content>
+                        </mat-card>
+                      </div>
+
+
+                    </mat-card-content>
+                  </mat-card>
+
+                </div>
+              </section>
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8" formGroupName="financialSummaryGroup">
+            <mat-card-header>
+              <mat-card-title>Repair Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <div class="inner-card" formArrayName="interiorRepairExpenses"
+                *ngFor="let interiorRepairExpense of interiorRepairExpenses.controls; index as i;last as isLast;first as isFirst" [formGroupName]="i">
+                <mat-card>
+                  <mat-card-content>
+                    <div class="expenses-container">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Interior Repair Exp.Type</mat-label>
+                        <mat-select formControlName="interiorRepairExpenseTypeId">
+                          <mat-option *ngFor="let interiorRepairExpenseType of interiorRepairExpenseTypes$|async" [value]="interiorRepairExpenseType.id">
+                            {{interiorRepairExpenseType.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Amount </mat-label>
+                        <input matInput formControlName="amount" type="number" required class="mat-form-field-two">
+                        <button mat-icon-button matPrefix>
+                          <mat-icon>attach_money</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <button mat-icon-button *ngIf="(i !== interiorRepairExpenses.controls.length - 1) || (interiorRepairExpenses.controls.length > 1 && isLast)"
+                        (click)="onRemoveFieldClick(interiorRepairExpenses,i)" class=" array-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onAddInteriorRepairExpenseClick()" *ngIf="isFirst" class="array-btn-add">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+
+                  </mat-card-content>
+
+
+                </mat-card>
+              </div>
+
+
+              <div class="inner-card" formArrayName="exteriorRepairExpenses"
+                *ngFor="let exteriorRepairExpense of exteriorRepairExpenses.controls; index as i;last as isLast;first as isFirst" [formGroupName]="i">
+                <mat-card>
+                  <mat-card-content>
+                    <div class="expenses-container">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Exterior Repair Exp.Type</mat-label>
+                        <mat-select formControlName="exteriorRepairExpenseTypeId">
+                          <mat-option *ngFor="let exteriorRepairExpenseType of exteriorRepairExpenseTypes$|async" [value]="exteriorRepairExpenseType.id">
+                            {{exteriorRepairExpenseType.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Amount </mat-label>
+                        <input matInput type="number" formControlName="amount" required class="mat-form-field-two">
+                        <button mat-icon-button matPrefix>
+                          <mat-icon>attach_money</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <button mat-icon-button *ngIf="(i !== exteriorRepairExpenses.controls.length - 1) || (exteriorRepairExpenses.controls.length > 1 && isLast)"
+                        (click)="onRemoveFieldClick(exteriorRepairExpenses,i)" class=" array-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onAddExteriorRepairExpenseClick()" *ngIf="isFirst" class="array-btn">
+                        <mat-icon>add</mat-icon>
+                      </button>
+
+                    </div>
+
+                  </mat-card-content>
+
+
+                </mat-card>
+              </div>
+
+
+
+              <div class="inner-card" formArrayName="generalRepairExpenses"
+                *ngFor="let generalRepairExpense of generalRepairExpenses.controls; index as i;last as isLast;first as isFirst" [formGroupName]="i">
+                <mat-card>
+                  <mat-card-content>
+                    <div class="expenses-container">
+                      <mat-form-field appearance="fill">
+                        <mat-label>General Repair Exp.Type </mat-label>
+                        <mat-select formControlName="generalRepairExpenseTypeId">
+                          <mat-option *ngFor="let generalRepairExpenseType of generalRepairExpenseTypes$|async" [value]="generalRepairExpenseType.id">
+                            {{generalRepairExpenseType.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Amount </mat-label>
+                        <input matInput type="number" formControlName="amount" required class="mat-form-field-two">
+                        <button mat-icon-button matPrefix>
+                          <mat-icon>attach_money</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <button mat-icon-button *ngIf="(i !== generalRepairExpenses.controls.length - 1) || (generalRepairExpenses.controls.length > 1 && isLast)"
+                        (click)="onRemoveFieldClick(generalRepairExpenses,i)" class=" array-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onAddGeneralRepairExpenseClick()" *ngIf="isFirst" class="array-btn">
+                        <mat-icon>add</mat-icon>
+                      </button>
+
+                    </div>
+
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8" formGroupName="financialSummaryGroup">
+            <mat-card-header>
+              <mat-card-title>Annual Operating Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="inner-card" formArrayName="annualOperatingExpenses"
+                *ngFor="let operatingExpense of annualOperatingExpenses.controls; index as i;last as isLast;first as isFirst" [formGroupName]="i">
+                <mat-card>
+                  <mat-card-content>
+                    <div class="expenses-container">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Operating Exp.Type </mat-label>
+                        <mat-select formControlName="operatingExpenseTypeId">
+                          <mat-option *ngFor="let operatingExpenseType of operatingExpenseTypes$|async" [value]="operatingExpenseType.id">
+                            {{operatingExpenseType.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Amount </mat-label>
+                        <input matInput type="number" formControlName="amount" required class="mat-form-field-two">
+                        <button mat-icon-button matPrefix>
+                          <mat-icon>attach_money</mat-icon>
+                        </button>
+                      </mat-form-field>
+                      <button mat-icon-button *ngIf="(i !== annualOperatingExpenses.controls.length - 1) || (annualOperatingExpenses.controls.length > 1 && isLast)"
+                        (click)="onRemoveFieldClick(annualOperatingExpenses,i)" class="array-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="onAddAnnualOperatingExpenseClick()" *ngIf="isFirst" class="array-btn">
+                        <mat-icon>add</mat-icon>
+                      </button>
+
+                    </div>
+
+                  </mat-card-content>
+                  <!-- <mat-card-actions align="end"> <button mat-raised-button class="array-btn">+</button> -->
+                  <!-- </mat-card-actions> -->
+
+                </mat-card>
+              </div>
+
+
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8" formGroupName="financialSummaryGroup">
+            <mat-card-header>
+              <mat-card-title>Annual Income</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Gross Scheduled Rental Income</mat-label>
+                    <input matInput type="number" required placeholder="$0.00" class="mat-form-field-two">
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                </section>
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label> Other Income </mat-label>
+                    <input matInput type="number" required class="mat-form-field-two">
+                    <button mat-icon-button matPrefix>
+                      <mat-icon>attach_money</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8" formGroupName="financialSummaryGroup">
+            <mat-card-header>
+              <mat-card-title>Annual Variable Expenses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Vacancy</mat-label>
+                    <input matInput type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Property Management Fee </mat-label>
+                    <input matInput type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Future Annual Assumptions</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill" placeholder="%0.0">
+                    <mat-label>Rental Income Growth Rate</mat-label>
+                    <input matInput type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+                <section>
+                  <mat-form-field appearance="fill" placeholder="%0.0">
+                    <mat-label>Expenses Growth Rate </mat-label>
+                    <input matInput type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="mat-elevation-z8">
+            <mat-card-header>
+              <mat-card-title>Market Rates</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <div class="expenses-container">
+                <section>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Market Capitalization Rate</mat-label>
+                    <input matInput type="number" required>
+                    <button mat-icon-button matSuffix>
+                      <mat-icon>percent</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </section>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+
+          <div class="expenses-container">
+            <section>
+              <mat-form-field appearance="fill">
+                <mat-label>Notes</mat-label>
+                <textarea cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" matInput></textarea>
+              </mat-form-field>
+            </section>
+          </div>
+
+        </div>
+
+
+        <div class="financial-summary-container">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Financing Overview</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-list role="list">
+                <mat-list-item role="listitem">Total Purchase Price:
+                  <a mat-button href="javascript:void(0)" title="Total Purchase Price">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Loan Amount:
+                  <a mat-button href="javascript:void(0)" title="Loan Amount">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Total Cash Needed:
+                  <a mat-button href="javascript:void(0)" title="Total Cash Needed">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Debt Service Coverage Ratio:
+                  <a mat-button href="javascript:void(0)" title="Debt Service Coverage Ratio">
+                    <strong>0</strong>
+                  </a>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Annual Rates</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-list role="list">
+                <mat-list-item role="listitem">Capitalization Rate:
+                  <a mat-button href="javascript:void(0)" title="Capitalization Rate:">
+                    <strong>0%</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Cash-on-Cash Rate:
+                  <a mat-button href="javascript:void(0)" title="Cash-on-Cash Rate">
+                    <strong>0%</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Total ROI:
+                  <a mat-button href="javascript:void(0)" title="Total ROI">
+                    <strong>0%</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">EGI:
+                  <a mat-button href="javascript:void(0)" title="EGI">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Operating Expenses:
+                  <a mat-button href="javascript:void(0)" title="Operating Expenses">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">NOI:
+                  <a mat-button href="javascript:void(0)" title="NOI">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Debt Service:
+                  <a mat-button href="javascript:void(0)" matTooltip="Principal & Interest" title="Debt Service">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Net Cash Flow:
+                  <a mat-button href="javascript:void(0)" matTooltip="Principal & Interest" title="Net Cash Flow">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Gain on Sale</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+              <mat-list role="list">
+                <mat-list-item role="listitem">Exit Price:
+                  <a mat-button href="javascript:void(0)">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Gain on Sale:
+                  <a mat-button href="javascript:void(0)">
+                    <strong>$0.00</strong>
+                  </a>
+                </mat-list-item>
+
+                <mat-divider></mat-divider>
+                <mat-list-item role="listitem">Gain on Value:
+                  <a mat-button href="javascript:void(0)">
+                    <strong>0%</strong>
+                  </a>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+
+          <div class="column-container">
+            <div id="refresh-rates-btn">
+              <button mat-raised-button color="primary">REFRESH RATES</button>
+            </div>
+
+            <div>
+              <span>Note: To see much more analysis data save this property by clicking SAVE button in this form then go to the property details page.</span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close="false">CLOSE</button>
+  <button mat-raised-button mat-dialog-close="false" (click)="onResetForm()" color="warn">RESET</button>
+  <button mat-raised-button (click)="onAddEditPropertyFormSubmit()" color="accent">SAVE</button>
+</mat-dialog-actions>

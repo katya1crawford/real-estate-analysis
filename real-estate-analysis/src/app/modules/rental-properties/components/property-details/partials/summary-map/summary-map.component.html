@@ -1,0 +1,11 @@
+<div>
+  <mat-spinner *ngIf="pageLoading"></mat-spinner>
+
+</div>
+
+<div class="maps" *ngIf="!pageLoading">
+  <div #summaryWrapper>
+    <mat-spinner *ngIf="pageLoading"></mat-spinner>
+    <app-maps [property]="property" [pageLoading]="false" [height]="'940px'" [width]="'940px'"></app-maps>
+  </div>
+</div>

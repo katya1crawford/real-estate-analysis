@@ -1,0 +1,27 @@
+<div class="container">
+  <div>
+    <a href="/assets/rent-roll/rent-roll-template.csv">Download rent roll template excel sheet.</a>
+  </div>
+
+  <app-error-summary [serverError]="serverError" [errorMessage]="errorMessage"></app-error-summary>
+
+
+  <div class="container">
+    <form [formGroup]="uploadForm">
+      <mat-form-field style="width: 100%;">
+        <mat-label>Choose file</mat-label>
+        <button mat-icon-button matPrefix (click)="f_input.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+        <input type="text" readonly matInput [value]="file.value ? file.value.name  : '' " formControlName="file" />
+        <input type="file" multiple hidden #f_input (change)="handleFileInputChange($event)" />
+        <mat-error *ngIf="file.value && !file.valid && file.touched">Only csv file is acceptable.</mat-error>
+      </mat-form-field>
+    </form>
+
+    <button mat-raised-button color="primary" [disabled]="!uploadForm.valid || isUploading" (click)="onUploadRentRoll()">
+      UPLOAD
+    </button>
+  </div>
+
+</div>

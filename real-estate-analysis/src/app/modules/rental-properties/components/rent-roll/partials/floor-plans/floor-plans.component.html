@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Floor Plans
+    </mat-card-title>
+    <mat-card-subtitle>
+      What floor plans does this building have?
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div id="container">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="5"></th>
+            <th colspan="2" class="text-center">Contract Rent</th>
+            <th colspan="2" class="text-center">Market Rent</th>
+            <th></th>
+          </tr>
+          <tr class="table-secondary">
+            <th>Floor Plan</th>
+            <th>Units</th>
+            <th>BRs</th>
+            <th>Baths</th>
+            <th>Avg Sqft</th>
+            <th>Avg Rent</th>
+            <th>Rent Range</th>
+            <th>Avg Rent</th>
+            <th>Rent Range</th>
+            <th>% of Mkt Rent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let floorPlan of rentRollSummary.floorPlansSummary.floorPlans">
+            <td>{{floorPlan.floorPlan}}</td>
+            <td>{{floorPlan.units}}</td>
+            <td>{{floorPlan.bedrooms}}</td>
+            <td>{{floorPlan.bathrooms}}</td>
+            <td>{{floorPlan.averageSquareFootage}}</td>
+            <td>{{floorPlan.averageContractRent | currency}}</td>
+            <td>{{floorPlan.contractRentRange}}</td>
+            <td>{{floorPlan.averageMarketRent | currency}}</td>
+            <td>{{floorPlan.marketRentRange}}</td>
+            <td>{{floorPlan.percentOfMarketRent}}%</td>
+          </tr>
+        </tbody>
+        <tfoot class="fw-bold">
+          <tr class="table-secondary">
+            <td>Total Average:</td>
+            <td>{{rentRollSummary.floorPlansSummary.units}}</td>
+            <td></td>
+            <td></td>
+            <td>{{rentRollSummary.floorPlansSummary.averageSquareFootage}}</td>
+            <td>{{rentRollSummary.floorPlansSummary.averageContractRent | currency}}</td>
+            <td></td>
+            <td>{{rentRollSummary.floorPlansSummary.averageMarketRent | currency}}</td>
+            <td></td>
+            <td>{{rentRollSummary.floorPlansSummary.percentOfMarketRent}}%</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </mat-card-content>
+
+
+</mat-card>

@@ -1,0 +1,55 @@
+.mat-card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.highlighted {
+  background-color: #b3d0ec;
+}
+
+.table-container {
+  width: 100%;
+  overflow: auto;
+}
+
+.mat-header-cell {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  border-bottom: 2.75px solid gray;
+  background-color: #b3d0ec;
+}
+
+table {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  width: 100%;
+  text-align: center;
+  scroll-behavior: smooth;
+}
+
+.mat-footer-row {
+  background-color: #d1e7dd;
+  font-weight: bold;
+}
+
+.mat-column-sqft,
+.mat-column-mtm,
+.mat-column-vacant,
+.mat-column-renovated,
+.mat-column-contract-rent,
+.mat-column-mkt-rent,
+.mat-column-other-income {
+  border-left: 2.75px solid gray;
+}
+
+.mat-column-mtm,
+.mat-column-sqft,
+.mat-column-mkt-rent {
+  border-right: 2.75px solid gray;
+}
+
+.table-container > button {
+  float: right;
+  margin-bottom: 1%;
+}

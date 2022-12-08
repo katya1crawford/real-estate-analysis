@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{description}}</h2>
+
+<mat-dialog-content>
+  <h4>Would you like to delete this neighborhood permanently?</h4>
+  <h5>{{neighborhood.neighborhoodName}}</h5>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close mat-dialog-close="false" (click)="close()">CLOSE</button>
+  <button mat-raised-button color="primary" mat-button mat-dialog-close="true" (click)="save()">DELETE</button>
+</mat-dialog-actions>

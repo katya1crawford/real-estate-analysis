@@ -1,0 +1,90 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Estimated Resale Value (Year 1)
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <div class="container" *ngIf="!pageLoading">
+      <mat-card class="inner">
+        <mat-card-content>
+          <h3>Exit Price</h3>
+          <mat-divider></mat-divider>
+
+          <h4><a href="javascript:void(0)" [appPopover]="exitPrice">{{ property.financialSummary.exitPrice | currency }}</a></h4>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="inner">
+        <mat-card-content>
+          <h3>Gain On Sale</h3>
+          <mat-divider></mat-divider>
+
+          <h4><a href="javascript:void(0)" [appPopover]="gainOnSale"> {{ property.financialSummary.gainOnSale | currency }}</a></h4>
+        </mat-card-content>
+      </mat-card>
+
+
+      <mat-card class="inner">
+        <mat-card-content>
+          <h3>Gain on Value</h3>
+          <mat-divider></mat-divider>
+          <h4> <a href="javascript:void(0)" [appPopover]="gainOnValue">{{ property.financialSummary.gainOnValuePercent }}% </a></h4>
+        </mat-card-content>
+      </mat-card>
+
+
+
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #exitPrice>
+  <mat-card class="popover">
+    <mat-card-header class="popover-title">
+      Exit Price
+    </mat-card-header>
+    <mat-card-content>
+      <p>Exit Price = NOI / Market Capitalization Rate</p>
+      <p>
+        <i>
+          {{ property.financialSummary.exitPrice | currency }} = {{property.financialSummary.annualNoi |
+          currency}} / {{property.marketCapitalizationRate}}%
+        </i>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #gainOnSale>
+  <mat-card class="popover">
+    <mat-card-header class="popover-title">
+      Gain on Sale </mat-card-header>
+    <mat-card-content>
+      <p>Gain on Sale = Exit Price - Total Purchase Price</p>
+      <p>
+        <i>
+          {{ property.financialSummary.gainOnSale | currency }} = {{property.financialSummary.exitPrice |
+          currency}} - {{property.financialSummary.totalPurchasePrice | currency}}
+        </i>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #gainOnValue>
+  <mat-card class="popover">
+    <mat-card-header class="popover-title">
+      Gain on Value </mat-card-header>
+    <mat-card-content>
+      <p>Gain on Value = Gain on Sale / Exit Price</p>
+      <p>
+        <i>
+          {{ property.financialSummary.gainOnValuePercent }}% = {{property.financialSummary.gainOnSale |
+          currency}} / {{property.financialSummary.exitPrice | currency}}
+        </i>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</ng-template>

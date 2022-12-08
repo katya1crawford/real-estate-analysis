@@ -1,0 +1,223 @@
+<h2 mat-dialog-title>{{description}}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="addEditCityForm">
+    <div class="form-container">
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>City Details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="details-container">
+              <div class="details-item">
+                <mat-form-field appearance="fill">
+                  <mat-label>City</mat-label>
+                  <input matInput type="text" formControlName="cityName" required>
+                </mat-form-field>
+              </div>
+
+              <div class="details-item">
+                <mat-form-field appearance="fill">
+                  <mat-label>State</mat-label>
+                  <mat-select matInput formControlName="stateId" required>
+                    <mat-option value="">Select one</mat-option>
+                    <mat-option *ngFor="let state of states$|async" [value]="state.id">{{state.name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Population Range</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="population-container">
+
+              <div class="two-column">
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>Year Start</mat-label>
+                  <input matInput type="number" formControlName="populationYearStart" style="width:100% !important" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>In Year Start</mat-label>
+                  <input matInput type="number" formControlName="populationInYearStart" required>
+                </mat-form-field>
+              </div>
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year End</mat-label>
+                  <input matInput type="number" formControlName="populationYearEnd" required>
+                  <mat-error *ngIf="addEditCityForm.controls.populationYearEnd.hasError('min')">Population year end must be greater or equal to 2017.</mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year End </mat-label>
+                  <input matInput type="number" formControlName="populationInYearEnd" required>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+      </section>
+
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Median Household Income Range</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="income-container">
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year Start</mat-label>
+                  <input matInput type="number" formControlName="medianHouseholdIncomeYearStart" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year Start</mat-label>
+                  <input matInput type="number" formControlName="medianHouseholdIncomeInYearStart" required>
+                </mat-form-field>
+              </div>
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year End</mat-label>
+                  <input matInput type="number" formControlName="medianHouseholdIncomeYearEnd" required>
+                  <mat-error *ngIf="addEditCityForm.controls.medianHouseholdIncomeYearEnd.hasError('min')">"Median household income year end must be greater or
+                    equal to 2016.</mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year End </mat-label>
+                  <input matInput type="number" formControlName="medianHouseholdIncomeInYearEnd" required>
+
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Median House or Condo Value Range</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="value-container">
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year Start</mat-label>
+                  <input matInput type="number" formControlName="medianHouseOrCondoValueYearStart" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year Start</mat-label>
+                  <input matInput type="number" formControlName="medianHouseOrCondoValueInYearStart" required>
+                </mat-form-field>
+              </div>
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year End</mat-label>
+                  <input matInput type="number" formControlName="medianHouseOrCondoValueYearEnd" required>
+                  <mat-error *ngIf="addEditCityForm.controls.medianHouseOrCondoValueYearEnd.hasError('min')">Median house or condo value year end must be greater
+                    or equal to 2016.</mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year End </mat-label>
+                  <input matInput type="number" formControlName="medianHouseOrCondoValueInYearEnd" required>
+                </mat-form-field>
+
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Crime Index Range</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="crimeIndex-container">
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year Start</mat-label>
+                  <input matInput type="number" formControlName="crimeIndexYearStart" required>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year Start</mat-label>
+                  <input matInput type="number" formControlName="crimeIndexInYearStart" required>
+                </mat-form-field>
+              </div>
+
+              <div class="two-column">
+                <mat-form-field appearance="fill">
+                  <mat-label>Year End</mat-label>
+                  <input matInput type="number" formControlName="crimeIndexYearEnd" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>In Year End </mat-label>
+                  <input matInput type="number" formControlName="crimeIndexInYearEnd" required>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
+      <section>
+        <mat-card class="mat-elevation-z8">
+          <mat-card-header>
+            <mat-card-title>Jobs Growth</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="jobsGrowth-container">
+
+              <div class="jobsGrowth-item">
+                <mat-form-field appearance="fill">
+                  <mat-label>CES Jobs Added</mat-label>
+                  <input matInput type="number" formControlName="numberOfJobsAdded" required>
+                </mat-form-field>
+              </div>
+
+              <div class="jobsGrowth-item">
+                <mat-form-field appearance="fill">
+                  <mat-label>1 Year CES Jobs Percent Change</mat-label>
+                  <input matInput type="number" formControlName="recentYearJobsGrowthRate" required>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close (click)="close()">CLOSE</button>
+  <button mat-raised-button color="primary" mat-button mat-dialog-close="true" (click)="save()">ADD</button>
+</mat-dialog-actions>

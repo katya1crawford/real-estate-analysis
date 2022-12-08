@@ -1,0 +1,10 @@
+<div *ngIf="!pageLoading && property.notes">
+  <mat-card class="notes-card">
+    <mat-card-subtitle>NOTE</mat-card-subtitle>
+    <mat-card-title>{{property.address.address}}</mat-card-title>
+    <mat-card-content>
+      {{property.notes}}
+    </mat-card-content>
+    <mat-divider inset></mat-divider>
+  </mat-card>
+</div>

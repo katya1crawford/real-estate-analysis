@@ -1,0 +1,77 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  /* text-size-adjust: auto; */
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* * {
+    text-size-adjust: auto !important;
+  } */
+
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.mat-icon:hover {
+  cursor: pointer;
+}
+
+.no-data-row {
+  background-color: rgb(231, 223, 223);
+  opacity: 0.87;
+  text-align: left;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.popover {
+  animation: fadeIn 0.25s linear;
+  margin-left: 110px !important;
+  text-align: justify;
+  padding: 2% !important;
+  max-width: 300px !important;
+}
+
+.popover-title {
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
+  padding: 1px 7px;
+  margin-bottom: 10%;
+}
+
+.mat-spinner {
+  margin-left: 250px;
+}

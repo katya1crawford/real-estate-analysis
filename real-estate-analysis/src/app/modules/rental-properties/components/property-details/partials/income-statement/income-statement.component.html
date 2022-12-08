@@ -1,0 +1,113 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Income Statement (Year 1)
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="container" *ngIf="!pageLoading">
+      <div>
+        <table>
+          <tbody>
+            <tr class="header">
+              <td colspan="3"><strong>Income</strong></td>
+              <td><strong>% of EGI</strong></td>
+              <td class="highlight">
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">Gross Scheduled Rental Income</td>
+              <td>{{property.annualGrossScheduledRentalIncome | currency}}</td>
+              <td class="highlight"></td>
+
+
+            </tr>
+            <tr>
+              <td colspan="2">Less {{property.annualVacancyRate}}% Vacancy Loss</td>
+              <td>{{(0 - property.financialSummary.annualVacancyLoss) | currency}}</td>
+              <td class="highlight"></td>
+
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Net Rental Income</strong></td>
+              <td><strong>{{property.financialSummary.annualNetRentalIncome | currency}}</strong></td>
+              <td class="highlight"></td>
+
+            </tr>
+            <tr>
+              <td colspan="2">Other Income</td>
+              <td>{{property.otherAnnualIncome | currency}}</td>
+              <td colspan="2" class="highlight"></td>
+
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Effective Gross Income (EGI)</strong></td>
+              <td>
+                <strong>{{property.financialSummary.annualEffectiveGrossIncome | currency}}</strong>
+              </td>
+              <td>
+                <strong>100.00%</strong>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="4"><strong>Operating Expenses</strong></td>
+            </tr>
+            <tr *ngFor="let annualOperatingExpense of combinedAnnualOperatingExpenses">
+              <td>{{annualOperatingExpense.operatingExpenseTypeName}}</td>
+              <td>{{annualOperatingExpense.amount | currency}}</td>
+              <td>{{getPercentOfGoi(annualOperatingExpense.amount)}}%</td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Total Operating Expenses</strong></td>
+              <td>
+                <strong>{{property.financialSummary.totalAnnualOperatingExpenses | currency}}</strong>
+              </td>
+              <td>
+                <strong>{{getPercentOfGoi(property.financialSummary.totalAnnualOperatingExpenses)}}%</strong>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Net Operating Income (NOI)</strong></td>
+              <td>
+                <strong>{{property.financialSummary.annualNoi | currency}}</strong>
+              </td>
+              <td>
+                <strong>{{getPercentOfGoi(property.financialSummary.annualNoi)}}%</strong>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="4"><strong>Other Expenses</strong></td>
+            </tr>
+            <tr>
+              <td colspan="2">Debt Service (principal &amp; interest)</td>
+              <td>{{property.financialSummary.annualMortgageExpenses | currency}}</td>
+              <td>{{getPercentOfGoi(property.financialSummary.annualMortgageExpenses)}}%</td>
+            </tr>
+            <tr>
+              <td colspan="2"><strong>Net Cash Flow</strong></td>
+              <td>
+                <strong>{{property.financialSummary.annualCashFlow | currency}}</strong>
+              </td>
+              <td>
+                <strong>{{getPercentOfGoi(property.financialSummary.annualCashFlow)}}%</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <app-charts [options]="chartOptions" [width]="'500px'">
+        </app-charts>
+
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
