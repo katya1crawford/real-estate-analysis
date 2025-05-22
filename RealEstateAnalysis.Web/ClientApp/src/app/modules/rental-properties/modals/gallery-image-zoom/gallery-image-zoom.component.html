@@ -1,0 +1,35 @@
+﻿<div class="modal-body">
+    <div class="container-fluid">
+        <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+        <div class="row" *ngIf="pageLoading">
+            <div class="col-xl-12 text-center">
+                <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="largeImages && largeImages.length > 0">
+            <div class="col-12">
+                <div id="large-image-gallery" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item" *ngFor="let largeImage of largeImages" [ngClass]="{'active': largeImage.id === activeImage.id}">
+                            <img class="d-block w-100" [src]="'data:' + largeImage.mimeType + ';base64,' + largeImage.contentBase64" />
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#large-image-gallery" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#large-image-gallery" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

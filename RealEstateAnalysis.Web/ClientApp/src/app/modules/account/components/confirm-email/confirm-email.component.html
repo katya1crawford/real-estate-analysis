@@ -1,0 +1,28 @@
+<div class="container-xxl">
+    <div class="row d-flex flex-row justify-content-center mt-5">
+        <div class="col-xl-5 text-center" *ngIf="isConfirming">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+
+        <div class="col-xl-5" *ngIf="isConfirming === false">
+            <div class="card shadow">
+                <div class="card-header">Email Confirmation</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-12 alert alert-danger" *ngIf="emailConfirmError; else emailConfirmSuccess">
+                            <span class="fas fa-exclamation-circle me-2"></span>
+                            Unable to confirm email
+                        </div>
+
+                        <ng-template #emailConfirmSuccess>
+                            <div class="col-xl-12 alert alert-success">
+                                <span class="fas fa-exclamation-circle me-2"></span>
+                                Your email has been successfully confirmed. Please go to <a [routerLink]="['/sign-in']">sign in page</a> to sign in.
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+﻿.highlighted-row {
+    font-weight: bold;
+    border-top: 1px solid;
+}
+
+.summary-row {
+    border-top: 2px solid #000;
+}

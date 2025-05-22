@@ -1,0 +1,414 @@
+<div class="container-xxl">
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="page-header">
+                <h1>Market Value Estimator</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12 d-flex flex-row justify-content-end">
+            <i appTooltip title="Add property to estimator" data-placement="top" class="fas fa-plus-circle fa-3x cursor-pointer" (click)="onAddNewClick()"></i>
+        </div>
+    </div>
+
+    <form [formGroup]="marketValueForm" #marketValueNgForm="ngForm" (ngSubmit)="onMarketValueFormSubmit(marketValueNgForm)" novalidate>
+        <div class="row mt-3">
+            <div class="col-xl-5 pt-2">
+                <div class="card shadow">
+                    <div class="card-header bg-info-2 text-white">Estimator Filters</div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-xl-12">
+                                <label for="group-name" class="form-label">Group Name<span class="text-danger"> *</span></label>
+                                <select formControlName="groupName" class="form-select"
+                                    [ngClass]="{'is-invalid': groupName.invalid && (groupName.touched || marketValueNgForm.submitted)}" id="group-name">
+                                    <option value="">Select one</option>
+                                    <option *ngFor="let groupName of groupNames" [value]="groupName">{{groupName}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-xl-12">
+                                <label for="subject-property" class="form-label">Subject Property</label>
+                                <select formControlName="subjectPropertyId" class="form-select"
+                                    [ngClass]="{'is-invalid': subjectPropertyId.invalid && (subjectPropertyId.touched || marketValueNgForm.submitted)}"
+                                    id="subject-property">
+                                    <option value="">Select one</option>
+                                    <option *ngFor="let subjectPropertiesLookup of subjectPropertiesLookups" [value]="subjectPropertiesLookup.id">
+                                        {{subjectPropertiesLookup.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="d-grid gap-2">
+                                    <button [disabled]="isRunningReport" type="submit" class="btn btn-primary">
+                                        {{ (isRunningReport ? 'Running Report...' : 'Run Report') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-4" *ngIf="comparableProperties && comparableProperties.length > 0">
+        <div class="col-xl-12 pt-3">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow">
+                    <thead>
+                        <tr class="table-info">
+                            <th class="text-center">Comparable Property</th>
+                            <th class="text-center">Year Built</th>
+                            <th class="text-center">Sales Price</th>
+                            <th class="text-center">Number of Units</th>
+                            <th class="text-center">Price / Unit</th>
+                            <th class="text-center">Average Unit Size</th>
+                            <th class="text-center">Price / Unit SF</th>
+                            <th class="text-center">Rent Income / Unit SF</th>
+                            <th class="text-center">Operating Expenses / Unit SF</th>
+                            <th class="text-center">GRM</th>
+                            <th class="text-center">Cap Rate</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let comparableProperty of comparableProperties">
+                            <td class="text-center">{{comparableProperty.address.address}}</td>
+                            <td class="text-center">{{comparableProperty.yearBuiltIn}}</td>
+                            <td class="text-center">{{comparableProperty.financialSummary.totalPurchasePrice | currency}}</td>
+                            <td class="text-center">{{comparableProperty.totalUnits}}</td>
+                            <td class="text-center">
+                                {{getRatio(comparableProperty.financialSummary.totalPurchasePrice, comparableProperty.totalUnits) | currency}}
+                            </td>
+                            <td class="text-center">{{getRatio(comparableProperty.totalUnitsSquareFootage, comparableProperty.totalUnits) | number}}</td>
+                            <td class="text-center">
+                                {{getRatio(comparableProperty.financialSummary.totalPurchasePrice, comparableProperty.totalUnitsSquareFootage) | currency}}</td>
+                            <td class="text-center">
+                                {{getRatio(comparableProperty.annualGrossScheduledRentalIncome, comparableProperty.totalUnitsSquareFootage) | currency}}</td>
+                            <td class="text-center">
+                                {{getRatio(comparableProperty.financialSummary.totalAnnualOperatingExpenses, getTotalActiveUnitsSqFts(comparableProperty)) |
+                                currency}}
+                            </td>
+                            <td class="text-center">{{comparableProperty.financialSummary.grossRentMultiplier}}</td>
+                            <td class="text-center">{{comparableProperty.financialSummary.annualCapRate}}%</td>
+                            <td class="action-icons-td">
+                                <i appTooltip title="Annual Income Statement" data-placement="top" (click)="onIncomeStatementClick(comparableProperty)"
+                                    class="fas fa-file-alt cursor-pointer me-2"></i>
+
+                                <a appTooltip title="Details" data-placement="top" [routerLink]="['/rental-property-details', comparableProperty.id]"
+                                    target="_blank" class="fa fa-info me-2 icon-link"></a>
+
+                                <i appTooltip title="Edit" data-placement="top" (click)="onEditClick(comparableProperty)"
+                                    class="fas fa-edit cursor-pointer me-2"></i>
+
+                                <i appTooltip title="Delete" data-placement="top" (click)="onDeleteClick(comparableProperty)"
+                                    class="fas fa-trash-alt cursor-pointer"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="fw-bold">
+                        <tr class="table-secondary">
+                            <td class="text-end">Minimum:</td>
+                            <td class="text-center">{{getMinimumYearBuilt()}}</td>
+                            <td class="text-center">{{getMinimumSalesPrice() | currency}}</td>
+                            <td class="text-center">{{getMinimumNumberOfUnits()}}</td>
+                            <td class="text-center">{{getMinimumPricePerUnit() | currency}}</td>
+                            <td class="text-center">{{getMinimumAverageUnitSize() | number}}</td>
+                            <td class="text-center">{{getMinimumPricePerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMinimumRentalIncomePerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMinimumOperatingExpensesPerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMinimumGRM()}}</td>
+                            <td class="text-center">{{getMinimumCapRate()}}%</td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td class="text-end">Average:</td>
+                            <td class="text-center">{{getYearBuiltAverage()}}</td>
+                            <td class="text-center">{{getSalesPriceAverage() | currency}}</td>
+                            <td class="text-center">{{getNumberOfUnitsAverage()}}</td>
+                            <td class="text-center">{{getPricePerUnitAverage() | currency}}</td>
+                            <td class="text-center">{{getAverageUnitSizeAverage() | number}}</td>
+                            <td class="text-center">{{getPricePerUnitSqFtAverage() | currency}}</td>
+                            <td class="text-center">{{getRentalIncomePerUnitSqFtAverage() | currency}}</td>
+                            <td class="text-center">{{getOperatingExpensesPerUnitSqFtAverage() | currency}}</td>
+                            <td class="text-center">{{getGRMAverage()}}</td>
+                            <td class="text-center">{{getCapRatesAverage()}}%</td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td class="text-end">Median:</td>
+                            <td class="text-center">{{getYearBuiltMedian()}}</td>
+                            <td class="text-center">{{getSalesPriceMedian() | currency}}</td>
+                            <td class="text-center">{{getNumberOfUnitsMedian()}}</td>
+                            <td class="text-center">{{getPricePerUnitMedian() | currency}}</td>
+                            <td class="text-center">{{getAverageUnitSizeMedian() | number}}</td>
+                            <td class="text-center">{{getPricePerUnitSqFtMedian() | currency}}</td>
+                            <td class="text-center">{{getRentalIncomePerUnitSqFtMedian() | currency}}</td>
+                            <td class="text-center">{{getOperatingExpensesPerUnitSqFtMedian() | currency}}</td>
+                            <td class="text-center">{{getGRMMedian()}}</td>
+                            <td class="text-center">{{getCapRatesMedian()}}%</td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-secondary">
+                            <td class="text-end">Maximum:</td>
+                            <td class="text-center">{{getMaximumYearBuilt()}}</td>
+                            <td class="text-center">{{getMaximumSalesPrice() | currency}}</td>
+                            <td class="text-center">{{getMaximumNumberOfUnits()}}</td>
+                            <td class="text-center">{{getMaximumPricePerUnit() | currency}}</td>
+                            <td class="text-center">{{getMaximumAverageUnitSize() | number}}</td>
+                            <td class="text-center">{{getMaximumPricePerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMaximumRentalIncomePerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMaximumOperatingExpensesPerUnitSqFt() | currency}}</td>
+                            <td class="text-center">{{getMaximumGRM()}}</td>
+                            <td class="text-center">{{getMaximumCapRate()}}%</td>
+                            <td></td>
+                        </tr>
+                        <tr class="table-secondary tr-subject-property" *ngIf="subjectProperty">
+                            <td class="text-end white-space-nowrap">Subject Property:</td>
+                            <td class="text-center">{{subjectProperty.yearBuiltIn}}</td>
+                            <td class="text-center">{{subjectProperty.financialSummary.totalPurchasePrice | currency}}</td>
+                            <td class="text-center">{{subjectProperty.totalUnits}}</td>
+                            <td class="text-center">{{getRatio(subjectProperty.financialSummary.totalPurchasePrice, subjectProperty.totalUnits) | currency}}
+                            </td>
+                            <td class="text-center">{{getRatio(subjectProperty.totalUnitsSquareFootage, subjectProperty.totalUnits) | number}}</td>
+                            <td class="text-center">
+                                {{getRatio(subjectProperty.financialSummary.totalPurchasePrice, subjectProperty.totalUnitsSquareFootage) | currency}}</td>
+                            <td class="text-center">
+                                {{getRatio(subjectProperty.annualGrossScheduledRentalIncome, subjectProperty.totalUnitsSquareFootage) | currency}}</td>
+                            <td class="text-center">
+                                {{getRatio(subjectProperty.financialSummary.totalAnnualOperatingExpenses, getTotalActiveUnitsSqFts(subjectProperty)) |
+                                currency}}
+                            </td>
+                            <td class="text-center">{{subjectProperty.financialSummary.grossRentMultiplier}}</td>
+                            <td class="text-center">{{subjectProperty.financialSummary.annualCapRate}}%</td>
+                            <td>
+                                <i appTooltip title="Annual Income Statement" data-placement="top" (click)="onIncomeStatementClick(subjectProperty)"
+                                    class="fas fa-file-alt cursor-pointer me-2"></i>
+
+                                <a appTooltip title="Details" data-placement="top" target="_blank"
+                                    [routerLink]="['/rental-property-details', subjectProperty.id]" class="fa fa-info me-2 icon-link"></a>
+
+                                <i appTooltip title="Edit" data-placement="top" (click)="onEditSubjectPropertyClick(subjectProperty)"
+                                    class="fas fa-edit cursor-pointer me-2"></i>
+
+                                <i appTooltip title="Delete" data-placement="top" (click)="onDeleteClick(subjectProperty)"
+                                    class="fas fa-trash-alt cursor-pointer"></i>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <h4>Items to Conciser</h4>
+            <ul>
+                <li>
+                    Compare amenities - what amenities does subject property offer vs. comps? What are common amenities comps offer that subject property does
+                    not?
+                </li>
+                <li>
+                    Ask appraisers, real estate brokers, property management companies in the area, a capitalization rate in the area on sold properties similar
+                    to yours.
+                </li>
+                <li>
+                    Ask your broker or the listing broker to provide list of recently sold comparables that help justify the sale price of the property.
+                </li>
+                <li>
+                    Ask your broker or the listing broker to provide recent appraisal on the property.
+                </li>
+                <li>
+                    Look at the units available for rent in the competitive properties of the one you&rsquo;re looking to purchase to get better idea of what
+                    the competition is offering.
+                </li>
+            </ul>
+
+            <h4>What is Market Value?</h4>
+            <p>
+                To the naive, appraised value, sales price, and market value all refer to the same idea. But, actually, appraised value might refer to an
+                insurance
+                policy appraisal, a property tax appraisal, an estate tax appraisal, or a market value appraisal. Sales price itself reveals the nominal price
+                at
+                which a property has sold. That sales price might equal, exceed, or fall below market value. Sales price represents market value only when a
+                property
+                is sold according to these five assumptions:
+            </p>
+            <ul>
+                <li>Buyers and sellers are typically motivated. Neither acts under duress.</li>
+                <li>Buyers and sellers are well informed about the market and negotiate in their own best interest.</li>
+                <li>The marketing period and sales promotion bring the property to the attention of willing and able buyers.</li>
+                <li>
+                    No atypical favorable or unfavorable terms of financing apply. Easy money inflates demand. Tight money suppresses demand. (During the most
+                    recent property boom, lenders offered dangerously easy financing, thus pushing demand and sales prices far above the market values that
+                    would have prevailed under normal loan underwriting standards.)
+                </li>
+                <li>
+                    Neither the seller nor the buyers offer any extraordinary sales concessions or incentives. (For example, the builders in many countries
+                    offered off-plan buyers three years of rent guarantees - clearly a red flag that the builders&rsquo; prices exceed market value.)
+                </li>
+            </ul>
+
+            <h4> How to Estimate Market Value</h4>
+            <ul class="list-style-none">
+                <li>
+                    <strong>Cost Approach</strong>
+                    <ul>
+                        <li>Calculate how much it would cost to build a subject property at today&rsquo;s prices.</li>
+                        <li>Subtract accrued depreciation.</li>
+                        <li>Add the depreciated cost figure to the current value of the lot.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Comparable Sales Approach</strong>
+                    <ul>
+                        <li>Compare a subject property with other similar (comp) properties that have recently sold.</li>
+                        <li>Adjust the prices for each positive or negative feature of the comps relative to the subject property.</li>
+                        <li>Estimate market value of the subject property from the adjusted sales price of the comps.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Income Approach</strong>
+                    <ul>
+                        <li>Estimate the rents you expect a property to produce.</li>
+                        <li>Calculate capitalization rate (Cap Rate).</li>
+                        <li>Compare a subject property GRM and/or Cap Rate with other similar (comp) properties that have recently sold.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>Sales Price Doesn&rsquo;t Necessarily Equal Market Value</h4>
+            <p>
+                When you value property, learn more than the past prices at which so-called similar properties have recently sold. Investigate whether the
+                buyers or sellers in these transactions acted with full market knowledge, negotiated any favorable terms of financing, bought (or sold) in a
+                hurry, or conceded something that pushed up the nominal selling price - or perhaps pulled it down. If you find that the sales price of
+                comparable properties do not meet the conditions of a market value sale, then that sales price (unadjusted) does not necessarily imply a market
+                price.
+            </p>
+            <p>
+                To confidently rely on comp sales prices: verify the accuracy of your information, verify the date of sale, and verify the terms and conditions
+                of the sale. Faulty information about a comp property&rsquo;s features or terms of the sale can make overpriced deals look good (or vice versa).
+                Market value assumes no hidden defects or title issues. A comp (or subject) house with termite infestation or unpaid tax liens should sell at a
+                price less than market value.
+            </p>
+
+            <h4>Select Comparable Properties</h4>
+            <p>
+                To apply the comp sales approach or income approach, find recently sold properties that closely match a subject property. Ideally, find comp
+                sales that resemble one another in property size, age, features, condition, quality of construction, room count, floor plan, and location.
+            </p>
+
+            <h4>The GRM Income Approach</h4>
+            <ul class="list-style-none">
+                <li><strong>GRM</strong> = Sales Price &divide; Monthly Rent</li>
+            </ul>
+            <p>
+                The GRM does not directly adjust for sales incentives, financing concessions, features, location, property condition, or property operating
+                expenses.This technique yields a rough estimate of market value. Nevertheless, for property investors, it works as rule of thumb.
+            </p>
+
+            <h4>The Cap Rate Income Approach</h4>
+            <ul class="list-style-none">
+                <li><strong>Cap Rate</strong> = Net Operating Income &divide; Purchase Price</li>
+            </ul>
+            <p>
+                A cap rate - the ratio what a building costs and what it makes - is the most fundamental indicator of a property&rsquo;s value. It is the
+                real-estate investor&rsquo;s equivalent to the stock market&rsquo;s &quot;price-earnings ratio&quot; that is used to value and compare different
+                stocks.
+            </p>
+            <p>
+                For example, let&rsquo;s say cap rates - <strong>on asking prices</strong> - in the neighborhood tend to range from 6 percent to 7 percent.
+                John&rsquo;s potential buy is right in the middle.
+            </p>
+            <p>
+                That&rsquo;s a good start. But what John really wants to know are cap rates for sale prices - <strong>not what sellers asked, but what buyers
+                    paid</strong>. For those he&rsquo;ll need to look as &quot;sales comparables&quot; that will show him what other, similar buildings in the
+                area have sold for recently. In most states, real-estate sales figures are public records - many of which are now accusable online. At a
+                minimum, county records should note the date of the sale, the price, the annual property tax, the overall size of the building and the number of
+                units. Frequently one can learn the mortgage amount as well.
+            </p>
+            <p>
+                John, of course, won&rsquo;t know the condition of the comparable buildings (unless they happen to be among those he looked at), but he will get
+                a very good picture of what similar properties have been selling for. Many county assessor offices have this kind of information online. It is
+                also readily available through real-estate agents, bankers, lawyers, and property appraisers.
+            </p>
+            <p>
+                Let&rsquo; say John learns that a four-unit building two blocks away sold two months earlier for $300,000, and another six unit building around
+                the corner sold for $625,000. Now he knows what ballpark he&rsquo;s playing in. His network will know what rents are in the area, and he can
+                always call landlords and ask what they are charging. They will probably not tell him their expenses, but he can make a reasonable estimate.
+                (Rule of thumb: Operating expenses on larger buildings equal 30 percent to 45 percent of gross rents).
+            </p>
+            <p>
+                The apartment in the four-unit building are renting for an average of $700 each, and John figures the owner&rsquo;s expenses are running $1,000
+                a month. At the six-unit, the rents are $900 with $2,000 in expenses. Cap rates 7.2 percent at the four unit and 6.5 percent at the six-unit.
+                (Note: The smaller building with the lower rents and lower revenue is actually performing better financially than the larger building).
+            </p>
+            <p>
+                Now John knows that the $400,000 asking price on the four-unit apartment building is too high.
+            </p>
+            <p>
+                What should he offer? Simple. He wants the best deal he can make, so he divides the net operating income (that&rsquo;s total income minus
+                non-mortgage expenses) by the cap rate he wants. In this case, John would prefer 7.2 percent to 6 percent, right? So he&rsquo;ll lowball a bit
+                and initially offer $26,000 &divide; .074 = $350,000
+            </p>
+            <p>
+                At this point the negotiations become a traditional back-and-forth. The seller counters at $390,000.
+            </p>
+            <ul class="list-style-none">
+                <li>&quot;You&rsquo;re killing me&quot;, John says.</li>
+                <li>&quot;You&rsquo;re killing me&quot;, the seller replies.</li>
+            </ul>
+            <p>
+                But they strike a deal at $370,000 - and a perfectly respectable cap rate in this neighborhood of 7.0 percent.
+            </p>
+            <p>
+                John agrees to close the deal 60 days after he has concluded his due diligence, including a rigorous inspection of the building and its
+                finances.
+            </p>
+
+            <h4>Below-Market Value</h4>
+            <p>
+                If you could have newly built a similar property for 20 percent less than the below-market price you paid, then you probably should have chosen
+                the new construction. Below-market value represents one metric by which you can evaluate a potential investment. Never rely on this measure as
+                the only measure. Cash flows, replacement costs, appreciation or depreciation potential, market timing, affordability ratios - rely on these and
+                other metrics along with below-market price. Below-market price does not assure profits. But below-market value often points in that direction.
+            </p>
+            <p>
+                Wise investors double and triple check their bargain price offers with multiple value metrics and other market indicators especially trends in
+                new home and apartment construction, the for-sale and for-rent markets, employment numbers, mortgage defaults and delinquencies. In fact,
+                investors often selectively use such information, when negative, to support lower price offer.
+            </p>
+            <p>
+                That below-market price won&rsquo;t seem like such a great deal once you learn the roof leaks, the foundation is cracking, and termites are
+                munching on floor joists. If the next-door neighbor make Animal House look tame, quality tenants will not rent your property - or if they do
+                move in, they will not stay.
+            </p>
+            <p>
+                Prepare against such unwanted surprises. Thoroughly inspect the property, talk with existing tenants walk the neighborhood, and avail yourself
+                of knowledgeable and trustworthy real estate agents. Get the property checked out by a property inspector, a structural engineer, a pest control
+                expert, ot other specialists who accurately assess the condition of the property. Be wary of plumbing and heating pipes that lie within or below
+                a concrete foundation. When these pipes leak, detection and repair can present difficult costly measures. Last, but not least, ask the sellers
+                to complete a seller disclosure statement.
+            </p>
+
+            <h4>Other</h4>
+            <p>
+                Earn price gains from appreciation, a possibility that becomes nearly certain when you buy in down markets at below-replacement-cost prices.
+            </p>
+            <p>
+                Be careful with purchasing property in the location where there are no other similar properties available within about 5 miles range. No similar
+                properties in the area might mean that no one wants to have that type of property in that area.
+            </p>
+        </div>
+    </div>
+</div>

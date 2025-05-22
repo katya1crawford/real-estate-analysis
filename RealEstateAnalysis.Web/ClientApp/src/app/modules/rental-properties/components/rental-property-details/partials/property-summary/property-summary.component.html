@@ -1,0 +1,115 @@
+﻿<div class="row" *ngIf="!pageLoading">
+    <div class="col-xl-3">
+        <div class="card shadow" #summaryWrapper>
+            <div class="card-header bg-info-2 text-white">Property Summary</div>
+            <div class="card-body">
+                <div *ngIf="property.thumbnailImageBase64; else noimage">
+                    <img class="img-fluid img-thumbnail" [src]="'data:' + property.thumbnailImageContentType + ';base64,' + property.thumbnailImageBase64">
+                </div>
+
+                <ng-template #noimage>
+                    <img class="img-fluid img-thumbnail" [src]="noImage">
+                </ng-template>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>
+                        {{property.address.address}}<br>
+                        {{property.address.city}}, {{property.address.state.name}} {{property.address.zipCode}}
+                    </strong>
+                </li>
+                <li class="list-group-item">County: <strong>{{property.address.county}}</strong></li>
+                <li class="list-group-item">Neighborhood: <strong>{{property.address.neighborhood}}</strong></li>
+                <li class="list-group-item">Year built in: <strong>{{property.yearBuiltIn}}</strong></li>
+                <li class="list-group-item">Type: <strong>{{property.propertyType.name}}</strong></li>
+                <li class="list-group-item">Total units: <strong>{{property.totalUnits}}</strong></li>
+                <li class="list-group-item">Total units SF:
+                    <strong>{{property.totalUnitsSquareFootage | number}}</strong>
+                </li>
+                <li class="list-group-item">Average Price / Unit SF:
+                    <strong>{{getRatio(property.financialSummary.totalPurchasePrice, property.totalUnitsSquareFootage) | currency}}</strong>
+                </li>
+                <li class="list-group-item">Average Unit Price:
+                    <strong>{{getRatio(property.financialSummary.totalPurchasePrice, property.totalUnits) | currency}}</strong>
+                </li>
+                <li class="list-group-item">Building SF: <strong>{{property.buildingSquareFootage | number}}</strong>
+                </li>
+                <li class="list-group-item">
+                    Total Purchase Price: <a href="javascript:void(0)" [appPopover]="totalPurchasePriceTemplate" class="text-decoration-none"
+                        data-bs-trigger="focus" title="Total Purchase Price"><strong>{{ property.financialSummary.totalPurchasePrice | currency }}</strong>
+                    </a>
+                    <ng-template #totalPurchasePriceTemplate>
+                        <span>Purchase price:
+                            <strong>{{property.purchasePrice | currency}}</strong><br /></span>
+                        <span>Closing Costs:
+                            <strong>{{property.financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+                        <span>
+                            Interior Repair Exp.:
+                            <strong>{{property.financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+                        <span>
+                            Exterior Repair Exp.:
+                            <strong>{{property.financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+                        <span>
+                            General Repair Exp.: <strong>{{property.financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+                        <span class="rowSubTotal">
+                            Total Purchase Price:
+                            <strong>{{property.financialSummary.totalPurchasePrice | currency}}</strong></span>
+                    </ng-template>
+                </li>
+                <li class="list-group-item">
+                    Loan {{property.financialSummary.annualMortgageExpenses > 0 ? '(' + property.loanYears + 'yr @ ' + property.loanApr + '%)' : ''}}:
+
+                    <a href="javascript:void(0)" [appPopover]="loanAmountTemplate" class="text-decoration-none" data-bs-trigger="focus" title="Loan Amount">
+                        <strong>{{ property.financialSummary.loanAmount | currency }}</strong>
+                    </a>
+
+                    <ng-template #loanAmountTemplate>
+                        <p>Loan Amount = Purchase Price - Down Payment</p>
+                        <p>
+                            <i>
+                                {{ property.financialSummary.loanAmount | currency }} = {{property.purchasePrice | currency}} -
+                                {{property.downPayment || 0 | currency}}</i>
+                        </p>
+                    </ng-template>
+
+                </li>
+                <li class="list-group-item">Loan-to-Value (LTV):
+                    <strong>{{ property.financialSummary.loanToValueRate }}%</strong>
+                </li>
+                <li class="list-group-item">
+                    Total cash needed: <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none"
+                        [appPopover]="popTotalCashNeededTemplate" title="Total Cash Needed"><strong>{{ property.financialSummary.totalCashNeeded | currency
+                            }}</strong></a>
+                    <ng-template #popTotalCashNeededTemplate>
+                        <span>
+                            Down Payment:
+                            <strong>{{property.downPayment | currency}}</strong><br /></span>
+                        <span>
+                            Closing Costs:
+                            <strong>{{property.financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+                        <span>
+                            Interior Repair Exp.:
+                            <strong>{{property.financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+                        <span>
+                            Exterior Repair Exp.:
+                            <strong>{{property.financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+                        <span>
+                            General Repair Exp.:
+                            <strong>{{property.financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+                        <span class="rowSubTotal">Total Cash Needed:
+                            <strong>{{property.financialSummary.totalCashNeeded | currency}}</strong></span>
+                    </ng-template>
+                </li>
+                <li class="list-group-item">Map circles radius: <strong>5, 3, and 1 Miles</strong></li>
+                <li class="list-group-item">Nearby places radius: <strong>3 Miles</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-xl-9">
+        <div class="card shadow">
+            <app-property-google-map [property]="property" [style.height.px]="mapHeight"></app-property-google-map>
+        </div>
+    </div>
+</div>

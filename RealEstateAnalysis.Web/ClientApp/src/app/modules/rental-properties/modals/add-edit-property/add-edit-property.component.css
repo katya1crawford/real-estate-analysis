@@ -1,0 +1,3 @@
+﻿.tbl-expenses tr:not(:first-child) .icon-add-expense {
+    margin-left: 10px;
+}

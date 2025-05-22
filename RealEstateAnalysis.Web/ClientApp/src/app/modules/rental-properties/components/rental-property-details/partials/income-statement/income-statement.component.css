@@ -1,0 +1,17 @@
+﻿.tdSubTotal,
+.tdTotal {
+    border-top: 1.5px solid;
+}
+
+.tdTotal {
+    border-bottom: 6px double;
+}
+
+.lblSubTotal,
+.lblSubAccountsGroup {
+    padding-left: 15px;
+}
+
+.tdSpacer {
+    width: 30px;
+}

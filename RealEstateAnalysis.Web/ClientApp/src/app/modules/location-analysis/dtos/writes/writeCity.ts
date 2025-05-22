@@ -1,0 +1,22 @@
+﻿export class WriteCity {
+    constructor(public cityName: string,
+        public populationInYearStart: number,
+        public populationInYearEnd: number,
+        public medianHouseholdIncomeInYearStart: number,
+        public medianHouseholdIncomeInYearEnd: number,
+        public medianHouseOrCondoValueInYearStart: number,
+        public medianHouseOrCondoValueInYearEnd: number,
+        public crimeIndexInYearStart: number,
+        public crimeIndexInYearEnd: number,
+        public recentYearJobsGrowthRate: number,
+        public numberOfJobsAdded: number,
+        public stateId: number,
+        public populationYearEnd: number,
+        public medianHouseholdIncomeYearEnd: number,
+        public medianHouseOrCondoValueYearEnd: number,
+        public crimeIndexYearStart: number,
+        public crimeIndexYearEnd: number,
+        public medianHouseholdIncomeYearStart: number,
+        public medianHouseOrCondoValueYearStart: number,
+        public populationYearStart: number) { }
+}

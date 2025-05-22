@@ -1,0 +1,103 @@
+<div class="row mt-4">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Rent Roll</div>
+            <div class="card-body">
+                <div class="row mt-2">
+                    <div class="col-xl-12 mt-3">
+                        <div class="table-responsive">
+                            <table appDatatables [dtTrigger]="dtTrigger" [dtTitle]="dtTitle" [dtMessageTop]="dtMessageTop"
+                                class="table table-bordered table-hover shadow">
+                                <thead>
+                                    <tr class="table-info">
+                                        <th class="text-center">Unit</th>
+                                        <th class="text-center">FP</th>
+                                        <th class="text-center">Sqft</th>
+                                        <th class="text-center">BRs</th>
+                                        <th class="text-center">Baths</th>
+                                        <th class="text-center">Vacant</th>
+                                        <th class="text-center">Renovated</th>
+                                        <th class="text-center">Contract Rent</th>
+                                        <th class="text-center">Other Income</th>
+                                        <th class="text-center">Mkt Rent</th>
+                                        <th class="text-center">% of Mkt Rent</th>
+                                        <th class="text-center">MTM</th>
+                                        <th class="text-center">Lease Start</th>
+                                        <th class="text-center">Lease End</th>
+                                        <th class="text-center">Lease Term</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let rentRollItem of rentRollSummary.rentRollItems">
+                                        <td class="text-center">{{rentRollItem.unit}}</td>
+                                        <td class="text-center">{{rentRollItem.floorPlan}}</td>
+                                        <td class="text-center">{{rentRollItem.squareFootage | number}}</td>
+                                        <td class="text-center">{{rentRollItem.bedrooms}}</td>
+                                        <td class="text-center">{{rentRollItem.bathrooms}}</td>
+                                        <td class="text-center">{{rentRollItem.isVacant ? 'Yes' : ''}}</td>
+                                        <td class="text-center">{{rentRollItem.isRenovated ? 'Yes' : ''}}</td>
+                                        <td class="text-center">{{rentRollItem.contractRent | currency}}</td>
+                                        <td class="text-center">{{rentRollItem.otherIncome | currency}}</td>
+                                        <td class="text-center">{{rentRollItem.marketRent | currency}}</td>
+                                        <td class="text-center">{{rentRollItem.percentOfMarketRent}}%</td>
+                                        <td class="text-center">{{rentRollItem.isMonthToMonth ? 'Yes' : ''}}</td>
+                                        <td class="text-center" [attr.data-sort]="rentRollItem.leaseStartDate">
+                                            {{rentRollItem.leaseStartDate | date : 'M/d/yyyy' }}
+                                        </td>
+                                        <td class="text-center" [attr.data-sort]="rentRollItem.leaseEndDate">
+                                            {{rentRollItem.leaseEndDate | date : 'M/d/yyyy'}}</td>
+                                        <td class="text-center">{{rentRollItem.leaseTermInMonths}} {{rentRollItem.leaseTermInMonths ? 'months' : ''}}</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="fw-bold">
+                                    <!-- Following row is work around for DataTable issues with tfoot -->
+                                    <tr class="table-secondary display-none">
+                                        <td></td>
+                                        <td>Totals:</td>
+                                        <td class="text-center">{{rentRollSummary.totalSquareFootage | number}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center">{{rentRollSummary.numberOfVacantUnits}}</td>
+                                        <td class="text-center">{{rentRollSummary.numberOfRenovatedUnits}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalContractRent | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalOtherIncome | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalMarketRent | currency}}</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">{{rentRollSummary.numberOfMonthToMonthUnits}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="table-secondary">
+                                        <td colspan="2" class="text-center">Totals:</td>
+                                        <td class="text-center">{{rentRollSummary.totalSquareFootage | number}}</td>
+                                        <td colspan="2"></td>
+                                        <td class="text-center">{{rentRollSummary.numberOfVacantUnits}}</td>
+                                        <td class="text-center">{{rentRollSummary.numberOfRenovatedUnits}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalContractRent | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalOtherIncome | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.totalMarketRent | currency}}</td>
+                                        <td class="text-center"></td>
+                                        <td class="text-center">{{rentRollSummary.numberOfMonthToMonthUnits}}</td>
+                                        <td colspan="3" class="text-center"></td>
+                                    </tr>
+                                    <tr class="table-secondary">
+                                        <td colspan="2" class="text-center">Averages:</td>
+                                        <td class="text-center">{{rentRollSummary.averageSquareFootage | number}}</td>
+                                        <td colspan="4"></td>
+                                        <td class="text-center">{{rentRollSummary.averageContractRent | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.averageOtherIncome | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.averageMarketRent | currency}}</td>
+                                        <td class="text-center">{{rentRollSummary.averagePercentOfMarketRent}}%</td>
+                                        <td></td>
+                                        <td colspan="3" class="text-center"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

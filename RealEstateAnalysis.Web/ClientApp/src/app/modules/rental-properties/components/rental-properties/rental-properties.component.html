@@ -1,0 +1,91 @@
+<div class="container-xxl">
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="page-header">
+                <h1>Rentals - {{propertyStatusFriendlyDisplay}}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="propertyStatus === 'Listing'">
+        <div class="col-xl-12">
+            <button type="button" class="btn btn-success add-new-property-btn" (click)="onAddNewClick()">
+                <span class="fa fa-plus fa-1x me-2"></span>
+                <span>Add new property</span>
+            </button>
+        </div>
+    </div>
+
+    <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+    <div class="row" *ngIf="propertiesLoading">
+        <div class="col-xl-12 text-center">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+    </div>
+
+    <div class="row mt-4" *ngIf="properties?.length > 0">
+        <div class="col-xl-3 col-xs-12" *ngIf="properties">
+            <input type="text" class="form-control" placeholder="Search for..." #searchInput (keyup)="filterProperties(searchInput.value)">
+        </div>
+    </div>
+
+    <div class="row" *ngIf="properties && properties.length > 0">
+        <div class="col-xl-3 col-md-4 col-sm-6 mt-4" *ngFor="let property of properties">
+            <div class="card shadow">
+                <div *ngIf="property.thumbnailImageBase64; else noimage">
+                    <img class="card-img-top img-fluid cursor-pointer" (click)="onDetailsClick(property)"
+                        [src]="'data:' + property.thumbnailImageContentType + ';base64,' + property.thumbnailImageBase64">
+                </div>
+
+                <ng-template #noimage>
+                    <img class="card-img-top img-fluid cursor-pointer" (click)="onDetailsClick(property)" [src]="noImage">
+                </ng-template>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>
+                            {{property.address.address}}<br>
+                            {{property.address.city}}, {{property.address.state.name}} {{property.address.zipCode}}
+                        </strong>
+                    </li>
+                </ul>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Cap Rate: <strong>{{property.financialSummary.annualCapRate}}%</strong></li>
+                    <li class="list-group-item">Cash-on-Cash Rate: <strong>{{property.financialSummary.annualCashOnCashRate}}%</strong></li>
+                    <li class="list-group-item">Cash Flow: <strong>{{property.financialSummary.annualCashFlow | currency}}</strong></li>
+                </ul>
+
+                <div class="card-footer d-flex justify-content-around">
+                    <span appTooltip title="Details" data-placement="top" class="fa fa-info fa-2x cursor-pointer" aria-hidden="true"
+                        (click)="onDetailsClick(property)">
+                    </span>
+
+                    <span appTooltip title="Attachments" data-placement="top" class="fa fa-paperclip fa-2x cursor-pointer action-icon-margin-right"
+                        aria-hidden="true" (click)="onAttachmentsClick(property)">
+                        <span class="badge text-dark" *ngIf="property.files.length > 0">{{property.files.length}}</span>
+                    </span>
+
+                    <span appTooltip title="Annual Income Statement" data-placement="top" class="fas fa-file-alt fa-2x cursor-pointer" aria-hidden="true"
+                        (click)="onIncomeStatementClick(property)"></span>
+
+                    <span appTooltip title="Edit" data-placement="top" class="fas fa-edit fa-2x cursor-pointer" aria-hidden="true"
+                        (click)="onEditClick(property)"></span>
+
+                    <span class="fas fa-trash-alt fa-2x cursor-pointer" appTooltip title="Delete" data-placement="top" aria-hidden="true"
+                        (click)="onDelete(property)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="(!properties || properties.length === 0)  && propertiesLoading === false && !serverError && !validationErrorResult">
+        <div class="col-xl-12">
+            <div class="alert alert-info" role="alert">
+                <span class="fas fa-exclamation-circle me-2"></span>
+                No properties found.
+            </div>
+        </div>
+    </div>
+</div>

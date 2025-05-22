@@ -1,0 +1,41 @@
+<div class="container-xxl">
+    <div class="row mt-4" *ngIf="pageLoading">
+        <div class="col-xl-12 text-center loadingWrapper">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+    </div>
+
+    <nav aria-label="breadcrumb" class="mt-2" *ngIf="!pageLoading">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/rental-property-details', propertyId]" class="text-decoration-none">Property Details</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Rent Roll</li>
+        </ol>
+    </nav>
+
+    <div class="row py-4" *ngIf="!pageLoading">
+        <div class="col-xl-12 d-flex flex-row justify-content-end">
+            <span appTooltip title="Import Rent Roll CSV" data-placement="top" class="fas fa-file-csv fa-2x cursor-pointer me-3"
+                (click)="onImportRentRollCsvClick()"></span>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="(!rentRollSummary || rentRollSummary.rentRollItems.length == 0) && pageLoading === false && !serverError && !validationErrorResult">
+        <div class="col-xl-12">
+            <div class="alert alert-info" role="alert">
+                <span class="fas fa-exclamation-circle me-2"></span>
+                No rent roll found.
+            </div>
+        </div>
+    </div>
+
+    <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+    <app-summary [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-summary>
+    <app-contract-rent-by-month [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0">
+    </app-contract-rent-by-month>
+    <app-lease-count-by-month [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-lease-count-by-month>
+    <app-floor-plans [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-floor-plans>
+    <app-rents [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-rents>
+    <app-occupancy [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-occupancy>
+    <app-rent-roll-details [rentRollSummary]="rentRollSummary" *ngIf="!pageLoading && rentRollSummary?.rentRollItems.length > 0"></app-rent-roll-details>
+</div>

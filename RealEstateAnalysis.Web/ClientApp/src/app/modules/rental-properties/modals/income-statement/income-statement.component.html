@@ -1,0 +1,153 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Annual Income Statement (Year 1)</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
+    </button>
+</div>
+<div class="modal-body" *ngIf="property">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="table-responsive">
+                    <table class="table table-condensed table-sm table-hover">
+                        <thead>
+                            <tr class="table-active">
+                                <th class="text-center">Cap Rate</th>
+                                <th class="text-center">Cash-on-Cash Rate</th>
+                                <th class="text-center">Purchase Price</th>
+                                <th class="text-center">Total Cash Needed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-success">
+                                <td class="text-center">{{property.financialSummary.annualCapRate}}%</td>
+                                <td class="text-center">{{property.financialSummary.annualCashOnCashRate}}%</td>
+                                <td class="text-center">{{property.purchasePrice | currency}}</td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="popTotalCashNeededTemplate" class="text-decoration-none"
+                                        title="Total Cash Needed"><strong>{{ property.financialSummary.totalCashNeeded | currency }}</strong>
+                                    </a>
+                                    <ng-template #popTotalCashNeededTemplate>
+                                        <span>Down Payment: <strong>{{property.downPayment | currency}}</strong><br /></span>
+                                        <span>Closing Costs:
+                                            <strong>{{property.financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+                                        <span>Interior Repair Exp.:
+                                            <strong>{{property.financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>Exterior Repair Exp.:
+                                            <strong>{{property.financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>General Repair Exp.:
+                                            <strong>{{property.financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+                                        <span class="rowSubTotal">Total Cash Needed: <strong>{{property.financialSummary.totalCashNeeded |
+                                                currency}}</strong></span>
+                                    </ng-template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-xl-12">
+                <div class="table-responsive">
+                    <table class="table table-condensed table-sm table-hover">
+                        <tbody>
+                            <tr class="table-active">
+                                <td colspan="3"><strong class="lblSubAccountsGroup">Income</strong></td>
+                                <td><strong>% of EGI</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="tdSpacer"></td>
+                                <td>Gross Scheduled Rental Income</td>
+                                <td>{{property.annualGrossScheduledRentalIncome | currency}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="tdSpacer"></td>
+                                <td>Less {{property.annualVacancyRate}}% Vacancy Loss</td>
+                                <td>{{(0 - property.financialSummary.annualVacancyLoss) | currency}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="tdSpacer"></td>
+                                <td><strong>Net Rental Income</strong></td>
+                                <td class="rowSubTotal"><strong>{{property.financialSummary.annualNetRentalIncome | currency}}</strong></td>
+                                <td class="rowSubTotal"></td>
+                            </tr>
+                            <tr>
+                                <td class="tdSpacer"></td>
+                                <td>Other Income</td>
+                                <td>{{property.otherAnnualIncome | currency}}</td>
+                                <td></td>
+                            </tr>
+                            <tr class="table-info">
+                                <td colspan="2"><strong class="lblSubTotal text-nowrap">Effective Gross Income (EGI)</strong></td>
+                                <td class="rowSubTotal rowTotal">
+                                    <strong>{{property.financialSummary.annualEffectiveGrossIncome | currency}}</strong>
+                                </td>
+                                <td class="rowSubTotal rowTotal">
+                                    <strong>100.00%</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr class="table-active">
+                                <td colspan="4"><strong class="lblSubAccountsGroup">Operating Expenses</strong></td>
+                            </tr>
+                            <tr *ngFor="let annualOperatingExpense of combinedAnnualOperatingExpenses">
+                                <td class="tdSpacer"></td>
+                                <td>{{annualOperatingExpense.name}}</td>
+                                <td>{{annualOperatingExpense.amount | currency}}</td>
+                                <td>{{getPercentOfGoi(annualOperatingExpense.amount)}}%</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td colspan="2"><strong class="lblSubTotal">Total Operating Expenses</strong></td>
+                                <td class="rowSubTotal">
+                                    <strong>{{property.financialSummary.totalAnnualOperatingExpenses | currency}}</strong>
+                                </td>
+                                <td class="rowSubTotal">
+                                    <strong>{{getPercentOfGoi(property.financialSummary.totalAnnualOperatingExpenses)}}%</strong>
+                                </td>
+                            </tr>
+                            <tr class="table-info">
+                                <td colspan="2"><strong>Net Operating Income (NOI)</strong></td>
+                                <td class="rowTotal">
+                                    <strong>{{property.financialSummary.annualNoi | currency}}</strong>
+                                </td>
+                                <td class="rowTotal">
+                                    <strong>{{getPercentOfGoi(property.financialSummary.annualNoi)}}%</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">&nbsp;</td>
+                            </tr>
+                            <tr class="table-active">
+                                <td colspan="4"><strong class="lblSubAccountsGroup">Other Expenses</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="tdSpacer"></td>
+                                <td>Debt Service (principal &amp; interest)</td>
+                                <td>{{property.financialSummary.annualMortgageExpenses | currency}}</td>
+                                <td>{{getPercentOfGoi(property.financialSummary.annualMortgageExpenses)}}%</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td colspan="2"><strong>Net Cash Flow</strong></td>
+                                <td class="rowTotal">
+                                    <strong>{{property.financialSummary.annualCashFlow | currency}}</strong>
+                                </td>
+                                <td class="rowTotal">
+                                    <strong>{{getPercentOfGoi(property.financialSummary.annualCashFlow)}}%</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

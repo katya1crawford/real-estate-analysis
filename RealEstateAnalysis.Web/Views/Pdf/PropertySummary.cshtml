@@ -1,0 +1,393 @@
+﻿@model RealEstateAnalysis.Domain.DTOs.Reads.RentalProperty.ReadProperty
+
+@{
+    List<KeyValuePair<string, decimal>> operatingExpenses = new List<KeyValuePair<string, decimal>>();
+
+    if (Model.FinancialSummary.AnnualPropertyManagementFee > 0)
+    {
+        operatingExpenses.Add(new KeyValuePair<string, decimal>(key: "Property Management Fee", value: Model.FinancialSummary.AnnualPropertyManagementFee));
+    }
+
+    foreach (var operatingExpense in Model.AnnualOperatingExpenses)
+    {
+        operatingExpenses.Add(new KeyValuePair<string, decimal>(key: operatingExpense.OperatingExpenseTypeName, value: operatingExpense.Amount));
+    }
+
+    decimal GetPercentOfGoi(decimal amount)
+    {
+        decimal percent = (amount / Model.FinancialSummary.AnnualEffectiveGrossIncome) * 100;
+        return Math.Round(percent, 2);
+    }
+}
+
+<style>
+    @@page {
+        @@bottom-center {
+            content: "Page " counter(page) " of " counter(pages);
+        }
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+        margin-top: 20px;
+    }
+
+    [class*="col-"] {
+        float: left;
+    }
+
+    .col-1 {
+        width: 8.33%;
+    }
+
+    .col-2 {
+        width: 16.66%;
+    }
+
+    .col-3 {
+        width: 25%;
+    }
+
+    .col-4 {
+        width: 33.33%;
+    }
+
+    .col-5 {
+        width: 41.66%;
+    }
+
+    .col-6 {
+        width: 50%;
+    }
+
+    .col-7 {
+        width: 58.33%;
+    }
+
+    .col-8 {
+        width: 66.66%;
+    }
+
+    .col-9 {
+        width: 75%;
+    }
+
+    .col-10 {
+        width: 83.33%;
+    }
+
+    .col-11 {
+        width: 91.66%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .pr-10 {
+        padding-right: 10px;
+    }
+
+    .pb-10 {
+        padding-bottom: 10px;
+    }
+
+    .pl-15 {
+        padding-left: 15px !important;
+    }
+
+    .pl-30 {
+        padding-left: 30px !important;
+    }
+
+    .bordered-table {
+        border: 1px solid #000;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .bordered-table td,
+        .bordered-table th {
+            border: 1px solid #000;
+            padding: 7px;
+        }
+
+    table tfoot {
+        font-weight: bold;
+    }
+
+        table tfoot tr,
+        .total-amount-row {
+            border-top: 3px solid #000;
+        }
+
+    .address {
+        margin-top: -15px;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+</style>
+
+<h2 class="text-center">Property Summary Report</h2>
+<p class="text-center address">
+    @Model.Address.Address, @Model.Address.City, @Model.Address.State.Name @Model.Address.ZipCode
+</p>
+
+<div class="row">
+    <div class="col-5 pr-10">
+        <div class="row pb-10">
+            <div class="col-12">
+                <table class="bordered-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Property Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Purchase Price:</td>
+                            <td>@Model.PurchasePrice.ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <td>Year Built in:</td>
+                            <td>@Model.YearBuiltIn</td>
+                        </tr>
+                        <tr>
+                            <td>Type:</td>
+                            <td>@Model.PropertyType.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Total Units:</td>
+                            <td>@Model.UnitGroups.Sum(x => x.NumberOfUnits)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row pb-10">
+            <div class="col-12">
+                <table class="bordered-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Loan Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Loan Amount:</td>
+                            <td>@Model.FinancialSummary.LoanAmount.ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <td>APR:</td>
+                            <td>@Model.LoanApr%</td>
+                        </tr>
+                        <tr>
+                            <td>Loan Years:</td>
+                            <td>@Model.LoanYears</td>
+                        </tr>
+                        <tr>
+                            <td>Down Payment:</td>
+                            <td>@Model.DownPayment.ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <td>Loan-to-Value (LTV):</td>
+                            <td>@Model.FinancialSummary.LoanToValueRate%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row pb-10">
+            <div class="col-12">
+                <table class="bordered-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Financial Summary (Year 1)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cap. Rate:</td>
+                            <td>@Model.FinancialSummary.AnnualCapRate%</td>
+                        </tr>
+                        <tr>
+                            <td>CoC Rate:</td>
+                            <td>@Model.FinancialSummary.AnnualCashOnCashRate%</td>
+                        </tr>
+                        <tr>
+                            <td>Cash Flow:</td>
+                            <td>@Model.FinancialSummary.AnnualCashFlow.ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <td>NOI:</td>
+                            <td>@Model.FinancialSummary.AnnualNoi.ToString("c")</td>
+                        </tr>
+                        <tr>
+                            <td>DSCR:</td>
+                            <td>@Model.FinancialSummary.DebtCoverageRatio</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="bordered-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Total Cash Needed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Down Payment:</td>
+                            <td>@Model.DownPayment.ToString("c")</td>
+                        </tr>
+
+                        @if (Model.FinancialSummary.TotalClosingCosts > 0)
+                        {
+                        <tr>
+                            <td>Closing Costs:</td>
+                            <td>@Model.FinancialSummary.TotalClosingCosts.ToString("c")</td>
+                        </tr>
+                        }
+
+                        @if (Model.FinancialSummary.TotalInteriorRepairExpenses > 0)
+                        {
+                        <tr>
+                            <td>Interior Repairs:</td>
+                            <td>@Model.FinancialSummary.TotalInteriorRepairExpenses.ToString("c")</td>
+                        </tr>
+                        }
+
+                        @if (Model.FinancialSummary.TotalExteriorRepairExpenses > 0)
+                        {
+                        <tr>
+                            <td>Exterior Repairs:</td>
+                            <td>@Model.FinancialSummary.TotalExteriorRepairExpenses.ToString("c")</td>
+                        </tr>
+                        }
+
+                        @if (Model.FinancialSummary.TotalGeneralRepairExpenses > 0)
+                        {
+                        <tr>
+                            <td>General Repairs:</td>
+                            <td>@Model.FinancialSummary.TotalGeneralRepairExpenses.ToString("c")</td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-right">Total:</td>
+                            <td>@Model.FinancialSummary.TotalCashNeeded.ToString("c")</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-7">
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th colspan="3">Income Statement (Year 1)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2" class="pl-15"><strong>Income</strong></td>
+                    <td><strong>% of EGI</strong></td>
+                </tr>
+                <tr>
+                    <td class="pl-30">Gross Scheduled Rental Income</td>
+                    <td>@Model.AnnualGrossScheduledRentalIncome.ToString("c")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="pl-30">Less: @Model.AnnualVacancyRate% Vacancy Loss</td>
+                    <td>-@Model.FinancialSummary.AnnualVacancyLoss.ToString("c")</td>
+                    <td></td>
+                </tr>
+                <tr class="total-amount-row">
+                    <td class="pl-15"><strong>Net Rental Income</strong></td>
+                    <td><strong>@Model.FinancialSummary.AnnualNetRentalIncome.ToString("c")</strong></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="pl-30">Other Income</td>
+                    <td>@Model.OtherAnnualIncome.ToString("c")</td>
+                    <td></td>
+                </tr>
+                <tr class="total-amount-row">
+                    <td><strong>Effective Gross Income (EGI)</strong></td>
+                    <td><strong>@Model.FinancialSummary.AnnualEffectiveGrossIncome.ToString("c")</strong></td>
+                    <td>100.00%</td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="pl-15"><strong>Operating Expenses</strong></td>
+                </tr>
+
+                @foreach (var operatingExpense in operatingExpenses.OrderByDescending(x => x.Value))
+                {
+                    <tr>
+                        <td class="pl-30">@operatingExpense.Key</td>
+                        <td>@operatingExpense.Value.ToString("c")</td>
+                        <td>@GetPercentOfGoi(operatingExpense.Value)%</td>
+                    </tr>
+                }
+
+                <tr class="total-amount-row">
+                    <td class="pl-15"><strong>Total Operating Expenses</strong></td>
+                    <td><strong>@Model.FinancialSummary.TotalAnnualOperatingExpenses.ToString("c")</strong></td>
+                    <td><strong>@GetPercentOfGoi(Model.FinancialSummary.TotalAnnualOperatingExpenses)%</strong></td>
+                </tr>
+                <tr class="total-amount-row">
+                    <td><strong>Net Operating Income (NOI)</strong></td>
+                    <td><strong>@Model.FinancialSummary.AnnualNoi.ToString("c")</strong></td>
+                    <td><strong>@GetPercentOfGoi(Model.FinancialSummary.AnnualNoi)%</strong></td>
+                </tr>
+                <tr>
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="pl-15"><strong>Other Expenses</strong></td>
+                </tr>
+                <tr>
+                    <td class="pl-30">Debt Service (principal &amp; interest)</td>
+                    <td>@Model.FinancialSummary.AnnualMortgageExpenses.ToString("c")</td>
+                    <td>@GetPercentOfGoi(Model.FinancialSummary.AnnualMortgageExpenses)%</td>
+                </tr>
+                <tr class="total-amount-row">
+                    <td><strong>Net Cash Flow</strong></td>
+                    <td><strong>@Model.FinancialSummary.AnnualCashFlow.ToString("c")</strong></td>
+                    <td><strong>@GetPercentOfGoi(Model.FinancialSummary.AnnualCashFlow)%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

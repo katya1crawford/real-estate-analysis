@@ -1,0 +1,61 @@
+﻿<div class="row mt-4" *ngIf="!pageLoading">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Gallery</div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-xl-12">
+                        <form [formGroup]="addImagesForm" (ngSubmit)="onAddImagesFormSubmit()" novalidate>
+                            <div class="d-flex flex-row">
+                                <div class="w-100">
+                                    <div class="custom-file">
+                                        <input type="file" [ngClass]="{'is-invalid': addImagesForm.invalid && addImagesForm.dirty}" class="form-control"
+                                            (change)="onFilesChange($event)" id="validatedCustomFile" multiple>
+                                        <label class="form-label" for="validatedCustomFile">{{selectedFiles }}</label>
+                                        <div *ngIf="filesCtrl.errors?.fileSize" class="invalid-feedback">File size must be equal or less than 15 MB.</div>
+                                        <div *ngIf="filesCtrl.errors?.fileType" class="invalid-feedback">Only &quot;.jpg&quot;, &quot;.jpeg&quot;,
+                                            &quot;.gif&quot;,
+                                            &quot;.png&quot; files are acceptable.</div>
+                                    </div>
+                                </div>
+
+                                <div class="ms-2">
+                                    <button class="btn btn-outline-secondary" type="submit"
+                                        [disabled]="addImagesForm.pristine || addImagesForm.invalid || isAddingNewImages">
+                                        {{ (isAddingNewImages ? 'Processing...' : 'Add') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+                <div class="card-deck" *ngIf="galleryImages && galleryImages.length > 0; else noGalleryImages">
+                    <div class="row">
+                        <div class="col-xl-3 col-md-4 col-sm-6 mt-4" *ngFor="let galleryImage of galleryImages">
+                            <div class="card">
+                                <img class="img-fluid card-img-top cursor-pointer" (click)="onZoom(galleryImage)"
+                                    [src]="'data:' + galleryImage.mimeType + ';base64,' + galleryImage.contentBase64" />
+                                <div class="card-footer d-flex justify-content-end">
+                                    <span class="fas fa-search-plus fa-1x cursor-pointer me-3" appTooltip title="Zoom" data-placement="top"
+                                        (click)="onZoom(galleryImage)"></span>
+
+                                    <span class="fas fa-trash-alt fa-1x cursor-pointer" appTooltip title="Delete" data-placement="top"
+                                        (click)="onDelete(galleryImage)"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #noGalleryImages class="row">
+                    <div class="col-xl-12">
+                        No images found
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

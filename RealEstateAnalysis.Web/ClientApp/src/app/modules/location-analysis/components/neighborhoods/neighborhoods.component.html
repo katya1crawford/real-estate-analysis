@@ -1,0 +1,251 @@
+<div class="container-xxl">
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="page-header">
+                <h1>Neighborhoods Analysis</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-12 d-flex flex-row justify-content-end">
+            <i appTooltip title="Add neighborhood" data-placement="top" class="fas fa-plus-circle fa-2x cursor-pointer me-3" (click)="onAddNewClick()"></i>
+            <a href="/assets/location-analysis/rules.pdf" target="_blank" class="icon-link">
+                <i appTooltip title="Download rules & instructions" data-placement="top" class="fas fa-file-download fa-2x cursor-pointer"></i>
+            </a>
+        </div>
+    </div>
+
+    <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+    <div class="row" *ngIf="pageLoading">
+        <div class="col-xl-12 text-center">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="pageLoading === false">
+        <div class=" col-xl-5">
+            <div class="card shadow">
+                <div class="card-header bg-info-2 text-white">Neighborhoods Filters</div>
+                <div class="card-body">
+                    <form [formGroup]="neighborhoodsSearchForm" novalidate>
+                        <div class="row mb-3">
+                            <label for="filter-city" class="form-label col-xl-4">City</label>
+                            <div class="col-xl-8">
+                                <select formControlName="city" class="form-select" id="filter-city" (change)="filterNeighborhoods()">
+                                    <option value="">All</option>
+                                    <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="filter-state" class="form-label col-xl-4">State</label>
+                            <div class="col-xl-8">
+                                <select formControlName="stateId" class="form-select" id="filter-state" (change)="filterNeighborhoods()">
+                                    <option value="">All</option>
+                                    <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="filter-number-of-passing-columns" class="form-label col-xl-4">Passing Columns</label>
+                            <div class="col-xl-8">
+                                <select formControlName="numberOfPassingColumns" class="form-select" id="filter-number-of-passing-columns"
+                                    (change)="filterNeighborhoods()">
+                                    <option value="">Any or None</option>
+                                    <option *ngFor="let passingColumnsNumber of passingColumnsNumbers" [value]="passingColumnsNumber">{{passingColumnsNumber}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="pageLoading === false && filteredNeighborhoods && filteredNeighborhoods.length > 0">
+        <div class="col-xl-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow">
+                    <thead>
+                        <tr class="table-info">
+                            <th>Neighborhood</th>
+                            <th class="text-center">Median Household Income</th>
+                            <th class="text-center">Median Contract Rent</th>
+                            <th class="text-center">Unemployment Rate Difference</th>
+                            <th class="text-center">Poverty Level</th>
+                            <th class="text-center">Ethnic Mix Main Slice</th>
+                            <th class="text-center">Homes Median Days on Market</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let neighborhood of filteredNeighborhoods">
+                            <td>
+                                <strong>{{neighborhood.neighborhoodName}}, {{neighborhood.city}},
+                                    {{neighborhood.state.abbreviation}}</strong>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': neighborhood.medianHouseholdIncomeIsGood}">
+                                {{neighborhood.medianHouseholdIncome | currency}}
+                                <i appTooltip
+                                    title="Acceptable median household income range is {{neighborhood.acceptableMedianHouseholdIncomeRange.from | currency}} - {{neighborhood.acceptableMedianHouseholdIncomeRange.to | currency}}"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': neighborhood.medianContractRentIsGood}">
+                                {{neighborhood.medianContractRent | currency}}
+                                <i appTooltip
+                                    title="Acceptable median contract rent range is {{neighborhood.acceptableMedianContractRentRange.from | currency}} - {{neighborhood.acceptableMedianContractRentRange.to | currency}}"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="text-center" [ngClass]="{'bg-success text-white': neighborhood.cityToNeighborhoodUnemploymentRateDifferenceIsGood}">
+                                <a href="javascript:void(0)" [appPopover]="cityToNeighborhoodUnemploymentRateDifferenceTemplate" data-bs-trigger="focus"
+                                    class="text-decoration-none" title="Unemployment Rate"
+                                    [ngClass]="{'text-white': neighborhood.cityToNeighborhoodUnemploymentRateDifferenceIsGood}">
+                                    {{neighborhood.cityToNeighborhoodUnemploymentRateDifference}}%
+                                </a>
+                                <ng-template #cityToNeighborhoodUnemploymentRateDifferenceTemplate>
+                                    <span>City: <strong>{{neighborhood.cityUnemploymentRate}}%</strong></span><br />
+                                    <span>Neighborhood:
+                                        <strong>{{neighborhood.neighborhoodUnemploymentRate}}%</strong></span>
+                                </ng-template>
+                                <i appTooltip
+                                    title="Highest acceptable rate difference between city and neighborhood is {{neighborhood.highestAcceptableCityToNeighborhoodUnemploymentRateDifference}}%"
+                                    class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': neighborhood.povertyRateIsGood}">
+                                {{neighborhood.povertyRate}}%
+                                <i appTooltip title="Highest acceptable poverty rate is {{neighborhood.highestAcceptablePovertyRate}}%" data-placement="top"
+                                    class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': neighborhood.ethnicMixLargestSlicePercentIsGood}">
+                                {{neighborhood.ethnicMixLargestSlicePercent}}%
+                                <i appTooltip
+                                    title="Highest acceptable ethnic mix largest slice percent is {{neighborhood.highestAcceptableEthnicMixLargestSlicePercent}}%"
+                                    placement="top" class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="text-center white-space-nowrap">
+                                {{neighborhood.homesMedianDaysOnMarket}}
+                                <i appTooltip data-boundary="window"
+                                    title="In slow markets, properties can sit unsold for 180, 270, 360 days, or longer. As median time on market falls from, say, 270 days to 180 days to 120 days, prices are about to go up."
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                            </td>
+                            <td class="action-icons-td">
+                                <i appTooltip title="Edit" data-placement="top" (click)="onEditClick(neighborhood)" class="fas fa-edit cursor-pointer me-2"></i>
+
+                                <i appTooltip title="Delete" data-placement="top" (click)="onDeleteClick(neighborhood)"
+                                    class="fas fa-trash-alt cursor-pointer"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="(!filteredNeighborhoods || filteredNeighborhoods.length === 0)  && !pageLoading && !serverError && !validationErrorResult">
+        <div class="col-xl-12">
+            <div class="alert alert-info" role="alert">
+                <span class="fas fa-exclamation-triangle me-2"></span>
+                No neighborhoods found.
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-xl-12">
+            <h4>Key Points</h4>
+            <ul>
+                <li>
+                    <strong>Median Household Income:</strong> High income area is not a great market to invest in because of low capitalization rate and real
+                    estate value will not appreciate much because it already appreciated a great deal. Great markets to invest are markets around it. Do not
+                    invest in the neighborhoods with below 40k in median household income, because delinquency spikes at 40k and delinquency will destroy your
+                    rental income.
+                </li>
+                <li>
+                    <strong>Median Contract Rent:</strong> Do not invest in the neighborhoods with median contract rent below $650 due to high rate of
+                    delinquency.
+                </li>
+                <li>
+                    <strong>Unemployment Rate:</strong> Do not invest in the neighborhood&rsquo;s where unemployment rate is more than 2% higher than the
+                    city&rsquo;s unemployment rent. You don&rsquo;t want to invest in the neighborhoods with unemployment rate below city&rsquo;s unemployment
+                    rate, because those will be call A areas with low cap rate and appreciation. Areas that are at the same unemployment rate as the city are
+                    class B areas. Areas that at the higher unemployment rate, buy not hight than 2%, than city are class C areas which are good cashflow
+                    areas.
+                </li>
+                <li>
+                    <strong>Poverty Level:</strong> Do not invest in the neighborhoods that are under 20%, but 15% is strongly preferred if you are risk averse.
+                    Due to high delinquency level.
+                </li>
+                <li>
+                    <strong>Schools:</strong> Since the school a student is assigned to is based on location, a property located near a good school district
+                    should rent for a higher amount and maintain a lower vacancy than one near a bad school district. To research school districts, head to
+                    GreatSchools.org and simply type in an address or zip code for your potential rental property
+                </li>
+                <li>
+                    <strong>Transportation:</strong> Look for locations with close access to mass public transit. My good friend and fellow BiggerPockets member
+                    Darren Sager recommends buying properties within walking distance of the local light-rail, because economic growth tends to follow the rail.
+                    But even if your area doesn’t have a light-rail, look for places within a moderate commute to major centers of employment.
+                </li>
+                <li>
+                    <strong>Proximity to Local Businesses:</strong> When seeking a good economic market, why reinvent the wheel? Consider this: when Starbucks
+                    decides to open a new store, do you think they do their research? How about Walmart? Or Costco? Of course they do! Large businesses like
+                    these spend millions of dollars a year doing research on every aspect of a community before deciding to invest their money into a new store
+                    there. Therefore, it would make sense that if Starbucks or other national businesses begin to invest in an area, it might be a good area for
+                    you to consider. This is also helpful because your tenants will want local businesses to shop at, and if they have to travel 30 minutes to
+                    get their tall extra hot peppermint hot chocolate with whip but no mocha drizzle, it might be a bit tougher to find a tenant.
+                </li>
+            </ul>
+
+            <h4>Other Metrics to Consider</h4>
+            <ul>
+                <li>
+                    When single family house prices spike in price in about 18 months rents will spike in price. That&rsquo;s because the city becomes so
+                    expensive that people cannot buy anymore. Follow single family market and go into ones that have highest single family house value
+                    appreciation trend and you are locked down the road for high rents.
+                </li>
+                <li>
+                    Review past 12 to 24 months. Are vacancy rates falling or increasing? How long do vacant apartments sit empty before they are rented?
+                </li>
+                <li>
+                    What type of units rent the quickest? Do some type of buildings or units enjoy waiting lists? What features and locations?
+                </li>
+                <li>
+                    Are rents steady or increasing? Or are property owners offering concessions like one or two months free rent for 12 months lease? Are homes
+                    in the area primarily owner occupied or tenant occupied? In which direction is are trending? Look for areas where tenants are being squeezed
+                    out by home buyers. Higher proportions of homeowners usually signal higher property prices and higher rental rates for relatively few rental
+                    units that remain.
+                </li>
+                <li>
+                    Research the prices and rental rates of any housing that is newly build or under construction. Is the new housing more expensive? If so,
+                    these higher prices indicate that a neighborhood is moving upscale.
+                </li>
+                <li>
+                    Purchase prices that fall well below replacement cost will generally protect you against direct competition from new construction. Any
+                    builder who would try to match the price or rent levels of these lower-priced properties would soon go broke.
+                </li>
+                <li>Are any new or expanded freeways or toll roads planned or under construction?</li>
+                <li>
+                    Close-in can also increase the relative attractiveness of neighborhoods. High gasoline prices, traffic congestion etc. set preference on run
+                    heavily toward close-in to city.
+                </li>
+                <li>
+                    Sales Trends. As prices begin to increase in a neighborhood, time-on-market data will show increasingly faster sales. In slow markets,
+                    properties can sit unsold for months (180, 270, or 360 days, or longer). As average time on market falls from, say, 270 days to 180 days,
+                    prices are about to go up. A decreasing inventory of for-sale properties also points the way towards an upswing in property prices.
+                </li>
+                <li>
+                    Before you invest, check whether new housing in competing areas is renting (selling) without difficulty and that vacancy rates aren&rsquo;t
+                    flying up toward 10 percent or higher.
+                </li>
+            </ul>
+
+            <p>
+                It is much easier to bring a Class C property to the standards of a Class B neighborhood than it is to elevate the property&rsquo;s class or
+                condition above that of the community. In some case, it does not matter how much money you spend on improvements, prospective tenants will elect
+                to reside elsewhere because they do not like the neighborhood.
+            </p>
+        </div>
+    </div>
+</div>

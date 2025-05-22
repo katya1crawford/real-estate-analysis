@@ -1,0 +1,39 @@
+﻿<div class="container-xxl">
+    <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+    <div class="row mt-4" *ngIf="pageLoading">
+        <div class="col-xl-12 text-center loadingWrapper">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+    </div>
+
+    <div class="row py-4" *ngIf="!pageLoading">
+        <div class="col-xl-12 d-flex flex-row justify-content-end">
+            <span appTooltip title="Download Property Summary Report PDF" data-placement="top" *ngIf="downloadingPdf === false"
+                class="fas fa-file-pdf fa-2x cursor-pointer me-3" (click)="onDownloadPropertySummaryPdfClick(property)"></span>
+
+            <span class="fa fa-spinner fa-pulse fa-2x fa-fw me-2" *ngIf="downloadingPdf"></span>
+
+            <span appTooltip title="Attachments" data-placement="top" class="fa fa-paperclip fa-2x cursor-pointer me-2" (click)="onAttachmentsClick()">
+                <span class="badge text-dark" *ngIf="property.files.length > 0">{{property.files.length}}</span>
+            </span>
+
+            <span appTooltip title="Rent Roll" data-placement="top" class="fas fa-table fa-2x cursor-pointer me-3" (click)="onRentRollClick(property)"></span>
+
+            <span appTooltip title="Annual Income Statement" data-placement="top" class="fas fa-file-alt fa-2x cursor-pointer me-3"
+                (click)="onIncomeStatementClick(property)"></span>
+
+            <span appTooltip title="Edit" data-placement="top" class="fas fa-edit fa-2x cursor-pointer me-3" (click)="onEditClick(property)"></span>
+
+            <span appTooltip title="Delete" data-placement="top" class="fas fa-trash-alt fa-2x cursor-pointer" (click)="onDeleteClick(property)"></span>
+        </div>
+    </div>
+
+    <app-property-summary [property]="property" [pageLoading]="pageLoading"></app-property-summary>
+    <app-kpis [property]="property" [pageLoading]="pageLoading"></app-kpis>
+    <app-income-statement [property]="property" [pageLoading]="pageLoading"></app-income-statement>
+    <app-financial-forecast [property]="property" [financialForecasts]="financialForecasts" [pageLoading]="pageLoading"></app-financial-forecast>
+    <app-estimated-resale-value [property]="property" [pageLoading]="pageLoading"></app-estimated-resale-value>
+    <app-notes [property]="property" [pageLoading]="pageLoading"></app-notes>
+    <app-gallery [property]="property" [galleryImages]="galleryImages" [pageLoading]="pageLoading"></app-gallery>
+</div>

@@ -1,0 +1,3 @@
+﻿CREATE SCHEMA [Reonomy]
+    AUTHORIZATION [dbo];
+

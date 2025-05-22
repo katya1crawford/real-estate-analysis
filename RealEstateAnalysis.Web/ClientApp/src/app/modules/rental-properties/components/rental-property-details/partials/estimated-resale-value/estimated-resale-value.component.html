@@ -1,0 +1,67 @@
+<div class="row mt-4" *ngIf="!pageLoading">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Estimated Resale Value (Year 1)</div>
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Exit Price</th>
+                                        <th class="text-center">Gain on Sale</th>
+                                        <th class="text-center">Gain on Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="exitPrice"
+                                                title="Exit Price">{{ property.financialSummary.exitPrice | currency }}</a>
+                                            <ng-template #exitPrice>
+                                                <p>Exit Price = NOI / Market Capitalization Rate</p>
+                                                <p>
+                                                    <i>
+                                                        {{ property.financialSummary.exitPrice | currency }} = {{property.financialSummary.annualNoi |
+                                                        currency}} / {{property.marketCapitalizationRate}}%
+                                                    </i>
+                                                </p>
+                                            </ng-template>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="gainOnSale"
+                                                title="Gain on Sale">{{ property.financialSummary.gainOnSale | currency }}</a>
+                                            <ng-template #gainOnSale>
+                                                <p>Gain on Sale = Exit Price - Total Purchase Price</p>
+                                                <p>
+                                                    <i>
+                                                        {{ property.financialSummary.gainOnSale | currency }} = {{property.financialSummary.exitPrice |
+                                                        currency}} - {{property.financialSummary.totalPurchasePrice | currency}}
+                                                    </i>
+                                                </p>
+                                            </ng-template>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="gainOnValue"
+                                                title="Gain on Value">{{ property.financialSummary.gainOnValuePercent }}%</a>
+                                            <ng-template #gainOnValue>
+                                                <p>Gain on Value = Gain on Sale / Exit Price</p>
+                                                <p>
+                                                    <i>
+                                                        {{ property.financialSummary.gainOnValuePercent }}% = {{property.financialSummary.gainOnSale |
+                                                        currency}} / {{property.financialSummary.exitPrice | currency}}
+                                                    </i>
+                                                </p>
+                                            </ng-template>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

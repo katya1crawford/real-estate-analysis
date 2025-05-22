@@ -1,0 +1,315 @@
+<div class="container-xxl">
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="page-header">
+                <h1>Cities Analysis</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-12 d-flex flex-row justify-content-end">
+            <i appTooltip title="Add city" data-placement="top" class="fas fa-plus-circle fa-2x cursor-pointer me-3" (click)="onAddNewClick()"></i>
+            <i *ngIf="harvestingCityData === false" appTooltip title="Harvest city data" data-placement="top"
+                class="fas fa-compress-arrows-alt fa-2x cursor-pointer me-3" (click)="onHarvestCityDataClick()"></i>
+            <i *ngIf="harvestingCityData" appTooltip title="Harvesting city data." class="fas fa-spinner fa-pulse fa-2x fa-fw me-3"></i>
+            <a href="/assets/location-analysis/rules.pdf" target="_blank" class="icon-link">
+                <i appTooltip title="Download rules & instructions" data-placement="top" class="fas fa-file-download fa-2x cursor-pointer"></i>
+            </a>
+        </div>
+    </div>
+
+    <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+    <div class="row" *ngIf="pageLoading">
+        <div class="col-xl-12 text-center">
+            <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="pageLoading === false">
+        <div class=" col-xl-5">
+            <div class="card shadow">
+                <div class="card-header bg-info-2 text-white">Cities Filters</div>
+                <div class="card-body">
+                    <form [formGroup]="citiesSearchForm" novalidate>
+                        <div class="row mb-3">
+                            <label for="filter-state" class="form-label col-xl-5">State</label>
+                            <div class="col-xl-7">
+                                <select formControlName="stateId" class="form-select" id="filter-state" (change)="filterCities()">
+                                    <option value="">All</option>
+                                    <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="filter-number-of-passing-columns" class="form-label col-xl-5">Number of Passing Columns</label>
+                            <div class="col-xl-7">
+                                <select formControlName="numberOfPassingColumns" class="form-select" id="filter-number-of-passing-columns" (change)="filterCities()">
+                                    <option value="">Any or None</option>
+                                    <option *ngFor="let passingColumnsNumber of passingColumnsNumbers" [value]="passingColumnsNumber">{{passingColumnsNumber}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="min-population-size" class="form-label col-xl-5">Min. Population Size</label>
+                            <div class="col-xl-7">
+                                <input formControlName="minPopulationSize" appInputMask="integer" class="form-control" id="min-population-size"
+                                    (blur)="filterCities()" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="max-population-size" class="form-label col-xl-5">Max. Population Size</label>
+                            <div class="col-xl-7">
+                                <input formControlName="maxPopulationSize" appInputMask="integer" class="form-control" id="max-population-size"
+                                    (blur)="filterCities()" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-xl-5">Filter by Passing Columns:</div>
+                            <div class="col-xl-7">
+                                <div class="form-check">
+                                    <input formControlName="filterByPopulationGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-population-growth">
+                                    <label class="form-check-label" for="filter-population-growth">Population Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByHouseholdIncomeGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-householdIncome-growth">
+                                    <label class="form-check-label" for="filter-householdIncome-growth">Household Income Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByHouseValueGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-houseValue-growth">
+                                    <label class="form-check-label" for="filter-houseValue-growth">House/Condo Value Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByCrimeIndex" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-crime-index">
+                                    <label class="form-check-label" for="filter-crime-index">Crime Index</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByJobGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-job-growth">
+                                    <label class="form-check-label" for="filter-job-growth">Job Growth</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-xl-5">Filter by Failing Columns:</div>
+                            <div class="col-xl-7">
+                                <div class="form-check">
+                                    <input formControlName="filterByFailingPopulationGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-failing-population-growth">
+                                    <label class="form-check-label" for="filter-failing-population-growth">Population Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByFailingHouseholdIncomeGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-failing-householdIncome-growth">
+                                    <label class="form-check-label" for="filter-failing-householdIncome-growth">Household Income Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByFailingHouseValueGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-failing-houseValue-growth">
+                                    <label class="form-check-label" for="filter-failing-houseValue-growth">House/Condo Value Growth</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByFailingCrimeIndex" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-failing-crime-index">
+                                    <label class="form-check-label" for="filter-failing-crime-index">Crime Index</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input formControlName="filterByFailingJobGrowth" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="filter-failing-job-growth">
+                                    <label class="form-check-label" for="filter-failing-job-growth">Job Growth</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="order-by-desc" class="form-label col-xl-5">Order By Desc.</label>
+                            <div class="col-xl-7">
+                                <select formControlName="orderByDescItem" class="form-select" id="order-by-des" (change)="orderResultsByDesc()">
+                                    <option value="">None</option>
+                                    <option *ngFor="let orderByItem of orderByItems" [value]="orderByItem.key">{{orderByItem.value}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-xl-5">Show Only Favorite</div>
+                            <div class="col-xl-7">
+                                <div class="form-check">
+                                    <input formControlName="showOnlyFavorite" type="checkbox" (change)="filterCities()" class="form-check-input"
+                                        id="show-only-favorite">
+                                    <label class="form-check-label" for="show-only-favorite"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="pageLoading === false && filteredCities && filteredCities.length > 0">
+        <div *ngIf="latestHarvestDate" class="col-xl-12 text-end mb-1">
+            <strong class="text-muted">Latest harvest date: {{latestHarvestDate | date }}</strong>
+        </div>
+        <div class="col-xl-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover shadow">
+                    <thead>
+                        <tr class="table-info">
+                            <th>City</th>
+                            <th class="text-center">Population Growth</th>
+                            <th class="text-center">Median Household Income Growth</th>
+                            <th class="text-center">Median House/Condo Value Growth</th>
+                            <th class="text-center">Crime Index Most Recent Year</th>
+                            <th class="text-center">Job Growth In Recent Year</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let city of filteredCities">
+                            <td class="white-space-nowrap">
+                                <strong>{{city.cityName}}, {{city.state.abbreviation}}</strong>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': city.populationGrowthRateIsGood}">
+                                <a href="javascript:void(0)" class="cursor-pointer text-decoration-none" [appPopover]="populationRangeTemplate"
+                                    data-bs-trigger="focus" title="Population Range" [ngClass]="{'text-white': city.populationGrowthRateIsGood}">
+                                    {{city.populationGrowthRate}}%
+                                </a>
+                                <i appTooltip title="Minimum acceptable population growth rate is {{city.minimumAcceptablePopulationGrowthRate}}%"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                                <ng-template #populationRangeTemplate>
+                                    <span>Year {{city.populationYearStart}}: <strong>{{city.populationInYearStart | number}}</strong></span><br />
+                                    <span>Year {{city.populationYearEnd}}: <strong>{{city.populationInYearEnd | number}}</strong></span>
+                                </ng-template>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': city.medianHouseholdIncomeGrowthRateIsGood}">
+                                <a href="javascript:void(0)" class="cursor-pointer text-decoration-none" [appPopover]="medianHouseholdIncomeRangeTemplate"
+                                    data-bs-trigger="focus" title="Median Household Income Range"
+                                    [ngClass]="{'text-white': city.medianHouseholdIncomeGrowthRateIsGood}">
+                                    {{city.medianHouseholdIncomeGrowthRate}}%
+                                </a>
+                                <i appTooltip
+                                    title="Minimum acceptable median household income growth rate is {{city.minimumAcceptableMedianHouseholdIncomeGrowthRate}}%"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                                <ng-template #medianHouseholdIncomeRangeTemplate>
+                                    <span>Year {{city.medianHouseholdIncomeYearStart}}: <strong>{{city.medianHouseholdIncomeInYearStart |
+                                            currency}}</strong></span><br />
+                                    <span>Year {{city.medianHouseholdIncomeYearEnd}}: <strong>{{city.medianHouseholdIncomeInYearEnd | currency}}</strong></span>
+                                </ng-template>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': city.medianHouseOrCondoValueGrowthRateIsGood}">
+                                <a href="javascript:void(0)" [appPopover]="medianHouseOrCondoValueRangeTemplate" data-bs-trigger="focus" class="text-decoration-none"
+                                    title="Median House or Condo Value Range" [ngClass]="{'text-white': city.medianHouseOrCondoValueGrowthRateIsGood}">
+                                    {{city.medianHouseOrCondoValueGrowthRate}}%
+                                </a>
+                                <i appTooltip
+                                    title="Minimum acceptable median house or condo value growth rate is {{city.minimumAcceptableMedianHouseOrCondoValueGrowthRate}}%"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+                                <ng-template #medianHouseOrCondoValueRangeTemplate>
+                                    <span>Year {{city.medianHouseOrCondoValueYearStart}}: <strong>{{city.medianHouseOrCondoValueInYearStart |
+                                            currency}}</strong></span><br />
+                                    <span>Year {{city.medianHouseOrCondoValueYearEnd}}: <strong>{{city.medianHouseOrCondoValueInYearEnd |
+                                            currency}}</strong></span>
+                                </ng-template>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': city.crimeIndexInYearEndIsGood}">
+                                <a href="javascript:void(0)" [appPopover]="crimeIndexRangeTemplate" data-bs-trigger="focus" title="Crime Index Range"
+                                    [ngClass]="{'text-white': city.crimeIndexInYearEndIsGood}" class="text-decoration-none">
+                                    {{city.crimeIndexInYearEnd}}
+                                </a>
+                                <i appTooltip title="Highest acceptable crime index is {{city.highestAcceptableCrimeIndex}}" data-placement="top"
+                                    class="fas fa-question-circle"></i>
+
+                                <ng-template #crimeIndexRangeTemplate>
+                                    <span>In Year {{city.crimeIndexYearStart}}: <strong>{{city.crimeIndexInYearStart | number}}</strong></span><br />
+                                    <span>In Year {{city.crimeIndexYearEnd}}: <strong>{{city.crimeIndexInYearEnd | number}}</strong></span><br />
+                                    <span>Crime Reduction: <strong>{{city.crimeReduction | number}}</strong></span>
+                                </ng-template>
+                            </td>
+                            <td class="text-center white-space-nowrap" [ngClass]="{'bg-success text-white': city.recentYearJobsGrowthRateIsGood}">
+                                <a href="javascript:void(0)" [appPopover]="jobsAddedTemplate" [ngClass]="{'text-white': city.recentYearJobsGrowthRateIsGood}"
+                                    data-bs-trigger="focus" class="text-decoration-none">
+                                    {{city.recentYearJobsGrowthRate}}%
+                                </a>
+                                <i appTooltip title="Minimum acceptable recent year jobs growth rate is {{city.minimumAcceptableRecentYearJobsGrowthRate}}%"
+                                    data-placement="top" class="fas fa-question-circle"></i>
+
+                                <ng-template #jobsAddedTemplate>
+                                    <span>Jobs Added: <strong>{{city.numberOfJobsAdded | number}}</strong></span><br />
+                                </ng-template>
+                            </td>
+                            <td class="action-icons-td">
+                                <i *ngIf="city.isFavorite === false" appTooltip title="Add to favorites" data-placement="top" (click)="onToggleIsFavoriteClick(city)"
+                                    class="far fa-heart cursor-pointer me-2"></i>
+
+                                <i *ngIf="city.isFavorite" appTooltip title="Remove from favorites" data-placement="top" (click)="onToggleIsFavoriteClick(city)"
+                                    class="fas fa-heart cursor-pointer me-2"></i>
+
+                                <i appTooltip title="Edit" data-placement="top" (click)="onEditClick(city)" class="fas fa-edit cursor-pointer me-2"></i>
+                                <i appTooltip title="Delete" data-placement="top" (click)="onDeleteClick(city)" class="fas fa-trash-alt cursor-pointer"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5" *ngIf="(!filteredCities || filteredCities.length === 0)  && !pageLoading && !serverError && !validationErrorResult">
+        <div class="col-xl-12">
+            <div class="alert alert-info" role="alert">
+                <span class="fas fa-exclamation-triangle me-2"></span>
+                No cities found.
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <h4>Key Points</h4>
+            <ul>
+                <li>
+                    <strong>Population Growth:</strong> Do not invest in the city that loses population consistently. Invest in the city that consistently gains
+                    population. A growing population should allow you to raise rents over time and should also increase the value of your property through
+                    appreciation because of supply and demand.
+                </li>
+                <li>
+                    <strong>250k - 1 Million Population Cities:</strong> Will offer better cash flow than larger cities. In larger cities you may even have
+                    a negative cash flow. It is better to stay away from larger cities unless you are a very experienced investor.
+                </li>
+                <li>
+                    <strong>Crime Level:</strong> Do not ignore this key point! Crime levels are highly tight to the delinquency. When you are a landlord one of
+                    the biggest things that destroys your profits is delinquency that leads to eviction costs, then you got 2-3 months or more they are staying
+                    for free, and then the rehab that comes before you can put in a new tenant, and that can completely destroy any profit you make. Hight crime
+                    level also means high level of turn over - there will be less families that will live in that area and there will be high level of people
+                    coming and leaving.
+                </li>
+                <li>
+                    <strong>Job Growth:</strong> When it&rsquo;s a small city sometimes a single employer can boost them to the top and then they go back down
+                    later. Don&rsquo;t just look at Jobs Percent Change but also look at Jobs Added. For example, 200 jobs added with 4.5% jobs growth might
+                    mean that it is a one employer - which means low stability jobs market, avoid area that depend on small number of employers. On the other
+                    hand a good area would look like 4,000 jobs added with 4.4% change.
+                </li>
+                <li>
+                    <strong>Median Household Income:</strong> Growth in the median household income is closely tight to the population growth.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

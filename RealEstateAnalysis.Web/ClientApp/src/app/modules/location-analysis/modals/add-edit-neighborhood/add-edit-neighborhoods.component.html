@@ -1,0 +1,166 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">{{modalTitle}}</h5>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modalService.hide()"> </button>
+</div>
+
+<form [formGroup]="addEditNeighborhoodForm" #addEditNeighborhoodNgForm="ngForm" (ngSubmit)="onAddEditNeighborhoodFormSubmit(addEditNeighborhoodNgForm)"
+    novalidate>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">Neighborhood Details</div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-4">
+                                    <label for="neighborhood" class="form-label">Neighborhood<span class="text-danger"> *</span></label>
+                                    <input formControlName="neighborhoodName" type="text"
+                                        [ngClass]="{'is-invalid': neighborhoodName.invalid && (neighborhoodName.touched || addEditNeighborhoodNgForm.submitted)}"
+                                        class="form-control" id="neighborhood" placeholder="Neighborhood">
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <label for="city" class="form-label">City<span class="text-danger"> *</span></label>
+                                    <input formControlName="city" type="text"
+                                        [ngClass]="{'is-invalid': city.invalid && (city.touched || addEditNeighborhoodNgForm.submitted)}" class="form-control"
+                                        id="city" placeholder="City">
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <label for="stateId" class="form-label">State<span class="text-danger"> *</span></label>
+                                    <select formControlName="stateId" class="form-select"
+                                        [ngClass]="{'is-invalid': stateId.invalid && (stateId.touched || addEditNeighborhoodNgForm.submitted)}" id="stateId">
+                                        <option value="">Select one</option>
+                                        <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Current Median Household Income &amp; Contract Rent
+                            <i appTooltip title="Get data from city &amp; neighborhoods map on www.city-data.com" class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="median-household-income" class="form-label">Median Household Income<span class="text-danger"> *</span></label>
+                                    <input formControlName="medianHouseholdIncome" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseholdIncome.invalid && (medianHouseholdIncome.touched || addEditNeighborhoodNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-household-income" placeholder="Median Household Income">
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="median-contract-rent" class="form-label">Median Contract Rent<span class="text-danger">
+                                            *</span></label>
+                                    <input formControlName="medianContractRent" type="text"
+                                        [ngClass]="{'is-invalid': medianContractRent.invalid && (medianContractRent.touched || addEditNeighborhoodNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-contract-rent" placeholder="Median Contract Rent">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Unemployment Rates
+                            <i appTooltip title="Get data from city &amp; neighborhoods map on www.city-data.com" class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="city-unemployment-rate" class="form-label">City Unemployment Rate<span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="cityUnemploymentRate" type="text" aria-describedby="cityUnemploymentRateAdd"
+                                            [ngClass]="{'is-invalid': cityUnemploymentRate.invalid && (cityUnemploymentRate.touched || addEditNeighborhoodNgForm.submitted)}"
+                                            class="form-control" appInputMask="percentage" id="city-unemployment-rate" placeholder="City Unemployment Rate">
+                                        <span class="input-group-text" id="cityUnemploymentRateAdd">%</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="neighborhood-unemployment-rate" class="form-label">Neighborhood Unemployment Rate<span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="neighborhoodUnemploymentRate" type="text" aria-describedby="neighborhoodUnemploymentRateAdd"
+                                            [ngClass]="{'is-invalid': neighborhoodUnemploymentRate.invalid && (neighborhoodUnemploymentRate.touched || addEditNeighborhoodNgForm.submitted)}"
+                                            class="form-control" appInputMask="percentage" id="neighborhood-unemployment-rate"
+                                            placeholder="Neighborhood Unemployment Rate">
+                                        <span class="input-group-text" id="neighborhoodUnemploymentRateAdd">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Poverty Level, Ethnic Mix &amp; Homes Median Days on Market
+                            <i appTooltip title="Get data for Poverty Level &amp; Ethnic Mix from city &amp; neighborhoods map on www.city-data.com"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="poverty-rate" class="form-label">Poverty Rate<span class="text-danger"> *</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="povertyRate" type="text" aria-describedby="povertyRateAdd"
+                                            [ngClass]="{'is-invalid': povertyRate.invalid && (povertyRate.touched || addEditNeighborhoodNgForm.submitted)}"
+                                            class="form-control" appInputMask="percentage" id="poverty-rate" placeholder="Poverty Rate">
+                                        <span class="input-group-text" id="povertyRateAdd">%</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="ethnic-mix-largest-slice-percent" class="form-label">Ethnic Mix Largest Slice<span class="text-danger">
+                                            *</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="ethnicMixLargestSlicePercent" type="text" aria-describedby="ethnicMixLargestSlicePercentAdd"
+                                            [ngClass]="{'is-invalid': ethnicMixLargestSlicePercent.invalid && (ethnicMixLargestSlicePercent.touched || addEditNeighborhoodNgForm.submitted)}"
+                                            class="form-control" appInputMask="percentage" id="ethnic-mix-largest-slice-percent"
+                                            placeholder="Ethnic Mix Largest Slice">
+                                        <span class="input-group-text" id="ethnicMixLargestSlicePercentAdd">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="homes-median-days-on-market" class="form-label">Homes Median Days on Market<span class="text-danger">
+                                            *</span></label>
+                                    <input formControlName="homesMedianDaysOnMarket" type="text"
+                                        [ngClass]="{'is-invalid': homesMedianDaysOnMarket.invalid && (homesMedianDaysOnMarket.touched || addEditNeighborhoodNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="homes-median-days-on-market" placeholder="Homes Median Days on Market">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError">
+            </app-error-summary>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalService.hide()">Close</button>
+        <button type="submit" [disabled]="isAddingEditingNeighborhood" class="btn btn-primary">
+            {{ (isAddingEditingNeighborhood ? 'Saving...' : 'Save') }}
+        </button>
+    </div>
+</form>

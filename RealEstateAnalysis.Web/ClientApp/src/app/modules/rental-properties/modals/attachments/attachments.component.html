@@ -1,0 +1,81 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Attachments</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
+    </button>
+</div>
+<div class="modal-body" *ngIf="property">
+    <div class="container-fluid">
+        <form [formGroup]="addAttachmentsForm" (ngSubmit)="onAddAttachmentsFormSubmit()" novalidate>
+            <div class="d-flex flex-row">
+                <div class="w-100">
+                    <div class="custom-file">
+                        <input type="file" [ngClass]="{'is-invalid': addAttachmentsForm.invalid && addAttachmentsForm.dirty}" class="form-control"
+                            (change)="onFilesChange($event)" id="validatedCustomFile" multiple>
+                        <label class="form-label" for="validatedCustomFile">{{selectedFiles}}</label>
+                        <div *ngIf="filesCtrl.errors?.fileSize" class="invalid-feedback">File size must be equal or less than 15 MB.</div>
+                        <div *ngIf="filesCtrl.errors?.fileType" class="invalid-feedback">Only &quot;.txt&quot;, &quot;.pdf&quot;, &quot;.jpg&quot;,
+                            &quot;.jpeg&quot;, &quot;.gif&quot;, &quot;.png&quot;, &quot;.docx&quot;, &quot;.doc&quot;, &quot;.xlsx&quot;, &quot;.xls&quot;
+                            files are acceptable.</div>
+                    </div>
+                </div>
+
+                <div class="ms-2">
+                    <button class="btn btn-outline-secondary" type="submit"
+                        [disabled]="addAttachmentsForm.pristine || addAttachmentsForm.invalid || isAddingNewAttachments">
+                        {{ (isAddingNewAttachments ? 'Processing...' : 'Add') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <br />
+
+        <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+
+        <div class="row" *ngIf="property.files.length === 0; else filesBlock">
+            <div class="col-xl-12">
+                <div class="alert alert-info" role="alert">
+                    <span class="fas fa-exclamation-circle me-2"></span>
+                    No files found.
+                </div>
+            </div>
+        </div>
+
+        <ng-template #filesBlock>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover shadow">
+                            <thead>
+                                <tr class="table-info">
+                                    <th class="w-100">Name</th>
+                                    <th class="text-nowrap">Created Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let file of property.files">
+                                    <td>{{file.name}}</td>
+                                    <td class="text-center">{{file.createdDate | date: 'shortDate'}}</td>
+                                    <td class="text-center text-nowrap">
+                                        <i class="fa fa-download fa-1x cursor-pointer me-2" appTooltip title="Download" data-placement="top" aria-hidden="true"
+                                            *ngIf="file.id !== downloadingFileId" (click)="onDownloadClick(file)"></i>
+
+                                        <i class="fa fa-spinner fa-pulse fa-1x fa-fw" *ngIf="file.id === downloadingFileId"></i>
+
+                                        <i class="fas fa-trash-alt fa-1x cursor-pointer" appTooltip title="Delete" data-placement="top" aria-hidden="true"
+                                            (click)="onDelete(file)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>

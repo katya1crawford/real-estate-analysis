@@ -1,0 +1,44 @@
+﻿<div class="row mt-4" *ngIf="!pageLoading">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Long Term Financial Forecast</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <app-highcharts [options]="chartOptions" (load)="saveChartInstance($event)"></app-highcharts>
+                    </div>
+                </div>
+
+                <div class="row mt-3" *ngIf="!pageLoading">
+                    <div class="col-xl-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th *ngFor="let value of financialForecasts[0].values; let i=index" class="text-center">
+                                            {{i + 1}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let financialForecast of financialForecasts"
+                                        [ngClass]="{'summary-row': financialForecast.id === 3 || financialForecast.id === 5 || financialForecast.id === 7 || financialForecast.id === 9 }">
+                                        <td [ngClass]="{'highlighted-row': financialForecast.id === 3 || financialForecast.id === 5 || financialForecast.id === 7 || financialForecast.id === 9 }"
+                                            nowrap>
+                                            {{financialForecast.name}}
+                                        </td>
+                                        <td *ngFor="let value of financialForecast.values"
+                                            [ngClass]="{'highlighted-row': financialForecast.id === 3 || financialForecast.id === 5 || financialForecast.id === 7 || financialForecast.id === 9 }">
+                                            {{financialForecast.id === 10 ? value + '%' : value | currency}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

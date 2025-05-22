@@ -1,0 +1,87 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+@media (min-width: 1400px) {
+    .container-xxl {
+        max-width: 1600px;
+    }
+}
+
+/*Highcharts Adjustments -- Begin*/
+app-highcharts {
+    width: 100% !important;
+    margin: 0 auto;
+    display: block;
+}
+/*Highcharts Adjustments -- End*/
+
+/*DataTables Adjustments -- Begin*/
+.dataTables_length {
+    float: left;
+}
+
+.dt-buttons {
+    float: right;
+}
+
+table tfoot {
+    display: table-row-group;
+}
+/*DataTables Adjustments -- End*/
+
+.navbar-brand {
+    padding-top: 0;
+    margin-top: -2px;
+}
+
+a,
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.page-loading-spinner {
+    margin-top: 15%;
+}
+
+.action-icons-td {
+    width: 1px !important;
+    white-space: nowrap !important;
+}
+
+tfoot {
+    border-top: 2px solid;
+}
+
+.white-space-nowrap {
+    white-space: nowrap;
+}
+
+a.icon-link {
+    color: inherit !important;
+}
+
+a.icon-link:hover {
+    color: inherit !important;
+}
+
+ul.list-style-none {
+    list-style: none;
+}
+
+.display-none {
+    display: none;
+}
+.bg-info-2 {
+    background-color: #17a2b8 !important;
+}
+
+.rowSubTotal {
+    border-top: 1px solid;
+}

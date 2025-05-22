@@ -1,0 +1,838 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">{{modalTitle}}</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
+    </button>
+</div>
+
+<form [formGroup]="addEditPropertyForm" #addEditPropertyNgForm="ngForm" (ngSubmit)="onAddEditPropertyFormSubmit(addEditPropertyNgForm)" novalidate>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row" *ngIf="pageLoading">
+                <div class="col-xl-12 text-center">
+                    <i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+                </div>
+            </div>
+
+            <div class="row mb-3" *ngIf="!pageLoading">
+                <div class="col-xl-12">
+                    <div class="custom-file">
+                        <label for="input-upload-thumbnail-image" class="form-label">
+                            {{selectedThumbnailImage || 'Property Thumbnail Image'}}</label>
+                        <input type="file" [ngClass]="{'is-invalid': thumbnailImage.invalid}" class="form-control" id="input-upload-thumbnail-image"
+                            (change)="onThumbnailImageChange($event)">
+
+                        <div *ngIf="thumbnailImage.errors?.fileSize" class="invalid-feedback">File size must be equal or less than 5 MB.</div>
+                        <div *ngIf="thumbnailImage.errors?.fileType" class="invalid-feedback">Only &quot;.jpg&quot;, &quot;.jpeg&quot;, &quot;.png&quot; files
+                            are acceptable.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" *ngIf="hasThumbnailImage && !pageLoading">
+                <div class="col-xl-12">
+                    <a href="javascript:void(0);" (click)="onRemoveThumbnailImageClick()"><span class="fas fa-trash-alt fa-1x" aria-hidden="true"></span> Remove
+                        thumbnail image</a>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="!pageLoading">
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">Property Details</div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-12" *ngIf="groupNameIsRequired">
+                                    <label for="group-name" class="form-label">Group Name<span class="text-danger"> *</span></label>
+                                    <input formControlName="groupName" type="text"
+                                        [ngClass]="{'is-invalid': groupName.invalid && (groupName.touched || addEditPropertyNgForm.submitted)}"
+                                        class="form-control" id="group-name" placeholder="Group Name">
+                                </div>
+
+                                <div class="col-xl-12" *ngIf="groupNameIsRequired === false">
+                                    <label for="propertyStatusId" class="form-label">Property Status<span class="text-danger"> *</span></label>
+                                    <select formControlName="propertyStatusId" class="form-select"
+                                        [ngClass]="{'is-invalid': propertyStatusId.invalid && (propertyStatusId.touched || addEditPropertyNgForm.submitted)}"
+                                        id="propertyStatusId">
+                                        <option *ngFor="let status of propertyStatuses" [value]="status.id">{{status.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xl-12">
+                                    <label for="address" class="form-label">Address<span class="text-danger"> *</span></label>
+                                    <input formControlName="address" type="text"
+                                        [ngClass]="{'is-invalid': address.invalid && (address.touched || addEditPropertyNgForm.submitted)}" class="form-control"
+                                        id="address" placeholder="Address">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-xl-4">
+                                    <label for="city" class="form-label">City<span class="text-danger"> *</span></label>
+                                    <input formControlName="city" type="text" class="form-control"
+                                        [ngClass]="{'is-invalid': city.invalid && (city.touched || addEditPropertyNgForm.submitted)}" id="city"
+                                        placeholder="City">
+                                </div>
+                                <div class="col-xl-4">
+                                    <label for="stateId" class="form-label">State<span class="text-danger"> *</span></label>
+                                    <select formControlName="stateId" class="form-select"
+                                        [ngClass]="{'is-invalid': stateId.invalid && (stateId.touched || addEditPropertyNgForm.submitted)}" id="stateId">
+                                        <option value="">Select one</option>
+                                        <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-4">
+                                    <label for="zipCode" class="form-label">Zip Code<span class="text-danger"> *</span></label>
+                                    <input formControlName="zipCode" type="text" appInputMask="zipCode" class="form-control"
+                                        [ngClass]="{'is-invalid': zipCode.invalid && (zipCode.touched || addEditPropertyNgForm.submitted)}" id="zipCode"
+                                        placeholder="Zip Code">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="propertyTypeId" class="form-label">Property Type<span class="text-danger"> *</span></label>
+                                    <select formControlName="propertyTypeId" class="form-select"
+                                        [ngClass]=" {'is-invalid': propertyTypeId.invalid && (propertyTypeId.touched || addEditPropertyNgForm.submitted)}"
+                                        id="propertyTypeId">
+                                        <option value="">Select one</option>
+                                        <option *ngFor="let propertyType of propertyTypes" [value]="propertyType.id">{{propertyType.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="yearBuiltIn" class="form-label">Year Built in<span class="text-danger"> *</span></label>
+                                    <input formControlName="yearBuiltIn" type="number" step="1" class="form-control"
+                                        [ngClass]="{'is-invalid': yearBuiltIn.invalid && (yearBuiltIn.touched || addEditPropertyNgForm.submitted)}"
+                                        id="yearBuiltIn" placeholder="Year Built in">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="buildingSquareFootage" class="form-label">Building SF<span class="text-danger"> *</span></label>
+                                    <input formControlName="buildingSquareFootage" type="text" appInputMask="integer" class="form-control"
+                                        [ngClass]="{'is-invalid': buildingSquareFootage.invalid && (buildingSquareFootage.touched || addEditPropertyNgForm.submitted)}"
+                                        id="buildingSquareFootage" placeholder="Building Sq. Ft.">
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="lotSquareFootage" class="form-label">Lot SF</label>
+                                    <input formControlName="lotSquareFootage" type="text" appInputMask="integer" class="form-control"
+                                        [ngClass]="{'is-invalid': lotSquareFootage.invalid && (lotSquareFootage.touched || addEditPropertyNgForm.submitted)}"
+                                        id="lotSquareFootage" placeholder="Lot SF">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Unit Groups</div>
+                        <div class="card-body" formArrayName="unitGroups">
+                            <div class="card mt-3" *ngFor="let unitGroup of unitGroups.controls; let i=index" [formGroupName]="i">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-xl-6">
+                                            <label for="numberOfUnits" class="form-label"># of Units<span class="text-danger"> *</span></label>
+                                            <input formControlName="numberOfUnits" type="text" appInputMask="integer" class="form-control"
+                                                [ngClass]="{'is-invalid': unitGroup.get('numberOfUnits').invalid && (unitGroup.get('numberOfUnits').touched || addEditPropertyNgForm.submitted)}"
+                                                id="numberOfUnits" placeholder="# of Units">
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <label for="squareFootage" class="form-label">SF<span class="text-danger"> *</span></label>
+                                            <input formControlName="squareFootage" type="text" appInputMask="integer" class="form-control"
+                                                [ngClass]="{'is-invalid': unitGroup.get('squareFootage').invalid && (unitGroup.get('squareFootage').touched || addEditPropertyNgForm.submitted)}"
+                                                id="squareFootage" placeholder="SF">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-xl-6">
+                                            <label for="bedrooms" class="form-label">Bedrooms <span class="text-danger"> *</span></label>
+                                            <input formControlName="bedrooms" type="text" appInputMask="integer" class="form-control"
+                                                [ngClass]="{'is-invalid': unitGroup.get('bedrooms').invalid && (unitGroup.get('bedrooms').touched || addEditPropertyNgForm.submitted)}"
+                                                id="bedrooms" placeholder="Bedrooms">
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <label for="bathrooms" class="form-label">Bathrooms <span class="text-danger"> *</span></label>
+                                            <input formControlName="bathrooms" type="text" appInputMask="decimal-1" class="form-control"
+                                                [ngClass]="{'is-invalid': unitGroup.get('bathrooms').invalid && (unitGroup.get('bathrooms').touched || addEditPropertyNgForm.submitted)}"
+                                                id="bathrooms" placeholder="Bathrooms">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-end text-no">
+                                    <i appTooltip title="Remove" data-placement="top"
+                                        *ngIf="(i !== unitGroups.controls.length - 1) || unitGroups.controls.length !== 1"
+                                        class="fas fa-trash-alt fa-2x cursor-pointer" (click)="onRemoveUnitGroupClick(unitGroup)"></i>
+
+                                    <i appTooltip title="Add" data-placement="top" *ngIf="i === unitGroups.controls.length - 1"
+                                        class="fas fa-plus-circle fa-2x cursor-pointer ms-2" (click)="onAddUnitGroupClick()"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Loan Details</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-4">
+                                    <div class="input-group">
+                                        <label for="purchasePrice" class="form-label">
+                                            Purchase Price&nbsp;<span class="text-danger">*</span>&nbsp;<i appTooltip title="This is the cost that you plan to buy the property for.
+                                            If you are unsure of what to put here, just take a guess at what you think you can
+                                            get the property for and then run the calculator. You can always come back later and
+                                            adjust this number until you find the perfect purchase price." data-placement="top"
+                                                class="fas fa-question-circle"></i>
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="purchasePriceAdd">$</span>
+                                            <input formControlName="purchasePrice" type="text" aria-describedby="purchasePriceAdd" appInputMask="money"
+                                                [ngClass]="{'is-invalid': purchasePrice.invalid && (purchasePrice.touched || addEditPropertyNgForm.submitted)}"
+                                                class="form-control" id="purchasePrice" placeholder="Purchase Price">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <div class="input-group">
+                                        <label for="downPaymentPercent" class="form-label">Down Payment Percent</label>
+                                        <div class="input-group">
+                                            <input formControlName="downPaymentPercent" type="text" aria-describedby="downpaymentAmtAdd"
+                                                appInputMask="percentage"
+                                                [ngClass]="{'is-invalid': downPaymentPercent.invalid && (downPaymentPercent.touched || addEditPropertyNgForm.submitted)}"
+                                                class="form-control" id="downPaymentPercent" placeholder="Down Payment Percent">
+                                            <span class="input-group-text" id="downPaymentPercentAdd">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <div class="input-group">
+                                        <label for="downPayment" class="form-label">
+                                            Down Payment Amount&nbsp;<i appTooltip title="How much money do you plan to put toward the purchase? For example, if you are buying a $100,000 house
+                                            and wanted to put down $20,000, loan amount will be $80,000." data-placement="top"
+                                                class="fas fa-question-circle"></i>
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="downpaymentAmtAdd">$</span>
+                                            <input formControlName="downPayment" type="text" aria-describedby="downpaymentAmtAdd" appInputMask="money"
+                                                [ngClass]="{'is-invalid': financialSummaryGroup.errors?.invalidDownPayment || (purchasePrice.invalid && (purchasePrice.touched || addEditPropertyNgForm.submitted))}"
+                                                class="form-control" id="downPayment" placeholder="Down Payment Amount">
+                                            <div *ngIf="financialSummaryGroup.errors?.invalidDownPayment" class="invalid-feedback">Down payment must be less
+                                                than purchase price.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-6">
+                                    <label for="loanApr" class="form-label">
+                                        Loan APR&nbsp;<i appTooltip title="What rate do you think you'll get on your loan?" data-placement="top"
+                                            class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input formControlName="loanApr" type="text" aria-describedby="loanAprAdd" appInputMask=" percentage"
+                                            [ngClass]="{'is-invalid': financialSummaryGroup.errors?.invalidLoanApr || (loanApr.invalid && (loanApr.touched || addEditPropertyNgForm.submitted))}"
+                                            class="form-control" id="loanApr" placeholder="Loan APR">
+                                        <span class="input-group-text" id="loanAprAdd">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="loanYears" class="form-label">
+                                        Loan Years&nbsp;<i appTooltip title="How long do you expect the term length to be on the loan to be? 30 years is the most common for residential properties,
+                                    20 or 25 is more common for commercial properties." data-placement="top" class="fas fa-question-circle"></i>
+                                    </label>
+                                    <input formControlName="loanYears" type="text" appInputMask="integer"
+                                        [ngClass]="{'is-invalid': (financialSummaryGroup.errors?.invalidLoanYears && (loanYears.touched || addEditPropertyNgForm.submitted)) || ((loanYears.invalid && (loanYears.touched || addEditPropertyNgForm.submitted)))}"
+                                        class="form-control" id="loanYears" placeholder="Loan Years">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-12" formArrayName="closingCosts">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered tbl-expenses">
+                                            <thead>
+                                                <tr class="table-info">
+                                                    <th class="text-nowrap">Closing Cost Type</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let closingCost of closingCosts.controls; let i=index" [formGroupName]="i">
+                                                    <td>
+                                                        <select formControlName="closingCostTypeId" class="form-select">
+                                                            <option *ngFor="let closingCostType of closingCostTypes" [value]="closingCostType.id">
+                                                                {{closingCostType.name}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input formControlName="amount" type="text" appInputMask="money"
+                                                                [ngClass]="{'has-error': closingCost.get('amount').invalid}" class="form-control"
+                                                                placeholder="Amount">
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center text-nowrap align-middle">
+                                                        <i appTooltip title="Remove" data-placement="top"
+                                                            *ngIf="(i !== closingCosts.controls.length - 1) || closingCosts.controls.length !== 1"
+                                                            class="fas fa-trash-alt fa-1x cursor-pointer" (click)="onRemoveClosingCostClick(closingCost)"></i>
+
+                                                        <i appTooltip title="Add" data-placement="top" *ngIf="i === closingCosts.controls.length - 1"
+                                                            class="fas fa-plus-circle fa-1x cursor-pointer ms-2" (click)="onAddClosingCostClick()"></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Repair Expenses</div>
+                        <div class="card-body">
+                            <div class="form-row" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-12" formArrayName="interiorRepairExpenses">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered tbl-expenses">
+                                            <thead>
+                                                <tr class="table-info">
+                                                    <th class="text-nowrap">Interior Repair Exp. Type</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let interiorRepairExpense of interiorRepairExpenses.controls; let i=index" [formGroupName]="i">
+                                                    <td>
+                                                        <select formControlName="interiorRepairExpenseTypeId" class="form-select">
+                                                            <option *ngFor=" let interiorRepairExpenseType of interiorRepairExpenseTypes"
+                                                                [value]="interiorRepairExpenseType.id">{{interiorRepairExpenseType.name}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input formControlName="amount" type="text" appInputMask="money"
+                                                                [ngClass]="{'is-invalid': interiorRepairExpense.get('amount').invalid}" class="form-control"
+                                                                placeholder="Amount">
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center text-nowrap align-middle">
+                                                        <i appTooltip title="Remove" data-placement="top"
+                                                            *ngIf="(i !== interiorRepairExpenses.controls.length - 1) || interiorRepairExpenses.controls.length !== 1"
+                                                            class="fas fa-trash-alt cursor-pointer"
+                                                            (click)="onRemoveInteriorRepairExpenseClick(interiorRepairExpense)"></i>
+
+                                                        <i appTooltip title="Add" data-placement="top" *ngIf="i === interiorRepairExpenses.controls.length - 1"
+                                                            class="fas fa-plus-circle cursor-pointer ms-2" (click)="onAddInteriorRepairExpenseClick()"></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-12" formArrayName="exteriorRepairExpenses">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered tbl-expenses">
+                                            <thead>
+                                                <tr class="table-info">
+                                                    <th class="text-nowrap">Exterior Repair Exp. Type</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let exteriorRepairExpense of exteriorRepairExpenses.controls; let i=index" [formGroupName]="i">
+                                                    <td>
+                                                        <select formControlName="exteriorRepairExpenseTypeId" class="form-control">
+                                                            <option *ngFor="let exteriorRepairExpenseType of exteriorRepairExpenseTypes"
+                                                                [value]="exteriorRepairExpenseType.id">{{exteriorRepairExpenseType.name}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input formControlName="amount" type="text" appInputMask="money"
+                                                                [ngClass]="{'is-invalid': exteriorRepairExpense.get('amount').invalid}" class="form-control"
+                                                                placeholder="Amount">
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center text-nowrap align-middle">
+                                                        <i appTooltip title="Remove" data-placement="top"
+                                                            *ngIf="(i !== exteriorRepairExpenses.controls.length - 1) || exteriorRepairExpenses.controls.length !== 1"
+                                                            class="fas fa-trash-alt cursor-pointer"
+                                                            (click)="onRemoveExteriorRepairExpenseClick(exteriorRepairExpense)"></i>
+
+                                                        <i appTooltip title="Add" data-placement="top" *ngIf="i === exteriorRepairExpenses.controls.length - 1"
+                                                            class="fas fa-plus-circle cursor-pointer ms-2" (click)="onAddExteriorRepairExpenseClick()"></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-12" formArrayName="generalRepairExpenses">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered tbl-expenses">
+                                            <thead>
+                                                <tr class="table-info">
+                                                    <th class="text-nowrap">General Repair Exp. Type</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let generalRepairExpense of generalRepairExpenses.controls; let i=index" [formGroupName]="i">
+                                                    <td>
+                                                        <select formControlName="generalRepairExpenseTypeId" class="form-select">
+                                                            <option *ngFor="let generalRepairExpenseType of generalRepairExpenseTypes"
+                                                                [value]="generalRepairExpenseType.id">{{generalRepairExpenseType.name}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text">$</span>
+                                                            </div>
+                                                            <input formControlName="amount" type="text" appInputMask="money"
+                                                                [ngClass]="{'is-invalid': generalRepairExpense.get('amount').invalid}" class="form-control"
+                                                                placeholder="Amount">
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center text-nowrap align-middle">
+                                                        <i appTooltip title="Remove" data-placement="top"
+                                                            *ngIf="(i !== generalRepairExpenses.controls.length - 1) || generalRepairExpenses.controls.length !== 1"
+                                                            class="fas fa-trash-alt cursor-pointer"
+                                                            (click)="onRemoveGeneralRepairExpenseClick(generalRepairExpense)"></i>
+
+                                                        <i appTooltip title="Add" data-placement="top" *ngIf="i === generalRepairExpenses.controls.length - 1"
+                                                            class="fas fa-plus-circle cursor-pointer ms-2" (click)="onAddGeneralRepairExpenseClick()"></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Annual Income</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-6">
+                                    <label for="annualGrossScheduledRentalIncome" class="form-label">
+                                        Gross Scheduled Rental Income&nbsp;<span class="text-danger">*</span>&nbsp;<i appTooltip
+                                            title="How much rent will the property receive each year at 100% occupancy?" data-placement="top"
+                                            class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="annualIncomeAdd">$</span>
+                                        <input formControlName="annualGrossScheduledRentalIncome" type="text" aria-describedby="annualIncomeAdd"
+                                            appInputMask="money"
+                                            [ngClass]="{'is-invalid': annualGrossScheduledRentalIncome.invalid && (annualGrossScheduledRentalIncome.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="annualGrossScheduledRentalIncome" placeholder="Gross Scheduled Rental Income">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="otherAnnualIncome" class="form-label">
+                                        Other Income&nbsp;<i appTooltip
+                                            title="Is there any other source of income on the property, such as laundry or extra storage? Include those numbers here."
+                                            data-placement="top" class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="otherIncomeAdd">$</span>
+                                        <input formControlName="otherAnnualIncome" type="text" aria-describedby="otherIncomeAdd" appInputMask="money"
+                                            [ngClass]="{'is-invalid': otherAnnualIncome.invalid && (otherAnnualIncome.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="otherAnnualIncome" placeholder="Other Income">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Annual Variable Expenses</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-6">
+                                    <label for="annualVacancyRate" class="form-label">
+                                        Vacancy&nbsp;<i appTooltip title="Vacancy rate is the cost of the property sitting empty due to tenant turnover.
+                                        This number can vary depending on the area, so consult with a local property manager or landlord as to the local norms.
+                                        Typical vacancy rates are between 3%-10% of the gross annual rent, but again, that can depend on the area."
+                                            data-placement="top" class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input formControlName="annualVacancyRate" type="text" aria-describedby="vacancyRateAdd" appInputMask="percentage"
+                                            [ngClass]="{'is-invalid': annualVacancyRate.invalid && (annualVacancyRate.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="annualVacancyRate" placeholder="Vacancy">
+                                        <span class="input-group-text" id="vacancyRateAdd">%</span>
+                                    </div>
+                                    <small class="form-text text-muted">{{ annualVacancyLoss | currency }}</small>
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="annualPropertyManagementFeeRate" class="form-label">Property Management Fee</label>
+                                    <div class="input-group">
+                                        <input formControlName="annualPropertyManagementFeeRate" aria-describedby="annualFeePMrateAdd" type="text"
+                                            appInputMask="percentage"
+                                            [ngClass]="{'is-invalid': annualPropertyManagementFeeRate.invalid && (annualPropertyManagementFeeRate.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="annualPropertyManagementFeeRate" placeholder="Property Management Fee">
+                                        <span class="input-group-text" id="annualFeePMrateAdd">%</span>
+                                    </div>
+                                    <small class="form-text text-muted">{{ annualPropertyManagementFee | currency }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Annual Operating Expenses</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-12" formArrayName="annualOperatingExpenses">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered tbl-expenses">
+                                            <thead>
+                                                <tr class="table-info">
+                                                    <th class="text-nowrap">Operating Exp. Type</th>
+                                                    <th>Amount</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let annualOperatingExpense of annualOperatingExpenses.controls; let i=index" [formGroupName]="i">
+                                                    <td>
+                                                        <select formControlName="operatingExpenseTypeId" class="form-select">
+                                                            <option *ngFor=" let operatingExpenseType of operatingExpenseTypes"
+                                                                [value]="operatingExpenseType.id">
+                                                                {{operatingExpenseType.name}}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text" id="annualAmountAdd">$</span>
+                                                            <input formControlName="amount" type="text" aria-describedby="annualAmountAdd" appInputMask="money"
+                                                                [ngClass]="{'is-invalid': annualOperatingExpense.get('amount').invalid}" class="form-control"
+                                                                placeholder="Annual Amount">
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center text-nowrap align-middle">
+                                                        <i appTooltip title="Remove" data-placement="top"
+                                                            *ngIf="(i !== annualOperatingExpenses.controls.length - 1) || annualOperatingExpenses.controls.length !== 1"
+                                                            class="fas fa-trash-alt cursor-pointer"
+                                                            (click)="onRemoveAnnualOperatingExpenseClick(annualOperatingExpense)"></i>
+
+                                                        <i appTooltip title="Add" data-placement="top" *ngIf="i === annualOperatingExpenses.controls.length - 1"
+                                                            class="fas fa-plus-circle cursor-pointer ms-2" (click)="onAddAnnualOperatingExpenseClick()"></i>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Future Annual Assumptions</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-6">
+                                    <label for="annualGrossScheduledRentalIncomeGrowthRate" class="form-label">
+                                        Rental Income Growth Rate&nbsp;<i appTooltip title="Represents gross scheduled rental income growth rate."
+                                            data-placement="top" class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input formControlName="annualGrossScheduledRentalIncomeGrowthRate" type="text" aria-describedby="incomeGrowthRateAdd"
+                                            appInputMask="percentage"
+                                            [ngClass]="{'is-invalid': annualGrossScheduledRentalIncomeGrowthRate.invalid && (annualGrossScheduledRentalIncomeGrowthRate.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="annualGrossScheduledRentalIncomeGrowthRate" placeholder="Rental Income Growth Rate">
+                                        <span class="input-group-text" id="incomeGrowthRateAdd">%</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="annualOperatingExpensesGrowthRate" class="form-label">
+                                        Expenses Growth Rate&nbsp;<i appTooltip title="Represents the total of operating expenses growth rate."
+                                            data-placement="top" class="fas fa-question-circle"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input formControlName="annualOperatingExpensesGrowthRate" type="text" aria-describedby="expensesGrowthRateAdd"
+                                            appInputMask="percentage"
+                                            [ngClass]="{'is-invalid': annualOperatingExpensesGrowthRate.invalid && (annualOperatingExpensesGrowthRate.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="annualOperatingExpensesGrowthRate" placeholder="Expenses Growth Rate">
+                                        <span class="input-group-text" id="expensesGrowthRateAdd">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header bg-info-2 text-white">Market Rates</div>
+                        <div class="card-body">
+                            <div class="row mb-3" formGroupName="financialSummaryGroup">
+                                <div class="col-xl-6">
+                                    <label for="annualGrossScheduledRentalIncomeGrowthRate" class="form-label">
+                                        Market Capitalization Rate
+                                    </label>
+                                    <div class="input-group">
+                                        <input formControlName="marketCapitalizationRate" type="text" aria-describedby="capRateAdd" appInputMask="percentage"
+                                            [ngClass]="{'is-invalid': marketCapitalizationRate.invalid && (marketCapitalizationRate.touched || addEditPropertyNgForm.submitted)}"
+                                            class="form-control" id="marketCapitalizationRate" placeholder="Market Capitalization Rate">
+                                        <span class="input-group-text" id="capRateAdd">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div [ngClass]="{'has-error': notes.invalid && (notes.touched || addEditPropertyNgForm.submitted)}" class="col-xl-12">
+                            <label for="notes" class="form-label">
+                                Notes&nbsp;<i appTooltip title="Use this space to write anything about the property you want.
+                               Typically, this is where investors put the sales notes supplied by the agent." data-placement="top"
+                                    class="fas fa-question-circle"></i>
+                            </label>
+                            <textarea formControlName="notes" class="form-control" id="notes" placeholder="Notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="sticky-top">
+                        <div class="card">
+                            <div class="card-header bg-info-2 text-white">Financing Overview</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    Total Purchase Price:
+                                    <a href="javascript:void(0)" [appPopover]="modalTotalPurchasePriceTemplate" class="text-decoration-none"
+                                        data-bs-trigger="focus" title="Total Purchase Price">
+                                        <strong>{{ financialSummary.totalPurchasePrice | currency }}</strong>
+                                    </a>
+                                    <ng-template #modalTotalPurchasePriceTemplate>
+                                        <span>Purchase price:
+                                            <strong>{{purchasePrice.value | currency}}</strong><br /></span>
+                                        <span>Closing Costs:
+                                            <strong>{{financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+                                        <span>
+                                            Interior Repair Exp.:
+                                            <strong>{{financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>
+                                            Exterior Repair Exp.:
+                                            <strong>{{financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>
+                                            General Repair Exp.: <strong>{{financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+                                        <span class="rowSubTotal">
+                                            Total Purchase Price:
+                                            <strong>{{financialSummary.totalPurchasePrice | currency}}</strong></span>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Loan Amount:
+                                    <a href="javascript:void(0)" [appPopover]="modalLoanAmountTemplate" class="text-decoration-none" data-bs-trigger="focus"
+                                        title="Loan Amount"><strong>{{ financialSummary.loanAmount | currency }}</strong></a>
+                                    <ng-template #modalLoanAmountTemplate>
+                                        <p>Loan Amount = Purchase Price - Down Payment</p>
+                                        <p>
+                                            <i>
+                                                {{ financialSummary.loanAmount | currency }} = {{purchasePrice.value || 0 | currency}} - {{downPayment.value ||
+                                                0 | currency}}</i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">
+                                    Total Cash Needed: <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none"
+                                        [appPopover]="modalPopTotalCashNeededTemplate" title="Total Cash Needed"><strong>{{ financialSummary.totalCashNeeded |
+                                            currency }}</strong></a>
+                                    <ng-template #modalPopTotalCashNeededTemplate>
+                                        <span>Down Payment:
+                                            <strong>{{downPayment.value || 0 | currency}}</strong><br /></span>
+                                        <span>Closing Costs:
+                                            <strong>{{financialSummary.totalClosingCosts | currency}}</strong><br /></span>
+                                        <span>Interior Repair Exp.:
+                                            <strong>{{financialSummary.totalInteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>Exterior Repair Exp.:
+                                            <strong>{{financialSummary.totalExteriorRepairExpenses | currency}}</strong><br /></span>
+                                        <span>General Repair Exp.:
+                                            <strong>{{financialSummary.totalGeneralRepairExpenses | currency}}</strong><br /></span>
+                                        <div class="rowSubTotal">Total Cash Needed:
+                                            <strong>{{financialSummary.totalCashNeeded | currency}}</strong>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">
+                                    Debt Service Coverage Ratio:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="modalDscrTemplate" class="text-decoration-none"
+                                        title="Debt Service Coverage Ratio (DSCR)"><strong>{{financialSummary.debtCoverageRatio}}</strong></a>
+                                    <ng-template #modalDscrTemplate>
+                                        <p>DSCR = Net Operating Income / Principal and Interest Payments</p>
+                                        <p>
+                                            <i>{{financialSummary.debtCoverageRatio}} = {{financialSummary.annualNoi | currency}} /
+                                                {{financialSummary.annualMortgageExpenses | currency}} </i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header bg-info-2 text-white">Annual Rates</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Capitalization Rate:
+                                    <a href="javascript:void(0)" [appPopover]="modalCapitalizationRateTemplate" class="text-decoration-none"
+                                        data-bs-trigger="focus" title="Capitalization Rate"><strong>{{ financialSummary.annualCapRate }}%</strong></a>
+                                    <ng-template #modalCapitalizationRateTemplate>
+                                        <p>Capitalization Rate = Net Operating Income / Total Purchase Price</p>
+                                        <p>
+                                            <i>{{ financialSummary.annualCapRate }}% = {{financialSummary.annualNoi | currency}} /
+                                                {{financialSummary.totalPurchasePrice | currency}}</i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Cash-on-Cash Rate:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="modalCashOnCashTemplate" class="text-decoration-none"
+                                        title="Cash-on-Cash Rate"><strong>{{ financialSummary.annualCashOnCashRate }}%</strong></a>
+                                    <ng-template #modalCashOnCashTemplate>
+                                        <p>Cash-on-Cash = (NOI - Debt Service) / Total Cash Needed</p>
+                                        <p>
+                                            <i>{{ financialSummary.annualCashOnCashRate }}% = ({{financialSummary.annualNoi | currency}} -
+                                                {{financialSummary.annualMortgageExpenses | currency}} ) / {{financialSummary.totalCashNeeded | currency}}</i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Total ROI:
+                                    <a href="javascript:void(0)" [appPopover]="modalAnnualTotalRoiTemplate" class="text-decoration-none" data-bs-trigger="focus"
+                                        title="Total ROI"><strong>{{ financialSummary.annualTotalRoi }}%</strong></a>
+                                    <ng-template #modalAnnualTotalRoiTemplate>
+                                        <p>Total ROI = (Net Cash Flow + Loan Principal Reduction) / Total Cash Needed</p>
+                                        <p>
+                                            <i>{{ financialSummary.annualTotalRoi }}% = ({{financialSummary.annualCashFlow | currency}} +
+                                                {{financialSummary.annualTotalPrincipalPayment | currency}}) / {{financialSummary.totalCashNeeded |
+                                                currency}}</i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">EGI:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="modalEgiTemplate"
+                                        title="Effective Gross Income (EGI)"><strong>{{ financialSummary.annualEffectiveGrossIncome | currency }}</strong></a>
+                                    <ng-template #modalEgiTemplate>
+                                        <span>Rental Income:
+                                            <strong>{{annualGrossScheduledRentalIncome.value || 0 | currency}}</strong><br /></span>
+                                        <span>Less Vacancy Loss:
+                                            <strong>{{financialSummary.annualVacancyLoss | currency}}</strong><br /></span>
+                                        <span>Other Income:
+                                            <strong>{{otherAnnualIncome.value || 0 | currency}}</strong><br /></span>
+                                        <div class="rowSubTotal">EGI:
+                                            <strong>{{financialSummary.annualEffectiveGrossIncome | currency}}</strong>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Operating Expenses: <strong>{{ financialSummary.totalAnnualOperatingExpenses | currency }}</strong>
+                                </li>
+                                <li class="list-group-item">NOI: <strong>{{ financialSummary.annualNoi | currency }}</strong></li>
+                                <li class="list-group-item">Debt Service <i appTooltip title="Principal & Interest" data-placement="top"
+                                        class="fas fa-question-circle"></i>: <strong>{{ financialSummary.annualMortgageExpenses | currency }}</strong></li>
+                                <li class="list-group-item">Net Cash Flow: <strong>{{ financialSummary.annualCashFlow | currency }}</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header bg-info-2 text-white">Gain on Sale</div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Exit Price:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="modalExitPrice"
+                                        title="Exit Price"><strong>{{ financialSummary.exitPrice | currency }}</strong></a>
+                                    <ng-template #modalExitPrice>
+                                        <p>Exit Price = NOI / Market Capitalization Rate</p>
+                                        <p>
+                                            <i>
+                                                {{ financialSummary.exitPrice | currency }} = {{financialSummary.annualNoi | currency}} /
+                                                {{marketCapitalizationRate.value || 0}}%
+                                            </i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Gain on Sale:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="modalGainOnSale"
+                                        title="Gain on Sale"><strong>{{ financialSummary.gainOnSale | currency }}</strong></a>
+                                    <ng-template #modalGainOnSale>
+                                        <p>Gain on Sale = Exit Price - Total Purchase Price</p>
+                                        <p>
+                                            <i>
+                                                {{ financialSummary.gainOnSale | currency }} = {{financialSummary.exitPrice | currency}} -
+                                                {{financialSummary.totalPurchasePrice | currency}}
+                                            </i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                                <li class="list-group-item">Gain on Value:
+                                    <a href="javascript:void(0)" data-bs-trigger="focus" class="text-decoration-none" [appPopover]="modalGainOnValue"
+                                        title="Gain on Value"><strong>{{ financialSummary.gainOnValuePercent }}%</strong></a>
+                                    <ng-template #modalGainOnValue>
+                                        <p>Gain on Value = Gain on Sale / Exit Price</p>
+                                        <p>
+                                            <i>
+                                                {{ financialSummary.gainOnValuePercent }}% = {{financialSummary.gainOnSale | currency}} /
+                                                {{financialSummary.exitPrice | currency}}
+                                            </i>
+                                        </p>
+                                    </ng-template>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <app-error-summary [validationErrorResult]="refreshRatesValidationErrorResult" [serverError]="refreshRatesServerError" class="mt-3">
+                        </app-error-summary>
+
+                        <div class="row mt-3">
+                            <div class="col-xl-12 text-center">
+                                <button type="button" class="btn btn-info" (click)="onRefreshRatesClick()"
+                                    [disabled]="financialSummaryGroup.invalid || isCalculatingRates">
+                                    {{ (isCalculatingRates ? 'Processing...' : 'Refresh Rates') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-xl-12">
+                                <small>
+                                    <em>Note: To see <strong>much more analysis data</strong> save this property by clicking Save button in this form then go to
+                                        the property details page.</em>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" (click)="resetForm()">Reset</button>
+        <button type="submit" [disabled]="isAddingEditingProperty" class="btn btn-primary">
+            {{ (isAddingEditingProperty ? 'Saving...' : 'Save') }}
+        </button>
+    </div>
+</form>

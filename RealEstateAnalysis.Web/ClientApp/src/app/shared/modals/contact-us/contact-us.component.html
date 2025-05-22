@@ -1,0 +1,58 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">Contact Us</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form [formGroup]="contactUsForm" (ngSubmit)="onContactUsFormSubmit()" novalidate>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="mb-3">
+                        <label for="fromEmail" class="form-label">Your Email&nbsp;<span class="text-danger">*</span></label>
+                        <input formControlName="fromEmail" type="email" [ngClass]="{'is-invalid': fromEmail.invalid && (fromEmail.dirty || fromEmail.touched)}"
+                            class="form-control" id="fromEmail" placeholder="Your Email">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject&nbsp;<span class="text-danger">*</span></label>
+                        <input formControlName="subject" type="text" [ngClass]="{'is-invalid': subject.invalid && (subject.dirty || subject.touched)}"
+                            class="form-control" id="subject" placeholder="Subject">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message&nbsp;<span class="text-danger">*</span></label>
+                        <textarea formControlName="message" [ngClass]="{'is-invalid': message.invalid && (message.dirty || message.touched)}"
+                            class="form-control" id="message" placeholder="Message" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="success">
+                <div class="col-xl-12">
+                    <div class="alert alert-success" role="alert">
+                        <span class="fas fa-exclamation-circle me-2"></span>
+                        We have received your message and would like to thank you for writing to us. We will review your message as soon as possible.
+                    </div>
+                </div>
+            </div>
+
+            <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError"></app-error-summary>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" [disabled]="contactUsForm.invalid || isSendingEmail">
+            {{ (isSendingEmail ? 'Processing...' : 'Send') }}
+        </button>
+    </div>
+</form>

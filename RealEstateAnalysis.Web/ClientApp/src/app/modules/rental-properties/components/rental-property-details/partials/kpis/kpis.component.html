@@ -1,0 +1,132 @@
+﻿<div class="row mt-4" *ngIf="!pageLoading">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Key Performance Indicators (Year 1)</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-5">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="cashOnCashTemplate" class="text-decoration-none"
+                                    title="Cash-on-Cash Rate">Cash-on-Cash
+                                    Rate:</a>&nbsp;<strong>{{property.financialSummary.annualCashOnCashRate}}%</strong>
+                                <ng-template #cashOnCashTemplate>
+
+                                    <p>
+                                        Cash-on-Cash is an important ratio used to determine cash rate of return on invested capital.
+                                    </p>
+                                    <p>Cash-on-Cash = (NOI - Debt Service) / Total Cash Needed</p>
+
+                                    <p>
+                                        <i>{{ property.financialSummary.annualCashOnCashRate }}% = ({{property.financialSummary.annualNoi | currency}} -
+                                            {{property.financialSummary.annualMortgageExpenses | currency}} ) /
+                                            {{property.financialSummary.totalCashNeeded | currency}}</i>
+                                    </p>
+                                </ng-template>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="javascript:void(0)" [appPopover]="capitalizationRateTemplate" class="text-decoration-none" data-bs-trigger="focus"
+                                    title="Capitalization Rate">Capitalization Rate:</a>&nbsp;<strong>{{property.financialSummary.annualCapRate}}%</strong>
+                                <ng-template #capitalizationRateTemplate>
+                                    <p>Capitalization Rate = Net Operating Income / Total Purchase Price </p>
+                                    <p>
+                                        <i>
+                                            {{property.financialSummary.annualCapRate}}% = {{property.financialSummary.annualNoi | currency}} /
+                                            {{ property.financialSummary.totalPurchasePrice | currency }}
+                                        </i>
+                                    </p>
+                                </ng-template>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="javascript:void(0)" [appPopover]="annualTotalRoiTemplate" class="text-decoration-none" data-bs-trigger="focus"
+                                    title="Total ROI">Total Return on
+                                    Investment (ROI):</a>&nbsp;<strong>{{property.financialSummary.annualTotalRoi}}%</strong>
+                                <ng-template #annualTotalRoiTemplate>
+                                    <p> Total ROI = (Cash Flow + Loan Principal Reduction) / Total Cash Needed</p>
+                                    <p>
+                                        <i>{{property.financialSummary.annualTotalRoi }}% = ({{property.financialSummary.annualCashFlow | currency}} +
+                                            {{property.financialSummary.annualTotalPrincipalPayment | currency}}) /
+                                            {{property.financialSummary.totalCashNeeded | currency}}</i>
+                                    </p>
+                                </ng-template>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="dscrTemplate" class="text-decoration-none"
+                                    title="Debt Service Coverage Ratio (DSCR)">Debt Service Coverage Ratio
+                                    (DSCR):</a>&nbsp;<strong>{{property.financialSummary.debtCoverageRatio}}</strong>
+                                <ng-template #dscrTemplate>
+                                    <p>
+                                        DSCR is a ratio of net operating income to principal and interest payments. It measures the relationship of the amount
+                                        of cash available to service debt payments. A DSCR of 1 means that there is roughly equal amounts or money coming in and
+                                        going out for debt service. This ratio is especially important to lenders This ratio will vary among landers, but a
+                                        general range is from a minimum of 1 to a maximum of 1.35, with most common ratio averaging 1.20.
+                                    </p>
+                                    <p>DSCR = Net Operating Income / Principal and Interest Payments</p>
+                                    <p> <i>{{property.financialSummary.debtCoverageRatio}} = {{property.financialSummary.annualNoi | currency}} /
+                                            {{property.financialSummary.annualMortgageExpenses | currency}}
+                                        </i>
+                                    </p>
+                                </ng-template>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="javascript:void(0)" data-bs-trigger="focus" [appPopover]="grmTemplate" title="Gross Rent Multiplier (GRM)"
+                                    class="text-decoration-none">
+                                    Gross Rent Multiplier (GRM):</a>&nbsp;<strong>{{property.financialSummary.grossRentMultiplier}}</strong>
+                                <ng-template #grmTemplate>
+                                    <p>GRM = Total Purchase Price / Gross Scheduled Rental Income</p>
+                                    <p> <i>{{property.financialSummary.grossRentMultiplier}} = {{property.financialSummary.totalPurchasePrice | currency}} /
+                                            {{property.annualGrossScheduledRentalIncome | currency}}
+                                        </i>
+                                    </p>
+                                    <p>
+                                        The GRM method does not directly adjust for sales incentives, financing concessions, features, location, property
+                                        condition,
+                                        or property operating expenses.
+                                        This technique yields a rough estimate of market value. Nevertheless, for property investors, it works as a rule of
+                                        thumb.
+                                        The lower the GRM, the lower the market value.
+                                    </p>
+                                </ng-template>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xl-7">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Annual</th>
+                                        <th>Monthly</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Gross Scheduled Rent Income / Unit SF</strong></td>
+                                        <td>{{getRatio(property.annualGrossScheduledRentalIncome, property.totalUnitsSquareFootage) | currency}}</td>
+                                        <td>{{getMonthlyAmount(getRatio(property.annualGrossScheduledRentalIncome, property.totalUnitsSquareFootage)) |
+                                            currency}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Operating Expenses / Unit SF</strong></td>
+                                        <td>{{getRatio(property.financialSummary.totalAnnualOperatingExpenses, getTotalActiveUnitsSqFts()) | currency}}</td>
+                                        <td>{{getMonthlyAmount(getRatio(property.financialSummary.totalAnnualOperatingExpenses, getTotalActiveUnitsSqFts())) |
+                                            currency}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Net Cash Flow</strong></td>
+                                        <td>{{property.financialSummary.annualCashFlow | currency}}</td>
+                                        <td>{{getMonthlyAmount(property.financialSummary.annualCashFlow) | currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

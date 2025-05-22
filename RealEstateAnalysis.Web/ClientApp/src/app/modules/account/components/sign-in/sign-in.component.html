@@ -1,0 +1,64 @@
+﻿<div class="container-xxl">
+    <div class="row d-flex flex-row justify-content-center mt-5">
+        <div class="col-xl-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row mb-5">
+                        <div class="col-xl-12">
+                            <img src="/assets/account/logo.png" class="card-img-top img-fluid" />
+                        </div>
+                    </div>
+
+                    <form [formGroup]="loginForm" (ngSubmit)="onLoginFormSubmit()" novalidate>
+                        <div class="col-xl-12">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="emailAdd"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                                <input formControlName="email" type="email" aria-describedby="emailAdd"
+                                    [ngClass]="{'is-valid': !email.invalid && (email.dirty || email.touched), 'is-invalid': email.invalid && (email.dirty || email.touched)}"
+                                    class="form-control" placeholder="Email" />
+                            </div>
+                        </div>
+
+                        <div class="col-xl-12">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="passAdd"><i class="fa fa-key" aria-hidden="true"></i></span>
+                                <input formControlName="password" type="password" aria-describedby="passAdd"
+                                    [ngClass]="{'is-valid': !password.invalid && (password.dirty || password.touched), 'is-invalid': password.invalid && (password.dirty || password.touched)}"
+                                    class="form-control" id="password" placeholder="Password" />
+                            </div>
+                        </div>
+
+                        <div *ngIf="validationErrorResult?.errors" class="alert alert-danger" role="alert">
+                            <div *ngFor="let error of validationErrorResult.errors">
+                                <span class="fas fa-exclamation-circle me-2"></span>
+                                {{error.errorMessage}}
+                            </div>
+                        </div>
+
+                        <div *ngIf="serverError" class="alert alert-danger" role="alert">
+                            <span class="fas fa-exclamation-circle me-2"></span>
+                            Server error
+                        </div>
+
+                        <p class="text-end">
+                            <a href="javascript:void(0);" (click)="onForgotPasswordClick()" class="text-decoration-none">Forgot Password</a>
+                        </p>
+
+                        <div class="d-grid gap-2">
+
+                            <button type="submit" [disabled]="loginForm.pristine || loginForm.invalid || isSigningIn" class="btn btn-primary">
+                                {{ (isSigningIn ? 'Processing...' : 'LOG IN') }}</button>
+
+                        </div>
+
+                        <hr>
+
+                        <p class="text-center">
+                            <a href="javascript:void(0);" (click)="onRegisterClick()" class="text-decoration-none">Create new account?</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

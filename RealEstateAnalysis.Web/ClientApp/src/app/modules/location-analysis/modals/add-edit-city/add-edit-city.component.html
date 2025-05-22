@@ -1,0 +1,267 @@
+﻿<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">{{modalTitle}}</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form [formGroup]="addEditCityForm" #addEditCityNgForm="ngForm" (ngSubmit)="onAddEditCityFormSubmit(addEditCityNgForm)" novalidate>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">City Details</div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="city" class="form-label">City<span class="text-danger"> *</span></label>
+                                    <input formControlName="cityName" type="text"
+                                        [ngClass]="{'is-invalid': cityName.invalid && (cityName.touched || addEditCityNgForm.submitted)}" class="form-control"
+                                        id="city" placeholder="City">
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="stateId" class="form-label">State<span class="text-danger"> *</span></label>
+                                    <select formControlName="stateId" class="form-select"
+                                        [ngClass]="{'is-invalid': stateId.invalid && (stateId.touched || addEditCityNgForm.submitted)}" id="stateId">
+                                        <option value="">Select one</option>
+                                        <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Population Range
+                            <i appTooltip
+                                title="Population range from the earliest available year to the latest available year. Get data from Google, for example, Google search for population columbus ohio"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-3">
+                                    <label for="population-year-start" class="form-label">Year Start<span class="text-danger"> *</span></label>
+                                    <input formControlName="populationYearStart" type="text"
+                                        [ngClass]="{'is-invalid': populationYearStart.invalid && (populationYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="population-year-start" placeholder="Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="population-in-year-start" class="form-label">In Year Start<span class="text-danger"> *</span></label>
+                                    <input formControlName="populationInYearStart" type="text"
+                                        [ngClass]="{'is-invalid': populationInYearStart.invalid && (populationInYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="population-in-year-start" placeholder="In Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="population-year-end" class="form-label">Year End<span class="text-danger"> *</span></label>
+                                    <input formControlName="populationYearEnd"
+                                        [ngClass]="{'is-invalid': populationYearEnd.invalid && (populationYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="population-year-end" placeholder="Year End">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="population-in-year-end" class="form-label">In Year End<span class="text-danger">
+                                            *</span></label>
+                                    <input formControlName="populationInYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': populationInYearEnd.invalid && (populationInYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="population-in-year-end" placeholder="In Year End">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Median Household Income Range
+                            <i appTooltip
+                                title="Median household income range from the earliest available year to the latest available year. Get data from www.city-data.com"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-3">
+                                    <label for="median-household-income-year-start" class="form-label">Year Start<span class="text-danger"> *</span></label>
+                                    <input formControlName="medianHouseholdIncomeYearStart" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseholdIncomeYearStart.invalid && (medianHouseholdIncomeYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="median-household-income-year-start" placeholder="Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-household-income-in-year-start" class="form-label">In Year Start<span class="text-danger">
+                                            *</span></label>
+                                    <input formControlName="medianHouseholdIncomeInYearStart" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseholdIncomeInYearStart.invalid && (medianHouseholdIncomeInYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-household-income-in-year-start" placeholder="In Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-household-income-year-end" class="form-label">Year End<span class="text-danger"> *</span></label>
+                                    <input formControlName="medianHouseholdIncomeYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseholdIncomeYearEnd.invalid && (medianHouseholdIncomeYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="median-household-income-year-end" placeholder="Year End">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-household-income-in-year-end" class="form-label">In Year End<span class="text-danger"> *</span></label>
+                                    <input formControlName="medianHouseholdIncomeInYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseholdIncomeInYearEnd.invalid && (medianHouseholdIncomeInYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-household-income-in-year-end" placeholder="In Year End">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Median House or Condo Value Range
+                            <i appTooltip
+                                title="Median house or condo value range from the earliest available year to the latest available year. Get data from www.city-data.com"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-3">
+                                    <label for="median-house-or-condo-value-year-start" class="form-label">Year Start<span class="text-danger"> *</span></label>
+                                    <input formControlName="medianHouseOrCondoValueYearStart" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseOrCondoValueYearStart.invalid && (medianHouseOrCondoValueYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="median-house-or-condo-value-year-start" placeholder="Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-house-or-condo-value-in-year-start" class="form-label">In Year Start
+                                        <span class="text-danger">*</span></label>
+                                    <input formControlName="medianHouseOrCondoValueInYearStart" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseOrCondoValueInYearStart.invalid && (medianHouseOrCondoValueInYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-house-or-condo-value-in-year-start" placeholder="In Year Start">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-house-or-condo-value-year-end" class="form-label">Year End<span class="text-danger">*</span></label>
+                                    <input formControlName="medianHouseOrCondoValueYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseOrCondoValueYearEnd.invalid && (medianHouseOrCondoValueYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="year" id="median-house-or-condo-value-year-end" placeholder="Year End">
+                                </div>
+
+                                <div class="col-xl-3">
+                                    <label for="median-house-or-condo-value-in-year-end" class="form-label">In Year End<span class="text-danger">
+                                            *</span></label>
+                                    <input formControlName="medianHouseOrCondoValueInYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': medianHouseOrCondoValueInYearEnd.invalid && (medianHouseOrCondoValueInYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="integer" id="median-house-or-condo-value-in-year-end" placeholder="In Year End">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Crime Index Range
+                            <i appTooltip
+                                title="Get data from www.city-data.com crime index. You want to see crime in year start higher than crime in year end. Also, see if crime decrease is smooth"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="crime-index-year-start" class="form-label">Year Start
+                                        <span class="text-danger">*</span></label>
+                                    <input formControlName="crimeIndexYearStart" type="number" step="1"
+                                        [ngClass]="{'is-invalid': crimeIndexYearStart.invalid && (crimeIndexYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" id="crime-index-year-start" placeholder="Year Start">
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="crime-index-in-year-start" class="form-label">In Year Start
+                                        <span class="text-danger">*</span></label>
+                                    <input formControlName="crimeIndexInYearStart" type="text"
+                                        [ngClass]="{'is-invalid': crimeIndexInYearStart.invalid && (crimeIndexInYearStart.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="decimal-1" id="crime-index-in-year-start" placeholder="In Year Start">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="crime-index-year-end" class="form-label">Year End
+                                        <span class="text-danger">*</span></label>
+                                    <input formControlName="crimeIndexYearEnd" type="number" step="1"
+                                        [ngClass]="{'is-invalid': crimeIndexYearEnd.invalid && (crimeIndexYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" id="crime-index-year-end" placeholder="Year End">
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="crime-index-in-year-end" class="form-label">In Year End
+                                        <span class="text-danger">*</span></label>
+                                    <input formControlName="crimeIndexInYearEnd" type="text"
+                                        [ngClass]="{'is-invalid': crimeIndexInYearEnd.invalid && (crimeIndexInYearEnd.touched || addEditCityNgForm.submitted)}"
+                                        class="form-control" appInputMask="decimal-1" id="crime-index-in-year-end" placeholder="In Year End">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-info-2 text-white">
+                            Jobs Growth
+                            <i appTooltip title="Get data from www.deptofnumbers.com/employment/metros/. Use first column for CES Jobs Added"
+                                class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-xl-6">
+                                    <label for="ces-jobs-added" class="form-label">CES Jobs Added<span class="text-danger"> *</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="numberOfJobsAdded" type="text"
+                                            [ngClass]="{'is-invalid': numberOfJobsAdded.invalid && (numberOfJobsAdded.touched || addEditCityNgForm.submitted)}"
+                                            class="form-control" appInputMask="integer" id="ces-jobs-added" placeholder="CES Jobs Added">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label for="recent-year-jobs-growth-rate" class="form-label">1 Year CES Jobs Percent Change
+                                        <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input formControlName="recentYearJobsGrowthRate" type="text" aria-describedby="recentYearJobsGrowthRateAdd"
+                                            [ngClass]="{'is-invalid': recentYearJobsGrowthRate.invalid && (recentYearJobsGrowthRate.touched || addEditCityNgForm.submitted)}"
+                                            class="form-control" appInputMask="percentage-allow-minus" id="recent-year-jobs-growth-rate"
+                                            placeholder="1 Year CES Jobs Percent Change">
+                                        <span class="input-group-text" id="recentYearJobsGrowthRateAdd">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError">
+            </app-error-summary>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" [disabled]="isAddingEditingCity" class="btn btn-primary">
+            {{ (isAddingEditingCity ? 'Saving...' : 'Save') }}
+        </button>
+    </div>
+</form>

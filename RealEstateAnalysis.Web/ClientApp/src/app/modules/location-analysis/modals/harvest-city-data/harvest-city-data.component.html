@@ -1,0 +1,28 @@
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">{{modalTitle}}</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form [formGroup]="harvestCityDataForm" #harvestCityDataNgForm="ngForm" (ngSubmit)="onHarvestCityDataFormSubmit(harvestCityDataNgForm)" novalidate>
+    <div class="modal-body">
+        <div class="container-fluid">
+            <div class="row">
+                <label for="minimum-population-count" class="col-xl-6 col-form-label">Minimum Population Count<span class="text-danger"> *</span></label>
+                <div class="col-xl-6">
+                    <input formControlName="minimumPopulationCount" type="text"
+                        [ngClass]="{'is-invalid': minimumPopulationCount.invalid && (minimumPopulationCount.touched || harvestCityDataNgForm.submitted)}"
+                        class="form-control" id="minimum-population-count" appInputMask="integer">
+                </div>
+            </div>
+
+            <app-error-summary [validationErrorResult]="validationErrorResult" [serverError]="serverError">
+            </app-error-summary>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" [disabled]="isHarvestingCityData" class="btn btn-primary">
+            {{ (isHarvestingCityData ? 'Running...' : 'Run') }}
+        </button>
+    </div>
+</form>

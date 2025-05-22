@@ -1,0 +1,129 @@
+<nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+    <div class="container-xxl">
+        <a [routerLink]="['/']" class="navbar-brand">
+            <img src="/assets/app/logo_small.png" />
+        </a>
+        <button class="navbar-toggler" *ngIf="isSignedIn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" *ngIf="isSignedIn; else notSignedIn">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">Rentals<span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/rentals/listing']">Listings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/rentals/in-review']">In-Review</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/rentals/purchased']">Purchased</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Location
+                        Analysis<span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/location-analysis/cities']">Cities</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/location-analysis/neighborhoods']">Neighborhoods</a>
+                    </div>
+                </li>
+
+                <li class="nav-item"><a routerLinkActive="active" class="nav-link" [routerLink]="['/market/market-value-estimator']">Market Value Estimator</a>
+                </li>
+
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Due
+                        Diligence<span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/due-diligence/pre-offer']">Pre-Offer</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/due-diligence/purchase-and-sale-agreement']">Purchase &amp; Sale Agreement</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/due-diligence/post-acceptance']">Post-Acceptance</a>
+                    </div>
+                </li>
+
+                <li class="nav-item"><a routerLinkActive="active" class="nav-link" [routerLink]="['/team']">Team</a></li>
+
+                <li class="nav-item dropdown" routerLinkActive="active">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Entity
+                        Structure<span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/entity-structure/limited-partnership']">Limited Partnership</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/entity-structure/llc']">LLC</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/entity-structure/series-llc']">Series LLC</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['entity-structure/taxation']">Taxation</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/entity-structure/wyoming-entity']">Wyoming Entity</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" [routerLink]="['/entity-structure/estate-planning']">Estate Planning</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Miscellaneous</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" [routerLink]="['/cost-segregation']">Cost Segregation</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" [routerLink]="['/classifications']">Classifications</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" [routerLink]="['/finding-good-deal']">Finding a Good Deal</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" [routerLink]="['/best-rentals']">Best Rentals</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" [routerLink]="['/submitting-your-offer']">Submitting Your Offer</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true"
+                        aria-expanded="false">{{userFullName}} <span class="caret"></span></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/user-profile']">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:void(0);" (click)="onSignOut()">Sign out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <ng-template #notSignedIn>
+            <div class="collapse navbar-collapse d-flex flex-row justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav d-flex flex-row ms-auto">
+                    <li class="nav-item" routerLinkActive="active"><a class="nav-link" [routerLink]="['/sign-in']">Sign in</a></li>
+                </ul>
+            </div>
+        </ng-template>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>
+
+<div class="container-xxl mt-4">
+    <div class="row text-center">
+        <div class="col-xl-12">
+            <hr />
+            <p class="text-muted">
+                Copyright &copy; {{currentYear}} {{appName}} | <a [routerLink]="['/terms']" class="text-decoration-none">Terms and Conditions</a>
+                | <a [routerLink]="['/privacy']" class="text-decoration-none">Privacy</a> | <a href="javascript:void(0);" (click)="onContactUs()"
+                    class="text-decoration-none">Contact Us</a>
+            </p>
+        </div>
+    </div>
+</div>

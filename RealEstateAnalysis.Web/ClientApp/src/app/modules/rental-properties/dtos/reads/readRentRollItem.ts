@@ -1,0 +1,20 @@
+export class ReadRentRollItem {
+    public readonly id: number;
+    public readonly unit: string;
+    public readonly floorPlan: string;
+    public readonly squareFootage: number;
+    public readonly bedrooms: number;
+    public readonly bathrooms: number;
+    public readonly isVacant: boolean;
+    public readonly isRenovated: boolean;
+    public readonly contractRent: number;
+    public readonly marketRent: number;
+    public readonly leaseStartDate: Date;
+    public readonly leaseEndDate: Date;
+    public readonly leaseTermInMonths: number;
+    public readonly contractRentPerSquareFoot: number;
+    public readonly marketRentPerSquareFoot: number;
+    public readonly isMonthToMonth: boolean;
+    public readonly otherIncome: number;
+    public readonly percentOfMarketRent: number;
+}

@@ -1,0 +1,111 @@
+﻿<div class="row mt-4" *ngIf="!pageLoading">
+    <div class="col-xl-12 pt-2">
+        <div class="card shadow">
+            <div class="card-header bg-info-2 text-white">Income Statement (Year 1)</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-condensed table-hover">
+                                <tbody>
+                                    <tr class="table-active">
+                                        <td colspan="3"><strong class="lblSubAccountsGroup">Income</strong></td>
+                                        <td><strong>% of EGI</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdSpacer"></td>
+                                        <td>Gross Scheduled Rental Income</td>
+                                        <td>{{property.annualGrossScheduledRentalIncome | currency}}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdSpacer"></td>
+                                        <td>Less {{property.annualVacancyRate}}% Vacancy Loss</td>
+                                        <td>{{(0 - property.financialSummary.annualVacancyLoss) | currency}}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdSpacer"></td>
+                                        <td><strong>Net Rental Income</strong></td>
+                                        <td class="tdSubTotal"><strong>{{property.financialSummary.annualNetRentalIncome | currency}}</strong></td>
+                                        <td class="tdSubTotal"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdSpacer"></td>
+                                        <td>Other Income</td>
+                                        <td>{{property.otherAnnualIncome | currency}}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td colspan="2"><strong class="lblSubTotal text-nowrap">Effective Gross Income (EGI)</strong></td>
+                                        <td class="tdSubTotal tdTotal">
+                                            <strong>{{property.financialSummary.annualEffectiveGrossIncome | currency}}</strong>
+                                        </td>
+                                        <td class="tdSubTotal tdTotal">
+                                            <strong>100.00%</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">&nbsp;</td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td colspan="4"><strong class="lblSubAccountsGroup">Operating Expenses</strong></td>
+                                    </tr>
+                                    <tr *ngFor="let annualOperatingExpense of combinedAnnualOperatingExpenses">
+                                        <td class="tdSpacer"></td>
+                                        <td>{{annualOperatingExpense.name}}</td>
+                                        <td>{{annualOperatingExpense.amount | currency}}</td>
+                                        <td>{{getPercentOfGoi(annualOperatingExpense.amount)}}%</td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td colspan="2"><strong class="lblSubTotal">Total Operating Expenses</strong></td>
+                                        <td class="tdSubTotal">
+                                            <strong>{{property.financialSummary.totalAnnualOperatingExpenses | currency}}</strong>
+                                        </td>
+                                        <td class="tdSubTotal">
+                                            <strong>{{getPercentOfGoi(property.financialSummary.totalAnnualOperatingExpenses)}}%</strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td colspan="2"><strong>Net Operating Income (NOI)</strong></td>
+                                        <td class="tdTotal">
+                                            <strong>{{property.financialSummary.annualNoi | currency}}</strong>
+                                        </td>
+                                        <td class="tdTotal">
+                                            <strong>{{getPercentOfGoi(property.financialSummary.annualNoi)}}%</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">&nbsp;</td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td colspan="4"><strong class="lblSubAccountsGroup">Other Expenses</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdSpacer"></td>
+                                        <td>Debt Service (principal &amp; interest)</td>
+                                        <td>{{property.financialSummary.annualMortgageExpenses | currency}}</td>
+                                        <td>{{getPercentOfGoi(property.financialSummary.annualMortgageExpenses)}}%</td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td colspan="2"><strong>Net Cash Flow</strong></td>
+                                        <td class="tdTotal">
+                                            <strong>{{property.financialSummary.annualCashFlow | currency}}</strong>
+                                        </td>
+                                        <td class="tdTotal">
+                                            <strong>{{getPercentOfGoi(property.financialSummary.annualCashFlow)}}%</strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6" *ngIf="!pageLoading && combinedAnnualOperatingExpenses.length> 0">
+                        <app-highcharts [options]="chartOptions" (load)="saveChartInstance($event)"></app-highcharts>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>7c10d94a-9470-457b-828e-b538943f5554</UserSecretsId>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.32" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.6.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\modules\sold-properties\**" />
+    <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\modules\sold-properties\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\modules\sold-properties\**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\modules\sold-properties\**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\tsconfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.Test.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\modules\due-diligence\due-diligence-routing.module.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\dtos\reads\readCity.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\dtos\reads\readDecimalRange.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\dtos\reads\readNeighborhood.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\dtos\writes\writeCity.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\dtos\writes\writeNeighborhood.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\modals\add-edit-city.modal.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\modals\add-edit-neighborhood\add-edit-neighborhoods.modal.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\services\city.service.ts" />
+    <None Remove="ClientApp\src\app\modules\location-analysis\services\neighborhood.service.ts" />
+    <None Remove="ClientApp\src\app\modules\rental-properties\components\rental-property-details\partials\gallery\gallery.component.ts" />
+    <None Remove="ClientApp\src\app\modules\rental-properties\directives\property-google-map.component.ts" />
+    <None Remove="ClientApp\src\app\modules\rental-properties\modals\gallery-image-zoom\gallery-image-zoom.modal.ts" />
+    <None Remove="ClientApp\src\app\shared\directives\input-mask\input-mask.directive.ts" />
+    <None Remove="ClientApp\src\app\shared\directives\input-mask\input-mask.module.ts" />
+    <None Remove="ClientApp\src\app\shared\dtos\modalOptions.ts" />
+    <None Remove="ClientApp\src\app\shared\dtos\reads\readUnitGroup.ts" />
+    <None Remove="ClientApp\src\app\shared\dtos\writes\WriteConfirmEmail.ts" />
+    <None Remove="ClientApp\src\app\shared\dtos\writes\writeUnitGroup.ts" />
+    <None Remove="ClientApp\src\app\shared\services\google.service.ts" />
+    <None Remove="ClientApp\src\app\shared\services\modal\modal.component.ts" />
+    <None Remove="ClientApp\src\app\shared\services\modal\modal.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstateAnalysis.Domain\RealEstateAnalysis.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\modules\due-diligence\components\" />
+    <Folder Include="ClientApp\src\assets\property\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.Test.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\modules\due-diligence\due-diligence-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\dtos\reads\readCity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\dtos\reads\readDecimalRange.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\dtos\reads\readNeighborhood.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\dtos\writes\writeCity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\dtos\writes\writeNeighborhood.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\modals\add-edit-city\add-edit-city.modal.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\modals\add-edit-neighborhood\add-edit-neighborhoods.modal.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\services\city.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\location-analysis\services\neighborhood.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\rental-properties\components\rental-property-details\partials\gallery\gallery.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\rental-properties\directives\property-google-map.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\directives\input-mask\input-mask.directive.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\directives\input-mask\input-mask.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\dtos\modalOptions.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\dtos\reads\readUnitGroup.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\dtos\writes\WriteConfirmEmail.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\dtos\writes\writeRefreshToken.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\rental-properties\modals\gallery-image-zoom\gallery-image-zoom.modal.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\rental-properties\services\gallery-image.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\modules\rental-properties\services\pdf.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\dtos\writes\writeUnitGroup.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\services\google.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\shared\services\modal\modal.service.ts" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --configuration production" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --configuration production" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

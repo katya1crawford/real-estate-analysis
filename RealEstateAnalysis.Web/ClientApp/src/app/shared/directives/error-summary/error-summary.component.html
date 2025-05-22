@@ -1,0 +1,15 @@
+﻿<div class="row mt-3" *ngIf="validationErrorResult?.errors || serverError">
+    <div class="col-xl-12">
+        <div *ngIf="validationErrorResult?.errors" class="alert alert-danger" role="alert">
+            <div *ngFor="let error of validationErrorResult.errors">
+                <span class="fas fa-exclamation-circle me-2" aria-hidden="true"></span>
+                {{error.errorMessage}}
+            </div>
+        </div>
+
+        <div *ngIf="serverError" class="alert alert-danger" role="alert">
+            <span class="fas fa-exclamation-circle me-2" aria-hidden="true"></span>
+            Server error.
+        </div>
+    </div>
+</div>
